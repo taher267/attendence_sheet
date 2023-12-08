@@ -7,21 +7,26 @@ const FormSubmissionSchema = new Schema(
       required: [true, "FormSubmission name is mandatory"],
       trim: true,
     },
-    observer: {
+    user_id: {
       type: Schema.Types.ObjectId,
       ref: "User",
+      required: [true, `User id is mandatory!`],
+    },
+    form_id: {
+      type: Schema.Types.ObjectId,
+      ref: "Form",
     },
     fields: [
       {
         name: { type: String, required: [true, `Field name is mandatory!`] },
       },
     ],
-    submission_date: {
+    for_submission_date: {
       type: Date,
-      required: [true, `Submission date is mandatory`],
+      required: [true, `For submission date is mandatory`],
     },
   },
-  { timestamps: true }
+  { timestamps: true, versionKey: false }
 );
 const FormSubmission = model("FormSubmission", FormSubmissionSchema);
 

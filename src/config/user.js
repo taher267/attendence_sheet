@@ -1,4 +1,4 @@
-const statuses = ["active", "inactive", "pending"];
+const statuses = ["active", "inactive", "pending", "close"];
 const authorize_roles = ["super_admin", "admin"];
 const roles = [...authorize_roles, "user"];
 const profilePicExtensions = [".jpg", ".jpeg", ".png", ".git"];

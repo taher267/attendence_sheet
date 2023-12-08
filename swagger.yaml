@@ -683,7 +683,7 @@ paths:
                     type: string
                 status:
                   type: string
-                  enum: ["active", "inactive", "pending"]
+                  enum: ["active", "inactive", "pending", "close"]
       responses:
         "200":
           description: Update user info!
@@ -1251,80 +1251,13 @@ paths:
           "application/json":
             schema:
               type: object
-              properties:
-                name:
-                  type: string
-                  example: Sales
-                fields:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      label:
-                        type: string
-                      name:
-                        type: string
-                        pattern: "^[a-z][a-z_]+$"
-                        example: start_time
-                      type:
-                        type: string
-                        enum:
-                          [
-                            "text",
-                            "select",
-                            "button",
-                            "checkbox",
-                            "color",
-                            "date",
-                            "datetime-local",
-                            "email",
-                            "file",
-                            "hidden",
-                            "image",
-                            "month",
-                            "number",
-                            "password",
-                            "radio",
-                            "range",
-                            "reset",
-                            "search",
-                            "submit",
-                            "tel",
-                            "time",
-                            "url",
-                            "week",
-                          ]
-                      submission_date:
-                        type: string
-                        format: data-time
-                        description: For which date do you submit the book?
-                      validation:
-                        type: array
-                        items:
-                          type: string
-                          example: "required→The filed is mandatory&pattern→^[a-z][a-z_]+$"
-                        #   type: object
-                        # properties:
-                        #   required:
-                        #     type: object
-                        #     properties:
-                        #       value:
-                        #         type: boolean
-                        #         example: true
-                        #       message:
-                        #         type: string
-                        #         example: The field is mandatory
-
-                  required: [label, name, type]
-              required: [name, fields]
-
+              $ref: "#/components/schemas/Form"
       responses:
         "201":
           description: Signup Successful
           content:
             "application/json":
               schema:
-                type: object
                 properties:
                   code:
                     type: integer
@@ -1335,13 +1268,10 @@ paths:
                     example: Added Form, Successfully
                   data:
                     type: object
-                    properties:
-                      name:
-                        type: string
-                        example: Hadia Shop
-                      establishment_id:
-                        type: string
-                        example: 6568c4210a26245b8cb27313
+                    allOf:
+                      - $ref: "#components/schemas/ID"
+                      - $ref: "#/components/schemas/Form"
+                      - $ref: "#/components/schemas/Timestamp"
         "400":
           $ref: "#/components/responses/400"
         "500":
@@ -1376,19 +1306,16 @@ paths:
                     type: array
                     items:
                       type: object
-                    properties:
-                      name:
-                        type: string
-                        example: Hadia Shop
-                  establishment_id:
-                    type: string
-                    example: 6568c4210a26245b8cb27313
+                      allOf:
+                        - $ref: "#components/schemas/ID"
+                        - $ref: "#/components/schemas/Form"
+                        - $ref: "#/components/schemas/Timestamp"
         "500":
           "$ref": "#/components/responses/500"
 
   "/forms/{id}":
     get:
-      operationId: Form
+      operationId: getForm
       description: "Retrive Form"
       tags:
         - "Form"
@@ -1397,7 +1324,7 @@ paths:
 
       responses:
         "200":
-          description: Fetching a Form
+          description: Fetching a Form data
           content:
             "application/json":
               schema:
@@ -1412,13 +1339,10 @@ paths:
                     example: Added Form, Successfully
                   data:
                     type: object
-                    properties:
-                      name:
-                        type: string
-                        example: Hadia Shop
-                      establishment_id:
-                        type: string
-                        example: 6568c4210a26245b8cb27313
+                    allOf:
+                      - $ref: "#components/schemas/ID"
+                      - $ref: "#/components/schemas/Form"
+                      - $ref: "#/components/schemas/Timestamp"
         "401":
           "$ref": "#/components/responses/401"
         "403":
@@ -1428,12 +1352,12 @@ paths:
         "500":
           "$ref": "#/components/responses/500"
     patch:
-      operationId: updateEstablishment
+      operationId: updateForm
       security:
         - bearerAuth: []
-      description: "Update Establishment"
+      description: "Update Form"
       tags:
-        - "Establishment"
+        - "Form"
       parameters:
         - $ref: "#/components/parameters/idPathParam"
       requestBody:
@@ -1441,11 +1365,7 @@ paths:
           "application/json":
             schema:
               type: object
-              properties:
-                name:
-                  description: Establishment name must be unique!
-                  type: string
-                  example: Hadia Shop
+              $ref: "#/components/schemas/Form"
 
       responses:
         "200":
@@ -1463,14 +1383,13 @@ paths:
                     type: string
                     example: Update Form, Successfully
                   data:
-                    type: object
-                    properties:
-                      name:
-                        type: string
-                        example: Hadia Shop
-                      establishment_id:
-                        type: string
-                        example: 6568c4210a26245b8cb27313
+                    type: array
+                    items:
+                      type: object
+                      allOf:
+                        - $ref: "#components/schemas/ID"
+                        - $ref: "#/components/schemas/Form"
+                        - $ref: "#/components/schemas/Timestamp"
     delete:
       operationId: DeleteForm
       security:
@@ -1588,6 +1507,7 @@ components:
       allOf:
         - $ref: "#components/schemas/UserCommon"
         - $ref: "#components/schemas/Timestamp"
+        - $ref: "#components/schemas/ID"
 
     UserCommon:
       properties:
@@ -1616,6 +1536,73 @@ components:
           type: string
           # example: active
           enum: ["active", "inactive", "pending"]
+    Form:
+      properties:
+        name:
+          type: string
+          example: Sales
+        fields:
+          type: array
+          items:
+            type: object
+            properties:
+              label:
+                type: string
+              name:
+                type: string
+                pattern: "^[a-z][a-z_]+$"
+                example: start_time
+              type:
+                type: string
+                enum:
+                  [
+                    "text",
+                    "select",
+                    "button",
+                    "checkbox",
+                    "color",
+                    "date",
+                    "datetime-local",
+                    "email",
+                    "file",
+                    "hidden",
+                    "image",
+                    "month",
+                    "number",
+                    "password",
+                    "radio",
+                    "range",
+                    "reset",
+                    "search",
+                    "submit",
+                    "tel",
+                    "time",
+                    "url",
+                    "week",
+                  ]
+              submission_date:
+                type: string
+                format: data-time
+                description: For which date do you submit the book?
+              validation:
+                type: array
+                items:
+                  type: string
+                  example: "required→The filed is mandatory&pattern→^[a-z][a-z_]+$"
+                #   type: object
+                # properties:
+                #   required:
+                #     type: object
+                #     properties:
+                #       value:
+                #         type: boolean
+                #         example: true
+                #       message:
+                #         type: string
+                #         example: The field is mandatory
+
+          required: [label, name, type]
+      required: [name, fields]
 
     Product:
       allOf:
@@ -1686,6 +1673,12 @@ components:
               description: category id (mongodb object id)
               example: "6568c4210a26245b8cb27313"
           required: [name]
+    ID:
+      # type: object
+      properties:
+        id:
+          type: string
+          example: "64d268cdeef8c84bb18912db"
     Timestamp:
       type: object
       properties:
