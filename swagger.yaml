@@ -1,0 +1,1436 @@
+openapi: 3.0.0
+info:
+  title: Ecomarce
+  version: 1.0.0
+  description: E-commerce Express Server is a robust and efficient solution designed to streamline and enhance the performance of online retail businesses. This specialized server serves as the backbone of e-commerce operations, ensuring seamless transactions, secure data handling, and optimal user experiences.
+  contact:
+    name: ABU TAHER
+    url: https://github.com/taher267
+    email: abutaher267@gmail.com
+servers:
+  - description: Dev
+    url: "http://localhost:4001/api/v1"
+  - description: Live
+    url: "https://ecom-server-rw2s.onrender.com/api/v1"
+  - description: Ngrok Dynamic
+    url: "https://a3e2-103-96-104-72.ngrok-free.app/api/v1"
+tags:
+  - name: Auth
+    description: Authentication Endpoints (public)
+  - name: User
+    description: User Endpoints (private)
+  - name: Product
+    description: Product Endpoints (public+private)
+  - name: Category
+    description: Category Endpoints (public+private)
+  - name: SubCategory
+    description: SubCategory Endpoints (public+private)
+  - name: Review
+    description: Review Endpoints (Private)
+  - name: User
+    description: User Endpoints (Private)
+paths:
+  "/auth/register":
+    post:
+      operationId: register
+      description: "Create a new account"
+      tags:
+        - "Auth"
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              properties:
+              $ref: "#/components/schemas/Auth"
+              required:
+                - "name"
+                - "email"
+                - "password"
+      responses:
+        "201":
+          description: Signup successful
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 201
+                  message:
+                    type: string
+                    example: Signup Successful
+                  data:
+                    type: object
+                    properties:
+                      user:
+                        type: object
+                        properties:
+                        $ref: "#/components/schemas/User"
+                      access_token:
+                        type: string
+                        example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+
+  "/auth/login-or-register-with-google":
+    post:
+      operationId: register
+      description: "Register or login of user for both"
+      tags:
+        - "Auth"
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              type: object
+              properties:
+                id_token:
+                  type: string
+                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+                access_token:
+                  type: string
+                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+
+              required:
+                - "id_token"
+      responses:
+        "201":
+          description: Signup successful
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 201
+                  message:
+                    type: string
+                    example: Successfully register with google
+                  data:
+                    type: object
+                    properties:
+                      user:
+                        type: object
+                        properties:
+                        $ref: "#/components/schemas/User"
+                      access_token:
+                        type: string
+                        example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+        "200":
+          description: Login successful
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 201
+                  message:
+                    type: string
+                    example: Successfully Login with google
+                  data:
+                    type: object
+                    properties:
+                      user:
+                        type: object
+                        properties:
+                        $ref: "#/components/schemas/User"
+                      access_token:
+                        type: string
+                        example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+
+  "/auth/register-with-google":
+    post:
+      operationId: register
+      description: "Register with google"
+      tags:
+        - "Auth"
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              type: object
+              properties:
+                id_token:
+                  type: string
+                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+                access_token:
+                  type: string
+                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+
+              required:
+                - "id_token"
+      responses:
+        "201":
+          description: Signup successful
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 201
+                  message:
+                    type: string
+                    example: Successfully register with google
+                  data:
+                    type: object
+                    properties:
+                      user:
+                        type: object
+                        properties:
+                        $ref: "#/components/schemas/User"
+                      access_token:
+                        type: string
+                        example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+
+  "/auth/login-with-google":
+    post:
+      operationId: register
+      description: "Login of user with google"
+      tags:
+        - "Auth"
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              type: object
+              properties:
+                id_token:
+                  type: string
+                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+                access_token:
+                  type: string
+                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+
+              required:
+                - "id_token"
+      responses:
+        "200":
+          description: Login successful
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 201
+                  message:
+                    type: string
+                    example: Successfully Login with google
+                  data:
+                    type: object
+                    properties:
+                      user:
+                        type: object
+                        properties:
+                        $ref: "#/components/schemas/User"
+                      access_token:
+                        type: string
+                        example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+
+  "/auth/login":
+    post:
+      operationId: login
+      description: "login an account"
+      tags:
+        - "Auth"
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: example@domain.com
+                password:
+                  type: string
+                  format: password
+                  example: password13r
+              required:
+                - "username"
+                - "password"
+      responses:
+        "200":
+          description: user login
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 201
+                  message:
+                    type: string
+                    example: Login Successful
+                  data:
+                    type: object
+                    properties:
+                      access_token:
+                        type: string
+                        example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+
+  "/auth/register-with-link":
+    post:
+      operationId: registerWithLink
+      description: "User register with email link sending!"
+      tags:
+        - "Auth"
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Abu Taher
+                email:
+                  type: string
+                  format: email
+                  example: example@domain.com
+
+              required:
+                - "name"
+                - "email"
+      responses:
+        "201":
+          description: Signup successful
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 201
+                  message:
+                    type: string
+                    example: Register link has been sent on your provided email!
+
+  "/auth/register-link-varification":
+    post:
+      operationId: accountVarification
+      description: "Account varification by receiving mail"
+      tags:
+        - "Auth"
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/Auth"
+                - $ref: "#/components/schemas/Hash"
+
+              required:
+                - "name"
+                - "email"
+                - "password"
+                - "hashToken"
+      responses:
+        "201":
+          description: Signup successful
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 201
+                  message:
+                    type: string
+                    example: Signup Successful
+                  data:
+                    type: object
+                    properties:
+                      access_token:
+                        type: string
+                        example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+
+  "/auth/forget-password":
+    post:
+      operationId: forgetPassword
+      description: "Forget user password"
+      tags:
+        - "Auth"
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: example@domain.com
+
+              required:
+                - "email"
+      responses:
+        "200":
+          description: Forget password response!
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 200
+                  message:
+                    type: string
+                    example: Successfully send email for Recovery account!
+
+  "/auth/reset-password":
+    post:
+      operationId: ResetPassword
+      description: "Reset user password"
+      tags:
+        - "Auth"
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/Hash"
+                - $ref: "#/components/schemas/ChangeCredential"
+              required: [hashToken, newPassword, confirmPassword]
+
+      responses:
+        "200":
+          description: Reset password response!
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 200
+                  message:
+                    type: string
+                    example: Password has been reset!
+
+  "/auth/refresh":
+    get:
+      operationId: newAccessToken
+      description: "Generate access token form refress token!"
+      tags:
+        - "Auth"
+      responses:
+        "200":
+          description: Getting a new access token!
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 200
+                  message:
+                    type: string
+                    example: Password has been reset!
+                  data:
+                    type: object
+                    properties:
+                      accessToken:
+                        type: string
+                        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjhkZDQ1MGFlZjEwMjY4MDkxMTM5MjVmNzJiMWJhNGI1YjI5ODFiZTc2NjBmOTdiOWQ5NTJmZWQzNWM1NzQwNmIiLCJpYXQiOjE3MDE4ODQ4MDIsImV4cCI6MTcwMTg4NTcwMn0.G1kD_YfiIaZO7CjV7uRoFUNsAYEhlLnFni2aNB3mm_I
+
+  "/auth/logout":
+    get:
+      operationId: Logout
+      description: "Logout the user"
+      tags:
+        - "Auth"
+      responses:
+        "202":
+          description: Clearing access token and refresh token for logout!
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 202
+                  message:
+                    type: string
+                    example: Password has been reset!
+
+  "/users":
+    post:
+      operationId: createUser
+      security:
+        - bearerAuth: []
+      description: "Create a new User"
+      tags:
+        - "User"
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              $ref: "#components/schemas/User"
+      responses:
+        "201":
+          description: Create user by adimin
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 201
+                  message:
+                    type: string
+                    example: Added User, Successful
+                  data:
+                    type: object
+                    properties:
+                    $ref: "#components/schemas/UserResponse"
+        "400":
+          $ref: "#/components/responses/400"
+        "500":
+          "$ref": "#/components/responses/500"
+    get:
+      operationId: AllProducts
+      security:
+        - bearerAuth: []
+      description: "Retrive all products"
+      tags:
+        - "User"
+      parameters:
+        - $ref: "#/components/parameters/pageParam"
+        - $ref: "#/components/parameters/limitParam"
+        - $ref: "#/components/parameters/sortTypeParam"
+        - $ref: "#/components/parameters/sortByParam"
+        - $ref: "#/components/parameters/searchParam"
+        - $ref: "#/components/parameters/searchByParam"
+        - $ref: "#/components/parameters/searchTypeParam"
+
+      responses:
+        "200":
+          description: Retrive all datas
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 200
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                      $ref: "#components/schemas/UserResponse"
+                  totalItems:
+                    type: integer
+                    format: int32
+                    example: 2
+                  pagination:
+                    $ref: "#/components/schemas/Pagination"
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        format: url
+                        example: "/api/v1/users?page=2&limit=1&sort_type=dsc&sort_by=createdAt&search=title"
+                      prev:
+                        type: string
+                        format: url
+                        example: "/api/v1/users?page=21&limit=1&sort_type=dsc&sort_by=createdAt&search=title"
+                      next:
+                        type: string
+                        format: url
+                        example: "/api/v1/users?page=1&limit=1&sort_type=dsc&sort_by=createdAt&search=title"
+
+        "400":
+          $ref: "#/components/responses/400"
+        "500":
+          "$ref": "#/components/responses/500"
+
+  "/users/{id}":
+    get:
+      operationId: getUser
+      security:
+        - bearerAuth: []
+      description: Retrieve single user
+      tags:
+        - "User"
+      parameters:
+        - $ref: "#/components/parameters/idPathParam"
+      responses:
+        "200":
+          description: A single item details
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 200
+                  message:
+                    type: string
+                    example: Retrieved a data, Successfully!
+                  data:
+                    type: object
+                    allOf:
+                      - $ref: "#components/schemas/UserCommon"
+                      - $ref: "#components/schemas/Timestamp"
+        "400":
+          $ref: "#/components/responses/400"
+        "500":
+          "$ref": "#/components/responses/500"
+    put:
+      operationId: updateOrCreateUser
+      security:
+        - bearerAuth: []
+      description: If exist user than update other wise create a user. only update those specified field(name, phone_number, username)
+      tags:
+        - "User"
+      parameters:
+        - $ref: "#/components/parameters/idPathParam"
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              $ref: "#components/schemas/User"
+      responses:
+        "200":
+          description: Update user info!
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 200
+                  message:
+                    type: string
+                    example: Retrieved a data, Successfully!
+                  data:
+                    type: object
+                    allOf:
+                      - $ref: "#components/schemas/UserCommon"
+                      - $ref: "#components/schemas/Timestamp"
+        "400":
+          $ref: "#/components/responses/400"
+        "500":
+          "$ref": "#/components/responses/500"
+    patch:
+      operationId: updateUser
+      security:
+        - bearerAuth: []
+      description: only update Status, Roles
+      tags:
+        - "User"
+      parameters:
+        - $ref: "#/components/parameters/idPathParam"
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              # oneOf:
+              #     - required:
+              #         - roles
+              #       properties:
+              #         roles:
+              #           type: array
+              #           items:
+              #             type: string
+              #     - required:
+              #         - status
+              #       properties:
+              #         status:
+              #           type: string
+              #           enum: ["active", "inactive", "pending"]
+              properties:
+                roles:
+                  type: array
+                  items:
+                    type: string
+                status:
+                  type: string
+                  enum: ["active", "inactive", "pending"]
+      responses:
+        "200":
+          description: Update user info!
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 200
+                  message:
+                    type: string
+                    example: Retrieved a data, Successfully!
+                  data:
+                    type: object
+                    allOf:
+                      - $ref: "#components/schemas/UserCommon"
+                      - $ref: "#components/schemas/Timestamp"
+        "400":
+          $ref: "#/components/responses/400"
+        "500":
+          "$ref": "#/components/responses/500"
+
+    delete:
+      operationId: deleteUser
+      security:
+        - bearerAuth: []
+      description: Delete single data
+      tags:
+        - "User"
+      parameters:
+        - $ref: "#/components/parameters/idPathParam"
+      responses:
+        "200":
+          description: Delete single item details
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 202
+                  message:
+                    type: string
+                    example: Data has been deleted, Successfully!
+        "400":
+          $ref: "#/components/responses/400"
+        "500":
+          "$ref": "#/components/responses/500"
+
+  "/users/{id}/change-profile-pic":
+    patch:
+      operationId: changeProfilePic
+      security:
+        - bearerAuth: []
+      description: Retrieve single user
+      tags:
+        - "User"
+      parameters:
+        - $ref: "#/components/parameters/idPathParam"
+        # summary: Upload a file
+      requestBody:
+        content:
+          multipart/form-data:
+            # 'image/png':
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  # pattern: '\.(jpg|jpeg|png|gif)$'
+              required:
+                - "file"
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+
+  "/users/set-password":
+    post:
+      security:
+        - bearerAuth: []
+      operationId: setPassword
+      description: "set user password"
+      tags:
+        - "User"
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/ChangeCredential"
+              required: [newPassword, confirmPassword]
+
+      responses:
+        "200":
+          description: Set password response!
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 200
+                  message:
+                    type: string
+                    example: Password has been reset!
+
+  "/users/update-password":
+    post:
+      security:
+        - bearerAuth: []
+      operationId: updatePassword
+      description: "Update user password"
+      tags:
+        - "User"
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/ChangeCredential"
+              properties:
+                oldPassword:
+                  type: string
+                  example: example123
+              required: [oldPassword, newPassword, confirmPassword]
+
+      responses:
+        "200":
+          description: Set password response!
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 200
+                  message:
+                    type: string
+                    example: Password has been updated!
+
+  "/products":
+    post:
+      operationId: createProduct
+      security:
+        - bearerAuth: []
+      description: "Create a new Product"
+      tags:
+        - "Product"
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              type: object
+              $ref: "#components/schemas/UserCommon"
+      responses:
+        "201":
+          description: Signup Successful
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 201
+                  message:
+                    type: string
+                    example: Added product, Successful
+                  data:
+                    type: object
+                    properties:
+                    $ref: "#components/schemas/Product"
+        "400":
+          $ref: "#/components/responses/400"
+        "500":
+          "$ref": "#/components/responses/500"
+    get:
+      operationId: AllProducts
+      description: "Retrive all products"
+      tags:
+        - "Product"
+      parameters:
+        - $ref: "#/components/parameters/pageParam"
+        - $ref: "#/components/parameters/limitParam"
+        - $ref: "#/components/parameters/sortTypeParam"
+        - $ref: "#/components/parameters/sortByParam"
+        - $ref: "#/components/parameters/searchParam"
+
+      responses:
+        "200":
+          description: Fetching all products
+          content:
+            "application/json":
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    code:
+                      type: integer
+                      format: int32
+                      example: 201
+                    message:
+                      type: string
+                      example: Added product, Successful
+                    data:
+                      type: object
+                      properties:
+                      $ref: "#components/schemas/Product"
+        "500":
+          "$ref": "#/components/responses/500"
+
+  "/category":
+    post:
+      operationId: createCategory
+      security:
+        - bearerAuth: []
+      description: "Create a new Categry"
+      tags:
+        - "Category"
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              $ref: "#components/schemas/Category"
+      responses:
+        "201":
+          description: response of new category!
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 201
+                  message:
+                    type: string
+                    example: Category has been added!
+                  data:
+                    type: object
+                    properties:
+                    $ref: "#components/schemas/Category"
+        "500":
+          "$ref": "#/components/responses/500"
+    get:
+      operationId: AllCategory
+      description: "Retrive all categories"
+      tags:
+        - "Category"
+      parameters:
+        - $ref: "#/components/parameters/pageParam"
+        - $ref: "#/components/parameters/limitParam"
+        - $ref: "#/components/parameters/sortTypeParam"
+        - $ref: "#/components/parameters/sortByParam"
+        - $ref: "#/components/parameters/searchParam"
+
+      responses:
+        "200":
+          description: fetching all categories
+          content:
+            "application/json":
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    code:
+                      type: integer
+                      format: int32
+                      example: 201
+                    message:
+                      type: string
+                      example: Get all categories!
+                    data:
+                      type: object
+                      properties:
+                      $ref: "#components/schemas/SubCategory"
+        "500":
+          "$ref": "#/components/responses/500"
+
+  "/sub-category":
+    post:
+      operationId: createSubCategory
+      security:
+        - bearerAuth: []
+      description: "Create a new sub Categry"
+      tags:
+        - "SubCategory"
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              $ref: "#components/schemas/Category"
+      responses:
+        "201":
+          description: Create a new sub category!
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 201
+                  message:
+                    type: string
+                    example: Category has been added!
+                  data:
+                    type: object
+                    properties:
+                    $ref: "#components/schemas/SubCategory"
+        "400":
+          $ref: "#/components/responses/400"
+        "500":
+          "$ref": "#/components/responses/500"
+    get:
+      description: "Retrive all datas"
+      tags:
+        - "SubCategory"
+      parameters:
+        - $ref: "#/components/parameters/pageParam"
+        - $ref: "#/components/parameters/limitParam"
+        - $ref: "#/components/parameters/sortTypeParam"
+        - $ref: "#/components/parameters/sortByParam"
+        - $ref: "#/components/parameters/searchParam"
+
+      responses:
+        "201":
+          description: fetching categories
+          content:
+            "application/json":
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    code:
+                      type: integer
+                      format: int32
+                      example: 201
+                    message:
+                      type: string
+                      example: Get all categories!
+                    data:
+                      type: object
+                      properties:
+                      $ref: "#components/schemas/Category"
+
+        "500":
+          "$ref": "#/components/responses/500"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    User:
+      properties:
+        id:
+          type: string
+          example: "6568c4210a26245b8cb27313"
+        name:
+          type: string
+          example: Taher
+        email:
+          type: string
+          format: email
+          example: example@domain.com
+        username:
+          type: string
+          example: taher267
+        phone_number:
+          type: string
+          example: 019xxxxxxxxx
+        roles:
+          type: array
+          items:
+            type: string
+        # password:
+        #   type: string
+        #   format: password
+        passwordAllow:
+          type: boolean
+        lastLogin:
+          type: string
+          format: data-time
+        status:
+          type: string
+          # example: active
+          enum: ["active", "inactive", "pending"]
+    Auth:
+      properties:
+        name:
+          type: string
+          example: Taher
+        email:
+          type: string
+          format: email
+          example: example@domain.com
+        username:
+          type: string
+          example: taher267
+        phone_number:
+          type: string
+          example: 019xxxxxxxxx
+        password:
+          type: string
+          format: password
+    Hash:
+      properties:
+        hashToken:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjhkZDQ1MGFlZjEwMjY4MDkxMTM5MjVmNzJiMWJhNGI1YjI5ODFiZTc2NjBmOTdiOWQ5NTJmZWQzNWM1NzQwNmIiLCJpYXQiOjE3MDE4ODQ4MDIsImV4cCI6MTcwMTg4NTcwMn0.G1kD_YfiIaZO7CjV7uRoFUNsAYEhlLnFni2aNB3mm_I
+    ChangeCredential:
+      properties:
+        newPassword:
+          type: string
+          example: example123
+        confirmPassword:
+          type: string
+          example: example123
+    UserRequest:
+      allOf:
+        - $ref: "#components/schemas/User"
+        - type: object
+          properties:
+            password:
+              type: string
+              format: password
+          required: [name, email, password]
+
+    UserResponse:
+      allOf:
+        - $ref: "#components/schemas/UserCommon"
+        - $ref: "#components/schemas/Timestamp"
+
+    UserCommon:
+      properties:
+        name:
+          type: string
+          example: Taher
+        email:
+          type: string
+          format: email
+          example: example@domain.com
+        username:
+          type: string
+          example: taher267
+        phone_number:
+          type: string
+          example: 019xxxxxxxxx
+        # password:
+        #   type: string
+        #   format: password
+        passwordAllow:
+          type: boolean
+        lastLogin:
+          type: string
+          format: data-time
+        status:
+          type: string
+          # example: active
+          enum: ["active", "inactive", "pending"]
+
+    Product:
+      allOf:
+        - type: object
+          properties:
+            title:
+              type: string
+              example: Smart T-Shirt
+            description:
+              type: string
+              example: 'No sólo sobrevivió 500 años, sino que tambien ingresó como texto de relleno en documentos electrónicos, quedando esencialmente igual al original. Fue popularizado en los 60s con la creación de las hojas "Letraset", las cuales contenian pasajes de Lorem Ipsum, y más recientemente con software de autoedición, como por ejemplo Aldus PageMaker, el cual incluye versiones de Lorem Ipsum.'
+            html:
+              type: string
+              example: <div><h1>Product title</h1><p>Product Details</p></div>
+            sub_category_id:
+              type: string
+              description: subtitle of mongodb object id
+              example: "6568c4210a26245b8cb27313"
+            SKU:
+              type: string
+              description: Stock Keeping Unit
+              example: "xyz-123"
+            qty_in_stock:
+              type: integer
+              description: Quantity of stock
+              format: int32
+              example: 1
+            thumb:
+              type: string
+              description: image url
+              example: "http://example.com/image.png"
+            price:
+              type: integer
+              description: Quantity of Stock
+              format: int32
+              example: 1
+            images:
+              type: array
+              items:
+                type: string
+                description: image url
+                example: "http://example.com/image.png"
+          required: ["title", "sub_category_id", "SKU", "price"]
+        - $ref: "#/components/schemas/Timestamp"
+    Category:
+      allOf:
+        - type: object
+          properties:
+            title:
+              type: string
+              example: T-Shirt
+            description:
+              type: string
+              example: "No sólo sobrevivió 500 años, sino que tambien ingresó como texto de relleno en documenton"
+          required: [name]
+    SubCategory:
+      allOf:
+        - type: object
+          properties:
+            name:
+              type: string
+              example: Smart T-Shirt
+            description:
+              type: string
+              example: "No sólo sobrevivió 500 años, sino que tambien ingresó como texto de relleno en documenton"
+            category_id:
+              type: string
+              description: category id (mongodb object id)
+              example: "6568c4210a26245b8cb27313"
+          required: [name]
+    Timestamp:
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: data-time
+          example: "2023-09-20T00:25:31.597Z"
+        updatedAt:
+          type: string
+          format: data-time
+          example: "2023-09-20T00:25:31.597Z"
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+          format: int32
+          example: 2
+        limit:
+          type: integer
+          format: int32
+          example: 10
+        next:
+          type: integer
+          format: int32
+          example: 3
+        prev:
+          type: integer
+          format: int32
+          example: 1
+        totalPage:
+          type: integer
+          format: int32
+          example: 5
+        totalItems:
+          type: integer
+          format: int32
+          example: 50
+      required:
+        - page
+        - limit
+        - totalPage
+        - totalItems
+
+    Links:
+      type: object
+      properties:
+        self:
+          type: string
+          format: url
+          example: "/products/1"
+        author:
+          type: string
+          format: url
+          example: "/products/1/author"
+        reviews:
+          type: string
+          format: url
+          example: "/products/1/reviews"
+
+  parameters:
+    pageParam:
+      in: query
+      name: page
+      description: current page number
+      schema:
+        type: integer
+        format: int32
+        example: 1
+    limitParam:
+      in: query
+      name: limit
+      description: maximum items items to be returned
+      schema:
+        type: integer
+        format: int32
+        example: 10
+    sortTypeParam:
+      in: query
+      name: sort_type
+      description: type of sort (asc or dsc)
+      schema:
+        type: string
+        enum: [asc, dsc]
+        example: dsc
+    sortByParam:
+      in: query
+      name: sort_by
+      description: Sort key
+      schema:
+        type: string
+        example: createdAt
+    searchParam:
+      in: query
+      name: search
+      description: Search term
+      schema:
+        type: string
+        example: title
+    searchByParam:
+      in: query
+      name: searchBy
+      description: search field
+      schema:
+        type: string
+        example: name
+    searchTypeParam:
+      in: query
+      name: searchType
+      description: matching with search value or simillar type value
+      schema:
+        type: string
+        enum:
+          - strict
+          - pattern
+    idPathParam:
+      in: path
+      name: id
+      required: true
+      description: Data ID of single item Retrieve
+      schema:
+        type: string
+        example: "64d268cdeef8c84bb18912db"
+  responses:
+    "500":
+      description: "Internal Server Error"
+      content:
+        "application/json":
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+                example: 500
+              error:
+                type: string
+                example: Internal Server Error
+              message:
+                type: string
+                example: We are sorry for the inconvenience. Please try again later
+    "400":
+      description: "Bad Request"
+      content:
+        "application/json":
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+                example: 400
+              error:
+                type: string
+                example: Bad Request
+              data:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    field:
+                      type: string
+                      example: email
+                    message:
+                      type: string
+                      example: Invalid email
+                    in:
+                      type: string
+                      enum: [query, body]
+                      example: body
+    "401":
+      description: Unauthorized
+      content:
+        "application/json":
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+                example: 401
+              error:
+                type: string
+                example: Unauthorized
+              message:
+                type: string
+                example: You don't have the right permissions
+    "404":
+      description: Resource Not Found
+      content:
+        "application/json":
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+                example: 404
+              error:
+                type: string
+                example: Not Found
+              message:
+                type: string
+                example: Requested resource not found
