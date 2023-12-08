@@ -1,8 +1,8 @@
 openapi: 3.0.0
 info:
-  title: Ecomarce
+  title: Attendance Sheet API
   version: 1.0.0
-  description: E-commerce Express Server is a robust and efficient solution designed to streamline and enhance the performance of online retail businesses. This specialized server serves as the backbone of e-commerce operations, ensuring seamless transactions, secure data handling, and optimal user experiences.
+  description: The Attendance Sheet is a structured document designed to systematically record the presence, absence, or tardiness of individuals within a specified group or event. Typically used in educational institutions, workplaces, and various organizational settings, the attendance sheet serves as a vital tool for tracking attendance patterns, facilitating payroll processes, and assessing overall participation
   contact:
     name: ABU TAHER
     url: https://github.com/taher267
@@ -19,16 +19,18 @@ tags:
     description: Authentication Endpoints (public)
   - name: User
     description: User Endpoints (private)
-  - name: Product
-    description: Product Endpoints (public+private)
-  - name: Category
-    description: Category Endpoints (public+private)
-  - name: SubCategory
-    description: SubCategory Endpoints (public+private)
-  - name: Review
-    description: Review Endpoints (Private)
-  - name: User
-    description: User Endpoints (Private)
+  - name: Establishment
+    description: Establishment Endpoints (Private)
+  - name: Department
+    description: Department Endpoints (Private)
+  - name: Form
+    description: Form Endpoints (private)
+  - name: FormPermission
+    description: FormPermission Endpoints (Private)
+  - name: FormSubmission
+    description: FormSubmission Endpoints (Private)
+  - name: Feedback
+    description: Feedback Endpoints (Private)
 paths:
   "/auth/register":
     post:
@@ -605,6 +607,8 @@ paths:
                       - $ref: "#components/schemas/Timestamp"
         "400":
           $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
         "500":
           "$ref": "#/components/responses/500"
     put:
@@ -831,20 +835,27 @@ paths:
                     type: string
                     example: Password has been updated!
 
-  "/products":
+  "/establishments":
     post:
-      operationId: createProduct
+      operationId: createEstablishment
       security:
         - bearerAuth: []
-      description: "Create a new Product"
+      description: "Create a new Establishment"
       tags:
-        - "Product"
+        - "Establishment"
       requestBody:
         content:
           "application/json":
             schema:
               type: object
-              $ref: "#components/schemas/UserCommon"
+              properties:
+                name:
+                  description: Establishment name must be unique!
+                  type: string
+                  example: Hadia Shop
+              required:
+                - "name"
+
       responses:
         "201":
           description: Signup Successful
@@ -859,67 +870,115 @@ paths:
                     example: 201
                   message:
                     type: string
-                    example: Added product, Successful
+                    example: Added establishment, Successful
                   data:
                     type: object
                     properties:
-                    $ref: "#components/schemas/Product"
+                      name:
+                        type: string
+                        example: Hadia Shop
         "400":
           $ref: "#/components/responses/400"
         "500":
           "$ref": "#/components/responses/500"
     get:
-      operationId: AllProducts
-      description: "Retrive all products"
+      operationId: AllEstablishmentS
+      description: "Retrive all Establishments name"
       tags:
-        - "Product"
+        - "Establishment"
       parameters:
         - $ref: "#/components/parameters/pageParam"
         - $ref: "#/components/parameters/limitParam"
         - $ref: "#/components/parameters/sortTypeParam"
-        - $ref: "#/components/parameters/sortByParam"
+        # - $ref: "#/components/parameters/sortByParam"
         - $ref: "#/components/parameters/searchParam"
 
       responses:
         "200":
-          description: Fetching all products
+          description: Fetching all Establishments
           content:
             "application/json":
               schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    code:
-                      type: integer
-                      format: int32
-                      example: 201
-                    message:
-                      type: string
-                      example: Added product, Successful
-                    data:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 202
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
                       type: object
                       properties:
-                      $ref: "#components/schemas/Product"
+                        name:
+                          type: string
+                          example: Hadia Shop
         "500":
           "$ref": "#/components/responses/500"
 
-  "/category":
-    post:
-      operationId: createCategory
+  "/establishments/{id}":
+    get:
+      operationId: Establishments
+      description: "Retrive Establishment name"
+      tags:
+        - "Establishment"
+      parameters:
+        - $ref: "#/components/parameters/idPathParam"
+
+      responses:
+        "200":
+          description: Fetching a Establishment
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 200
+                  message:
+                    type: string
+                    example: Added Establishment, Successful
+                  data:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                        example: Hadia Shop
+        "401":
+          "$ref": "#/components/responses/401"
+        "403":
+          "$ref": "#/components/responses/403"
+        "404":
+          "$ref": "#/components/responses/404"
+        "500":
+          "$ref": "#/components/responses/500"
+    patch:
+      operationId: updateEstablishment
       security:
         - bearerAuth: []
-      description: "Create a new Categry"
+      description: "Update Establishment"
       tags:
-        - "Category"
+        - "Establishment"
+      parameters:
+        - $ref: "#/components/parameters/idPathParam"
       requestBody:
         content:
           "application/json":
             schema:
-              $ref: "#components/schemas/Category"
+              type: object
+              properties:
+                name:
+                  description: Establishment name must be unique!
+                  type: string
+                  example: Hadia Shop
+
       responses:
-        "201":
-          description: response of new category!
+        "200":
+          description: Establishment updated successful
           content:
             "application/json":
               schema:
@@ -931,65 +990,73 @@ paths:
                     example: 201
                   message:
                     type: string
-                    example: Category has been added!
+                    example: Establishment has been updated!
                   data:
                     type: object
                     properties:
-                    $ref: "#components/schemas/Category"
+                      name:
+                        type: string
+                        example: Hadia Shop
+        "400":
+          $ref: "#/components/responses/400"
         "500":
           "$ref": "#/components/responses/500"
-    get:
-      operationId: AllCategory
-      description: "Retrive all categories"
+    delete:
+      operationId: DeleteEstablishment
+      security:
+        - bearerAuth: []
+      description: "Delete Establishment"
       tags:
-        - "Category"
+        - "Establishment"
       parameters:
-        - $ref: "#/components/parameters/pageParam"
-        - $ref: "#/components/parameters/limitParam"
-        - $ref: "#/components/parameters/sortTypeParam"
-        - $ref: "#/components/parameters/sortByParam"
-        - $ref: "#/components/parameters/searchParam"
+        - $ref: "#/components/parameters/idPathParam"
 
       responses:
-        "200":
-          description: fetching all categories
+        "202":
+          description: Establishment Deleting
           content:
             "application/json":
               schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    code:
-                      type: integer
-                      format: int32
-                      example: 201
-                    message:
-                      type: string
-                      example: Get all categories!
-                    data:
-                      type: object
-                      properties:
-                      $ref: "#components/schemas/SubCategory"
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 202
+                  message:
+                    type: string
+                    example: Establishment has been Deleted!
+
+        "400":
+          $ref: "#/components/responses/400"
         "500":
           "$ref": "#/components/responses/500"
 
-  "/sub-category":
+  "/departments":
     post:
-      operationId: createSubCategory
+      operationId: createDepartment
       security:
         - bearerAuth: []
-      description: "Create a new sub Categry"
+      description: "Create a new Department"
       tags:
-        - "SubCategory"
+        - "Department"
       requestBody:
         content:
           "application/json":
             schema:
-              $ref: "#components/schemas/Category"
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Sales
+                establishment_id:
+                  type: string
+                  example: 6568c4210a26245b8cb27313
+              required: [name]
+
       responses:
         "201":
-          description: Create a new sub category!
+          description: Signup Successful
           content:
             "application/json":
               schema:
@@ -1001,19 +1068,25 @@ paths:
                     example: 201
                   message:
                     type: string
-                    example: Category has been added!
+                    example: Added department, Successfully
                   data:
                     type: object
                     properties:
-                    $ref: "#components/schemas/SubCategory"
+                      name:
+                        type: string
+                        example: Hadia Shop
+                      establishment_id:
+                        type: string
+                        example: 6568c4210a26245b8cb27313
         "400":
           $ref: "#/components/responses/400"
         "500":
           "$ref": "#/components/responses/500"
     get:
-      description: "Retrive all datas"
+      operationId: AllDepartments
+      description: "Retrive all Departments"
       tags:
-        - "SubCategory"
+        - "Department"
       parameters:
         - $ref: "#/components/parameters/pageParam"
         - $ref: "#/components/parameters/limitParam"
@@ -1022,27 +1095,410 @@ paths:
         - $ref: "#/components/parameters/searchParam"
 
       responses:
-        "201":
-          description: fetching categories
+        "200":
+          description: Fetching all Department
           content:
             "application/json":
               schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    code:
-                      type: integer
-                      format: int32
-                      example: 201
-                    message:
-                      type: string
-                      example: Get all categories!
-                    data:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 202
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
                       type: object
-                      properties:
-                      $ref: "#components/schemas/Category"
+                    properties:
+                      name:
+                        type: string
+                        example: Hadia Shop
+                  establishment_id:
+                    type: string
+                    example: 6568c4210a26245b8cb27313
+        "500":
+          "$ref": "#/components/responses/500"
 
+  "/departments/{id}":
+    get:
+      operationId: Department
+      description: "Retrive Department"
+      tags:
+        - "Department"
+      parameters:
+        - $ref: "#/components/parameters/idPathParam"
+
+      responses:
+        "200":
+          description: Fetching a Department
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 200
+                  message:
+                    type: string
+                    example: Added department, Successfully
+                  data:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                        example: Hadia Shop
+                      establishment_id:
+                        type: string
+                        example: 6568c4210a26245b8cb27313
+        "401":
+          "$ref": "#/components/responses/401"
+        "403":
+          "$ref": "#/components/responses/403"
+        "404":
+          "$ref": "#/components/responses/404"
+        "500":
+          "$ref": "#/components/responses/500"
+    patch:
+      operationId: updateEstablishment
+      security:
+        - bearerAuth: []
+      description: "Update Establishment"
+      tags:
+        - "Establishment"
+      parameters:
+        - $ref: "#/components/parameters/idPathParam"
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              type: object
+              properties:
+                name:
+                  description: Establishment name must be unique!
+                  type: string
+                  example: Hadia Shop
+
+      responses:
+        "200":
+          description: Update Department
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 200
+                  message:
+                    type: string
+                    example: Update department, Successfully
+                  data:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                        example: Hadia Shop
+                      establishment_id:
+                        type: string
+                        example: 6568c4210a26245b8cb27313
+    delete:
+      operationId: DeleteDepartment
+      security:
+        - bearerAuth: []
+      description: "Delete Department"
+      tags:
+        - "Department"
+      parameters:
+        - $ref: "#/components/parameters/idPathParam"
+
+      responses:
+        "202":
+          description: Department Deleting
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 202
+                  message:
+                    type: string
+                    example: Department has been deleted!
+
+        "400":
+          $ref: "#/components/responses/400"
+        "500":
+          "$ref": "#/components/responses/500"
+
+  "/forms":
+    post:
+      operationId: createForm
+      security:
+        - bearerAuth: []
+      description: "Create a new Form"
+      tags:
+        - "Form"
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Sales
+                fields:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      label:
+                        type: string
+                      name:
+                        type: string
+                        pattern: "^[a-z][a-z_]+$"
+                        example: start_time
+                      type:
+                        type: string
+                        enum:
+                          [
+                            "text",
+                            "select",
+                            "button",
+                            "checkbox",
+                            "color",
+                            "date",
+                            "datetime-local",
+                            "email",
+                            "file",
+                            "hidden",
+                            "image",
+                            "month",
+                            "number",
+                            "password",
+                            "radio",
+                            "range",
+                            "reset",
+                            "search",
+                            "submit",
+                            "tel",
+                            "time",
+                            "url",
+                            "week",
+                          ]
+                      submission_date:
+                        type: string
+                        format: data-time
+                        description: For which date do you submit the book?
+                      validation:
+                        type: array
+                        items:
+                          type: string
+                          example: "required→The filed is mandatory&pattern→^[a-z][a-z_]+$"
+                        #   type: object
+                        # properties:
+                        #   required:
+                        #     type: object
+                        #     properties:
+                        #       value:
+                        #         type: boolean
+                        #         example: true
+                        #       message:
+                        #         type: string
+                        #         example: The field is mandatory
+
+                  required: [label, name, type]
+              required: [name, fields]
+
+      responses:
+        "201":
+          description: Signup Successful
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 201
+                  message:
+                    type: string
+                    example: Added Form, Successfully
+                  data:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                        example: Hadia Shop
+                      establishment_id:
+                        type: string
+                        example: 6568c4210a26245b8cb27313
+        "400":
+          $ref: "#/components/responses/400"
+        "500":
+          "$ref": "#/components/responses/500"
+    get:
+      operationId: Allforms
+      description: "Retrive all forms"
+      tags:
+        - "Form"
+      parameters:
+        - $ref: "#/components/parameters/pageParam"
+        - $ref: "#/components/parameters/limitParam"
+        - $ref: "#/components/parameters/sortTypeParam"
+        - $ref: "#/components/parameters/sortByParam"
+        - $ref: "#/components/parameters/searchParam"
+
+      responses:
+        "200":
+          description: Fetching all Form
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 202
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                    properties:
+                      name:
+                        type: string
+                        example: Hadia Shop
+                  establishment_id:
+                    type: string
+                    example: 6568c4210a26245b8cb27313
+        "500":
+          "$ref": "#/components/responses/500"
+
+  "/forms/{id}":
+    get:
+      operationId: Form
+      description: "Retrive Form"
+      tags:
+        - "Form"
+      parameters:
+        - $ref: "#/components/parameters/idPathParam"
+
+      responses:
+        "200":
+          description: Fetching a Form
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 200
+                  message:
+                    type: string
+                    example: Added Form, Successfully
+                  data:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                        example: Hadia Shop
+                      establishment_id:
+                        type: string
+                        example: 6568c4210a26245b8cb27313
+        "401":
+          "$ref": "#/components/responses/401"
+        "403":
+          "$ref": "#/components/responses/403"
+        "404":
+          "$ref": "#/components/responses/404"
+        "500":
+          "$ref": "#/components/responses/500"
+    patch:
+      operationId: updateEstablishment
+      security:
+        - bearerAuth: []
+      description: "Update Establishment"
+      tags:
+        - "Establishment"
+      parameters:
+        - $ref: "#/components/parameters/idPathParam"
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              type: object
+              properties:
+                name:
+                  description: Establishment name must be unique!
+                  type: string
+                  example: Hadia Shop
+
+      responses:
+        "200":
+          description: Update Form
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 200
+                  message:
+                    type: string
+                    example: Update Form, Successfully
+                  data:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                        example: Hadia Shop
+                      establishment_id:
+                        type: string
+                        example: 6568c4210a26245b8cb27313
+    delete:
+      operationId: DeleteForm
+      security:
+        - bearerAuth: []
+      description: "Delete Form"
+      tags:
+        - "Form"
+      parameters:
+        - $ref: "#/components/parameters/idPathParam"
+
+      responses:
+        "202":
+          description: Form Deleting
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 202
+                  message:
+                    type: string
+                    example: Form has been deleted!
+
+        "400":
+          $ref: "#/components/responses/400"
         "500":
           "$ref": "#/components/responses/500"
 
@@ -1414,6 +1870,23 @@ components:
               error:
                 type: string
                 example: Unauthorized
+              message:
+                type: string
+                example: You don't have the right permissions
+    "403":
+      description: Unauthenticated
+      content:
+        "application/json":
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+                example: 401
+              error:
+                type: string
+                example: Unauthenticated
               message:
                 type: string
                 example: You don't have the right permissions
