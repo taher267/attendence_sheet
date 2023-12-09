@@ -31,21 +31,9 @@ const findAllItems = async ({
   }
 
   const skip = page * limit - limit;
-  const selection = [
-    "id",
-    "name",
-    "email",
-    "phone_number",
-    "username",
-    "lastLogin",
-    "roles",
-    "username",
-    "status",
-    "createdAt",
-    "updatedAt",
-  ];
+  const selection = ["weekly", "monthly", "occasional"];
 
-  const users = await holidayRepo.findAllItems({
+  const items = await holidayRepo.findAllItems({
     qry: filter,
     sortStr,
     limit,
@@ -53,11 +41,11 @@ const findAllItems = async ({
     select: selection,
   });
   // .populate({ path: "author", select: "name" })
-  console.log(users?.length);
+  console.log(items?.length);
   const data = query.getTransformedItems({
-    items: users,
+    items: items,
     selection,
-    path: "/users",
+    path: "/holidays",
   });
 
   // pagination
@@ -76,7 +64,7 @@ const findAllItems = async ({
   });
 
   return {
-    users: data,
+    data,
     totalItems,
     pagination,
     links,

@@ -23,7 +23,7 @@ const login = async ({ username, password }) => {
   }
   const user = await userRepo.findItem({
     qry,
-    select: "+password +refreshToken status",
+    select: "+password +refreshToken",
   });
 
   if (!user) {

@@ -29,7 +29,7 @@ const ReportFormSchema = new Schema(
     ],
     status: { type: String, eum: ["active", "inactive"], default: "active" },
   },
-  { timestamps: true }
+  { timestamps: true, versionKey: false  }
 );
 const ReportForm = model("ReportForm", ReportFormSchema);
 

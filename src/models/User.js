@@ -50,7 +50,7 @@ const userSchema = new Schema(
       },
     ],
   },
-  { timestamps: true }
+  { timestamps: true, versionKey: false }
 );
 userSchema.index({ email: 1 }, { unique: true });
 const User = model("User", userSchema);

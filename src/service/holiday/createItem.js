@@ -1,69 +1,23 @@
 const { badRequest, customError } = require("../../utils/error");
 const holidayRepo = require("../../repo/holiday");
-const bcrypt = require("bcrypt");
-
-const createItem = async ({
-  name,
-  email,
-  // status,
-  phone_number,
-  username,
-  passwordAllow,
-  // lastLogin,
-  roles,
-  // refreshToken,
-  password,
-}) => {
-  if (!name || !email || !password) {
+const createItem = async ({ weekly = [], monthly = [], occasional = [] }) => {
+  if (!weekly?.length && !monthly?.length && !occasional?.length) {
     throw badRequest(`Invalid parameters!`);
   }
 
-  const qry = [{ email }];
-  if (username) {
-    qry.push({ username });
+  const newObj = {};
+  if (weekly?.length) {
+    newObj.weekly = weekly;
+  }
+  if (monthly?.length) {
+    newObj.monthly = monthly;
+  }
+  if (occasional?.length) {
+    newObj.occasional = occasional;
   }
 
-  if (phone_number) {
-    qry.push({ phone_number });
-  }
-
-  const existUser = await holidayRepo.findItem({
-    qry: { $or: qry },
-  });
-
-  if (existUser) {
-    throw customError({
-      message: "Failure to create user!",
-      errors: [{ name: `User already exist!` }],
-    });
-  }
-
-  const hash = await bcrypt.hash(password, await bcrypt.genSalt(10));
-
-  const newObj = {
-    name,
-    email,
-    password: hash,
-  };
-  if (phone_number) {
-    newObj.phone_number = phone_number;
-  }
-  if (username) {
-    newObj.username = username;
-  }
-  if (roles) {
-    newObj.roles = roles;
-  }
-
-  if (passwordAllow) {
-    newObj.passwordAllow = passwordAllow;
-  }
-  if (password) {
-  }
-
-  const user = await holidayRepo.createNewItem(newObj);
-  delete user.password;
-  return user;
+  const createItem = await holidayRepo.createNewItem(newObj);
+  return createItem;
 };
 
 module.exports = createItem;
