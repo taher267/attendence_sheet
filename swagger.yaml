@@ -23,14 +23,14 @@ tags:
     description: Establishment Endpoints (Private)
   - name: Department
     description: Department Endpoints (Private)
-  - name: Form
-    description: Form Endpoints (private)
-  - name: FormPermission
-    description: FormPermission Endpoints (Private)
-  - name: FormSubmission
-    description: FormSubmission Endpoints (Private)
-  - name: Feedback
-    description: Feedback Endpoints (Private)
+  - name: ReportForm
+    description: ReportForm Endpoints (private)
+  - name: Holiday
+    description: Holiday Endpoints (Private)
+  - name: ReportPermission
+    description: ReportPermission Endpoints (Private)
+  - name: WorkReport
+    description: WorkReport Endpoints (Private)
 paths:
   "/auth/register":
     post:
@@ -1238,23 +1238,23 @@ paths:
         "500":
           "$ref": "#/components/responses/500"
 
-  "/forms":
+  "/report-form":
     post:
-      operationId: createForm
+      operationId: createReportForm
       security:
         - bearerAuth: []
-      description: "Create a new Form"
+      description: "Create a new Report Form"
       tags:
-        - "Form"
+        - "ReportForm"
       requestBody:
         content:
           "application/json":
             schema:
               type: object
-              $ref: "#/components/schemas/Form"
+              $ref: "#/components/schemas/ReportForm"
       responses:
         "201":
-          description: Signup Successful
+          description: Response to create a new Report Form
           content:
             "application/json":
               schema:
@@ -1265,22 +1265,23 @@ paths:
                     example: 201
                   message:
                     type: string
-                    example: Added Form, Successfully
+                    example: Added Report Form, Successfully
                   data:
                     type: object
                     allOf:
                       - $ref: "#components/schemas/ID"
-                      - $ref: "#/components/schemas/Form"
+                      - $ref: "#/components/schemas/ReportForm"
                       - $ref: "#/components/schemas/Timestamp"
+
         "400":
           $ref: "#/components/responses/400"
         "500":
           "$ref": "#/components/responses/500"
     get:
-      operationId: Allforms
-      description: "Retrive all forms"
+      operationId: AllReportForms
+      description: "Retrive all Report Forms"
       tags:
-        - "Form"
+        - "ReportForm"
       parameters:
         - $ref: "#/components/parameters/pageParam"
         - $ref: "#/components/parameters/limitParam"
@@ -1290,7 +1291,7 @@ paths:
 
       responses:
         "200":
-          description: Fetching all Form
+          description: Fetching all Report Forms
           content:
             "application/json":
               schema:
@@ -1308,23 +1309,26 @@ paths:
                       type: object
                       allOf:
                         - $ref: "#components/schemas/ID"
-                        - $ref: "#/components/schemas/Form"
+                        - $ref: "#/components/schemas/ReportForm"
                         - $ref: "#/components/schemas/Timestamp"
         "500":
           "$ref": "#/components/responses/500"
 
-  "/forms/{id}":
+  "/report-form/{id}":
     get:
+      security:
+        - bearerAuth: []
+
       operationId: getForm
-      description: "Retrive Form"
+      description: "Retrive single ReportForm"
       tags:
-        - "Form"
+        - "ReportForm"
       parameters:
         - $ref: "#/components/parameters/idPathParam"
 
       responses:
         "200":
-          description: Fetching a Form data
+          description: Fetching a Report Form data
           content:
             "application/json":
               schema:
@@ -1336,12 +1340,12 @@ paths:
                     example: 200
                   message:
                     type: string
-                    example: Added Form, Successfully
+                    example: Added Report Form, Successfully
                   data:
                     type: object
                     allOf:
                       - $ref: "#components/schemas/ID"
-                      - $ref: "#/components/schemas/Form"
+                      - $ref: "#/components/schemas/ReportForm"
                       - $ref: "#/components/schemas/Timestamp"
         "401":
           "$ref": "#/components/responses/401"
@@ -1352,12 +1356,12 @@ paths:
         "500":
           "$ref": "#/components/responses/500"
     patch:
-      operationId: updateForm
+      operationId: updateReportForm
       security:
         - bearerAuth: []
-      description: "Update Form"
+      description: "Update Report Form"
       tags:
-        - "Form"
+        - "ReportForm"
       parameters:
         - $ref: "#/components/parameters/idPathParam"
       requestBody:
@@ -1365,7 +1369,7 @@ paths:
           "application/json":
             schema:
               type: object
-              $ref: "#/components/schemas/Form"
+              $ref: "#/components/schemas/ReportForm"
 
       responses:
         "200":
@@ -1381,28 +1385,28 @@ paths:
                     example: 200
                   message:
                     type: string
-                    example: Update Form, Successfully
+                    example: Update Report Form, Successfully
                   data:
                     type: array
                     items:
                       type: object
                       allOf:
                         - $ref: "#components/schemas/ID"
-                        - $ref: "#/components/schemas/Form"
+                        - $ref: "#/components/schemas/ReportForm"
                         - $ref: "#/components/schemas/Timestamp"
     delete:
-      operationId: DeleteForm
+      operationId: DeleteReportForm
       security:
         - bearerAuth: []
-      description: "Delete Form"
+      description: "Delete Report Form"
       tags:
-        - "Form"
+        - "ReportForm"
       parameters:
         - $ref: "#/components/parameters/idPathParam"
 
       responses:
         "202":
-          description: Form Deleting
+          description: ReportForm Deleting
           content:
             "application/json":
               schema:
@@ -1414,7 +1418,527 @@ paths:
                     example: 202
                   message:
                     type: string
-                    example: Form has been deleted!
+                    example: ReportForm has been deleted!
+
+        "400":
+          $ref: "#/components/responses/400"
+        "500":
+          "$ref": "#/components/responses/500"
+
+  "/holiday":
+    post:
+      operationId: createHoliday
+      security:
+        - bearerAuth: []
+      description: "Create a new Holiday"
+      tags:
+        - "Holiday"
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              type: object
+              $ref: "#/components/schemas/Holiday"
+      responses:
+        "201":
+          description: Response to create a new Holiday
+          content:
+            "application/json":
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 201
+                  message:
+                    type: string
+                    example: Added Holiday, Successfully
+                  data:
+                    $ref: "#/components/schemas/HolidayResponse"
+        "400":
+          $ref: "#/components/responses/400"
+        "500":
+          "$ref": "#/components/responses/500"
+    get:
+      operationId: AllReportForms
+      description: "Retrive all Holiday"
+      tags:
+        - "Holiday"
+      parameters:
+        - $ref: "#/components/parameters/pageParam"
+        - $ref: "#/components/parameters/limitParam"
+        - $ref: "#/components/parameters/sortTypeParam"
+        - $ref: "#/components/parameters/sortByParam"
+        - $ref: "#/components/parameters/searchParam"
+
+      responses:
+        "200":
+          description: Fetching all Holidays
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 202
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      $ref: "#/components/schemas/HolidayResponse"
+        "500":
+          "$ref": "#/components/responses/500"
+
+  "/holiday/{id}":
+    get:
+      security:
+        - bearerAuth: []
+
+      operationId: getHoliday
+      description: "Retrive single Holiday"
+      tags:
+        - "Holiday"
+      parameters:
+        - $ref: "#/components/parameters/idPathParam"
+
+      responses:
+        "200":
+          description: Fetching a Holiday
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 200
+                  message:
+                    type: string
+                    example: Added Holiday, Successfully
+                  data:
+                    $ref: "#/components/schemas/HolidayResponse"
+        "401":
+          "$ref": "#/components/responses/401"
+        "403":
+          "$ref": "#/components/responses/403"
+        "404":
+          "$ref": "#/components/responses/404"
+        "500":
+          "$ref": "#/components/responses/500"
+    patch:
+      operationId: updateHoliday
+      security:
+        - bearerAuth: []
+      description: "Update Holiday"
+      tags:
+        - "Holiday"
+      parameters:
+        - $ref: "#/components/parameters/idPathParam"
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              type: object
+              $ref: "#/components/schemas/Holiday"
+
+      responses:
+        "200":
+          description: Update Holiday
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 200
+                  message:
+                    type: string
+                    example: Update Holiday, Successfully
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      $ref: "#/components/schemas/HolidayResponse"
+    delete:
+      operationId: DeleteHoliday
+      security:
+        - bearerAuth: []
+      description: "Delete Holiday"
+      tags:
+        - "Holiday"
+      parameters:
+        - $ref: "#/components/parameters/idPathParam"
+
+      responses:
+        "202":
+          description: Holiday Deleting
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 202
+                  message:
+                    type: string
+                    example: Report Form has been deleted!
+
+        "400":
+          $ref: "#/components/responses/400"
+        "500":
+          "$ref": "#/components/responses/500"
+
+  "/report-permission":
+    post:
+      operationId: createReportPermission
+      security:
+        - bearerAuth: []
+      description: "Create a new ReportPermission"
+      tags:
+        - "ReportPermission"
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              type: object
+              $ref: "#/components/schemas/ReportPermission"
+      responses:
+        "201":
+          description: Response to create a new Report Permission
+          content:
+            "application/json":
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 201
+                  message:
+                    type: string
+                    example: Added Report Permission, Successfully
+                  data:
+                    $ref: "#/components/schemas/ReportPermissionResponse"
+                    # allOf:
+                    #   - $ref: "#components/schemas/ID"
+                    #   - $ref: "#/components/schemas/ReportPermissionResponse"
+                    #   - $ref: "#/components/schemas/Timestamp"
+        "400":
+          $ref: "#/components/responses/400"
+        "500":
+          "$ref": "#/components/responses/500"
+    get:
+      operationId: AllReportForms
+      description: "Retrive all Report Forms"
+      tags:
+        - "ReportPermission"
+      parameters:
+        - $ref: "#/components/parameters/pageParam"
+        - $ref: "#/components/parameters/limitParam"
+        - $ref: "#/components/parameters/sortTypeParam"
+        - $ref: "#/components/parameters/sortByParam"
+        - $ref: "#/components/parameters/searchParam"
+
+      responses:
+        "200":
+          description: Fetching all Report Permission
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 202
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      $ref: "#/components/schemas/ReportPermissionResponse"
+        "500":
+          "$ref": "#/components/responses/500"
+
+  "/report-permission/{id}":
+    get:
+      security:
+        - bearerAuth: []
+
+      operationId: getReportPermission
+      description: "Retrive single Report Permission"
+      tags:
+        - "ReportPermission"
+      parameters:
+        - $ref: "#/components/parameters/idPathParam"
+
+      responses:
+        "200":
+          description: Fetching a Report Permission data
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 200
+                  message:
+                    type: string
+                    example: Added Report Permission, Successfully
+                  data:
+                    $ref: "#/components/schemas/ReportPermissionResponse"
+        "401":
+          "$ref": "#/components/responses/401"
+        "403":
+          "$ref": "#/components/responses/403"
+        "404":
+          "$ref": "#/components/responses/404"
+        "500":
+          "$ref": "#/components/responses/500"
+    patch:
+      operationId: updateReportPermission
+      security:
+        - bearerAuth: []
+      description: "Update Report Form"
+      tags:
+        - "ReportPermission"
+      parameters:
+        - $ref: "#/components/parameters/idPathParam"
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              type: object
+              $ref: "#/components/schemas/ReportPermission"
+
+      responses:
+        "200":
+          description: Update Form
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 200
+                  message:
+                    type: string
+                    example: Update Report Form, Successfully
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      $ref: "#/components/schemas/ReportPermissionResponse"
+    delete:
+      operationId: DeleteReportPermission
+      security:
+        - bearerAuth: []
+      description: "Delete Report Form"
+      tags:
+        - "ReportPermission"
+      parameters:
+        - $ref: "#/components/parameters/idPathParam"
+
+      responses:
+        "202":
+          description: Report Permission Deleting
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 202
+                  message:
+                    type: string
+                    example: Report Form has been deleted!
+
+        "400":
+          $ref: "#/components/responses/400"
+        "500":
+          "$ref": "#/components/responses/500"
+
+  "/work-report":
+    post:
+      operationId: createHoliday
+      security:
+        - bearerAuth: []
+      description: "Create a new Holiday"
+      tags:
+        - "WorkReport"
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              type: object
+              $ref: "#/components/schemas/Holiday"
+      responses:
+        "201":
+          description: Response to create a new Holiday
+          content:
+            "application/json":
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 201
+                  message:
+                    type: string
+                    example: Added Holiday, Successfully
+                  data:
+                    $ref: "#/components/schemas/HolidayResponse"
+        "400":
+          $ref: "#/components/responses/400"
+        "500":
+          "$ref": "#/components/responses/500"
+    get:
+      operationId: AllReportForms
+      description: "Retrive all Holiday"
+      tags:
+        - "WorkReport"
+      parameters:
+        - $ref: "#/components/parameters/pageParam"
+        - $ref: "#/components/parameters/limitParam"
+        - $ref: "#/components/parameters/sortTypeParam"
+        - $ref: "#/components/parameters/sortByParam"
+        - $ref: "#/components/parameters/searchParam"
+
+      responses:
+        "200":
+          description: Fetching all Holidays
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 202
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      $ref: "#/components/schemas/HolidayResponse"
+        "500":
+          "$ref": "#/components/responses/500"
+
+  "/work-report/{id}":
+    get:
+      security:
+        - bearerAuth: []
+
+      operationId: getHoliday
+      description: "Retrive single Holiday"
+      tags:
+        - "WorkReport"
+      parameters:
+        - $ref: "#/components/parameters/idPathParam"
+
+      responses:
+        "200":
+          description: Fetching a Holiday
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 200
+                  message:
+                    type: string
+                    example: Added Holiday, Successfully
+                  data:
+                    $ref: "#/components/schemas/HolidayResponse"
+        "401":
+          "$ref": "#/components/responses/401"
+        "403":
+          "$ref": "#/components/responses/403"
+        "404":
+          "$ref": "#/components/responses/404"
+        "500":
+          "$ref": "#/components/responses/500"
+    patch:
+      operationId: updateHoliday
+      security:
+        - bearerAuth: []
+      description: "Update Holiday"
+      tags:
+        - "WorkReport"
+      parameters:
+        - $ref: "#/components/parameters/idPathParam"
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              type: object
+              $ref: "#/components/schemas/Holiday"
+
+      responses:
+        "200":
+          description: Update Holiday
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 200
+                  message:
+                    type: string
+                    example: Update Holiday, Successfully
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      $ref: "#/components/schemas/HolidayResponse"
+    delete:
+      operationId: DeleteHoliday
+      security:
+        - bearerAuth: []
+      description: "Delete Holiday"
+      tags:
+        - "WorkReport"
+      parameters:
+        - $ref: "#/components/parameters/idPathParam"
+
+      responses:
+        "202":
+          description: Holiday Deleting
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 202
+                  message:
+                    type: string
+                    example: Report Form has been deleted!
 
         "400":
           $ref: "#/components/responses/400"
@@ -1536,7 +2060,8 @@ components:
           type: string
           # example: active
           enum: ["active", "inactive", "pending"]
-    Form:
+
+    ReportForm:
       properties:
         name:
           type: string
@@ -1589,96 +2114,94 @@ components:
                 items:
                   type: string
                   example: "required→The filed is mandatory&pattern→^[a-z][a-z_]+$"
-                #   type: object
-                # properties:
-                #   required:
-                #     type: object
-                #     properties:
-                #       value:
-                #         type: boolean
-                #         example: true
-                #       message:
-                #         type: string
-                #         example: The field is mandatory
-
           required: [label, name, type]
       required: [name, fields]
-
-    Product:
-      allOf:
-        - type: object
-          properties:
-            title:
-              type: string
-              example: Smart T-Shirt
-            description:
-              type: string
-              example: 'No sólo sobrevivió 500 años, sino que tambien ingresó como texto de relleno en documentos electrónicos, quedando esencialmente igual al original. Fue popularizado en los 60s con la creación de las hojas "Letraset", las cuales contenian pasajes de Lorem Ipsum, y más recientemente con software de autoedición, como por ejemplo Aldus PageMaker, el cual incluye versiones de Lorem Ipsum.'
-            html:
-              type: string
-              example: <div><h1>Product title</h1><p>Product Details</p></div>
-            sub_category_id:
-              type: string
-              description: subtitle of mongodb object id
-              example: "6568c4210a26245b8cb27313"
-            SKU:
-              type: string
-              description: Stock Keeping Unit
-              example: "xyz-123"
-            qty_in_stock:
-              type: integer
-              description: Quantity of stock
-              format: int32
-              example: 1
-            thumb:
-              type: string
-              description: image url
-              example: "http://example.com/image.png"
-            price:
-              type: integer
-              description: Quantity of Stock
-              format: int32
-              example: 1
-            images:
-              type: array
-              items:
+    WorkReport:
+      properties:
+        report_permission_id:
+          $ref: "#/components/schemas/ID_TYPE_EXAMPLE"
+        for_submission_date:
+          type: string
+          format: data-time
+        fields:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
                 type: string
-                description: image url
-                example: "http://example.com/image.png"
-          required: ["title", "sub_category_id", "SKU", "price"]
+                example: start_time
+              report:
+                type: string
+                example: 09:30 AM
+
+      required: [report_permission_id, fields, for_submission_date]
+    WorkReportResponse:
+      allOf:
+        - $ref: "#/components/schemas/ID"
+        - $ref: "#/components/schemas/WorkReport"
         - $ref: "#/components/schemas/Timestamp"
-    Category:
+    ReportPermission:
+      properties:
+        user_id:
+          $ref: "#components/schemas/ID_TYPE_EXAMPLE"
+        report_form_id:
+          $ref: "#components/schemas/ID_TYPE_EXAMPLE"
+        status:
+          type: string
+          enum: [open, "close"]
+        establishment_id:
+          $ref: "#components/schemas/ID_TYPE_EXAMPLE"
+        department_id:
+          $ref: "#components/schemas/ID_TYPE_EXAMPLE"
+        holiday_id:
+          $ref: "#components/schemas/ID_TYPE_EXAMPLE"
+        observer:
+          description: observer should be a active user and it role would be observer
+          $ref: "#components/schemas/ID_TYPE_EXAMPLE"
+      required: [user_id, form_id, status]
+    Holiday:
+      properties:
+        weekly:
+          type: string
+          enum:
+            [
+              "Saturday",
+              "Sunday",
+              "Monday",
+              "Tuesday",
+              "Wednesday",
+              "Thursday",
+              "Friday",
+            ]
+        monthly:
+          type: string
+        occasional:
+          type: array
+          items:
+            type: string
+            format: data-time
+    HolidayResponse:
       allOf:
-        - type: object
-          properties:
-            title:
-              type: string
-              example: T-Shirt
-            description:
-              type: string
-              example: "No sólo sobrevivió 500 años, sino que tambien ingresó como texto de relleno en documenton"
-          required: [name]
-    SubCategory:
+        - $ref: "#/components/schemas/ID"
+        - $ref: "#/components/schemas/Holiday"
+        - $ref: "#/components/schemas/Timestamp"
+
+    ReportPermissionResponse:
       allOf:
-        - type: object
-          properties:
-            name:
-              type: string
-              example: Smart T-Shirt
-            description:
-              type: string
-              example: "No sólo sobrevivió 500 años, sino que tambien ingresó como texto de relleno en documenton"
-            category_id:
-              type: string
-              description: category id (mongodb object id)
-              example: "6568c4210a26245b8cb27313"
-          required: [name]
+        - $ref: "#/components/schemas/ID"
+        - $ref: "#/components/schemas/ReportPermission"
+        - $ref: "#/components/schemas/Timestamp"
+
     ID:
       # type: object
       properties:
         id:
           type: string
           example: "64d268cdeef8c84bb18912db"
+    ID_TYPE_EXAMPLE:
+      type: string
+      example: "64d268cdeef8c84bb18912db"
     Timestamp:
       type: object
       properties:

@@ -1,17 +1,20 @@
+const User = require("./User");
 const Department = require("./Department");
 const Establishment = require("./Establishment");
-const Form = require("./Form");
-const FormPermission = require("./FormPermission");
-const FormSubmission = require("./FormSubmission");
-const User = require("./User");
+const ReportForm = require("./ReportForm");
+const ReportPermission = require("./ReportPermission");
+const WorkReport = require("./WorkReport");
+const Holiday = require("./Holiday");
 const Feedback = () => {};
 
 module.exports = {
   User,
   Establishment,
   Department,
-  Form,
-  FormPermission,
-  FormSubmission,
+  ReportForm,
+  ReportPermission,
+  WorkReport,
+  Holiday,
   Feedback,
 };
+

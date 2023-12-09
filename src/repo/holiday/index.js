@@ -1,4 +1,4 @@
-const { User } = require("../../models");
+const { Holiday } = require("../../models");
 
 const findAllItems = async ({
   qry = {},
@@ -10,14 +10,14 @@ const findAllItems = async ({
 }) => {
   let items = [];
   if (populate) {
-    items = await User.find(qry)
+    items = await Holiday.find(qry)
       .populate({ ...populate })
       .select(select)
       .sort(sortStr)
       .skip(skip)
       .limit(limit);
   } else {
-    items = await User.find(qry)
+    items = await Holiday.find(qry)
       .select(select)
       .sort(sortStr)
       .skip(skip)
@@ -30,15 +30,16 @@ const findAllItems = async ({
 };
 
 const findItem = async ({ qry = {}, select = "" }) => {
-  const item = await User.findOne(qry).select(select).exec();
+  const item = await Holiday.findOne(qry).select(select).exec();
   if (!item) return false;
   const copy = { id: item.id, ...item._doc };
   delete copy._id;
   delete copy.__v;
   return copy;
 };
+
 const findItemById = async ({ id, select = "" }) => {
-  const item = await User.findById(id).select(select).exec();
+  const item = await Holiday.findById(id).select(select).exec();
   if (!item) return false;
   const copy = { id: item.id, ...item._doc };
   delete copy._id;
@@ -47,13 +48,13 @@ const findItemById = async ({ id, select = "" }) => {
 };
 
 const updateItem = async ({ qry = {}, updateDate = {}, options = {} }) => {
-  const updated = await User.updateOne(qry, updateDate, options);
+  const updated = await Holiday.updateOne(qry, updateDate, options);
   if (!updated.matchedCount) return false;
   return updated;
 };
 
 const updateItemById = async ({ id, updateDate = {}, options = {} }) => {
-  const updated = await User.findByIdAndUpdate(id, updateDate, options);
+  const updated = await Holiday.findByIdAndUpdate(id, updateDate, options);
   if (!updated) return false;
   const copy = { id: updated.id, ...updated._doc };
   delete copy._id;
@@ -61,19 +62,19 @@ const updateItemById = async ({ id, updateDate = {}, options = {} }) => {
 };
 
 const deleteItem = ({ qry = {} }) => {
-  return User.deleteOne(qry);
+  return Holiday.deleteOne(qry);
 };
 
 const deleteItemById = ({ id }) => {
-  return User.findByIdAndDelete(id);
+  return Holiday.findByIdAndDelete(id);
 };
 
 const deleteManyItem = ({ qry = {} }) => {
-  return User.deleteMany(qry);
+  return Holiday.deleteMany(qry);
 };
 
 const createNewItem = async ({ data }) => {
-  const newData = new User(data);
+  const newData = new Holiday(data);
   await newData.save();
   const copy = newData._doc;
   delete copy._id;
@@ -81,8 +82,8 @@ const createNewItem = async ({ data }) => {
 };
 
 const create = async ({ ...data }) => {
-  const created = await User.create(data);
-  const copy = { id: created.id, ...created._doc };
+  const updated = await Holiday.create(data);
+  const copy = { id: updated.id, ...updated._doc };
   delete copy._id;
   delete copy.password;
   delete copy.__v;
@@ -90,7 +91,7 @@ const create = async ({ ...data }) => {
 };
 
 const count = ({ filter }) => {
-  return User.countDocuments(filter);
+  return Holiday.countDocuments(filter);
 };
 
 module.exports = {

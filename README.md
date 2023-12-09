@@ -43,3 +43,11 @@
 2. (src/api/v1/controllers/loginOrRegisterWithGoogle.js) (src/service/auth/loginOrRegisterWithGoogle.js)
 
 3. User.js (model) thirdPartyAuth="google"
+
+
+
+
+Form Create flow:
+1. have authenticated user should be active
+2. department (optional) department comunicate with company
+3. 

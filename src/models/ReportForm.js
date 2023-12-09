@@ -1,11 +1,12 @@
-const { Schema, model } = require("mongoose");
-const formFiledConfig = require("../config/form");
 
-const formSchema = new Schema(
+const { Schema, model } = require("mongoose");
+const reportFormFiledConfig = require("../config/reportForm");
+
+const ReportFormSchema = new Schema(
   {
     name: {
       type: String,
-      required: [true, "Form name is mandatory"],
+      required: [true, "Report form name is mandatory"],
       trim: true,
       
     },
@@ -24,7 +25,7 @@ const formSchema = new Schema(
       {
         type: {
           type: String,
-          enum: formFiledConfig.filedTypes,
+          enum: reportFormFiledConfig.filedTypes,
           default: "text",
         },
       },
@@ -33,6 +34,6 @@ const formSchema = new Schema(
   },
   { timestamps: true }
 );
-const Form = model("Form", formSchema);
+const ReportForm = model("ReportForm", ReportFormSchema);
 
-module.exports = Form;
+module.exports = ReportForm;

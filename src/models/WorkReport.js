@@ -1,24 +1,17 @@
 const { Schema, model } = require("mongoose");
 
-const FormSubmissionSchema = new Schema(
+const WorkReportSchema = new Schema(
   {
-    name: {
-      type: String,
-      required: [true, "FormSubmission name is mandatory"],
-      trim: true,
-    },
-    user_id: {
+    report_permission_id: {
       type: Schema.Types.ObjectId,
-      ref: "User",
+      ref: "ReportPermission",
       required: [true, `User id is mandatory!`],
     },
-    form_id: {
-      type: Schema.Types.ObjectId,
-      ref: "Form",
-    },
+
     fields: [
       {
         name: { type: String, required: [true, `Field name is mandatory!`] },
+        report: { type: String, required: [true, `Field name is mandatory!`] },
       },
     ],
     for_submission_date: {
@@ -28,6 +21,6 @@ const FormSubmissionSchema = new Schema(
   },
   { timestamps: true, versionKey: false }
 );
-const FormSubmission = model("FormSubmission", FormSubmissionSchema);
+const WorkReport = model("WorkReport", WorkReportSchema);
 
-module.exports = FormSubmission;
+module.exports = WorkReport;
