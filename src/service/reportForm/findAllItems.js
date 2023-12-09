@@ -2,7 +2,7 @@ const reportFormRepo = require("../../repo/reportForm");
 const defaults = require("../../config/defaults");
 const { query } = require("../../utils");
 /**
- * Find all users
+ * Find all reportForm
  * Pagination
  * Searching
  * Sorting
@@ -31,21 +31,9 @@ const findAllItems = async ({
   }
 
   const skip = page * limit - limit;
-  const selection = [
-    "id",
-    "name",
-    "email",
-    "phone_number",
-    "username",
-    "lastLogin",
-    "roles",
-    "username",
-    "status",
-    "createdAt",
-    "updatedAt",
-  ];
+  const selection = ["id", "name", "fields"];
 
-  const users = await reportFormRepo.findAllItems({
+  const reportForm = await reportFormRepo.findAllItems({
     qry: filter,
     sortStr,
     limit,
@@ -53,11 +41,11 @@ const findAllItems = async ({
     select: selection,
   });
   // .populate({ path: "author", select: "name" })
-  console.log(users?.length);
+  console.log(reportForm?.length);
   const data = query.getTransformedItems({
-    items: users,
+    items: reportForm,
     selection,
-    path: "/users",
+    path: "/report-forms",
   });
 
   // pagination
@@ -76,7 +64,7 @@ const findAllItems = async ({
   });
 
   return {
-    users: data,
+    reportForm: data,
     totalItems,
     pagination,
     links,

@@ -1,13 +1,13 @@
-const createItem = require("./createItem");
+const create = require("./create");
 const findAllItems = require("./findAllItems");
 const findSingleItem = require("./findSingleItem");
-const updateItem = require("./updateItem");
 const removeItem = require("./removeItem");
+const updateItem = require("./updateItem");
 
 module.exports = {
   findAllItems,
+  create,
   findSingleItem,
   removeItem,
-  createItem,
   updateItem,
 };

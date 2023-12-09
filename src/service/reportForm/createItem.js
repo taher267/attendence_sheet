@@ -1,69 +1,56 @@
 const { badRequest, customError } = require("../../utils/error");
 const reportFormRepo = require("../../repo/reportForm");
-const bcrypt = require("bcrypt");
+const keyValueValidation = require("../../utils/keyValueValidation");
+const fieldsFilter = require("../../utils/fieldsFilter");
 
-const createItem = async ({
-  name,
-  email,
-  // status,
-  phone_number,
-  username,
-  passwordAllow,
-  // lastLogin,
-  roles,
-  // refreshToken,
-  password,
-}) => {
-  if (!name || !email || !password) {
+const createItem = async ({ name, fields, status }) => {
+  if (!name || !fields?.length) {
     throw badRequest(`Invalid parameters!`);
   }
+  const qry = { name: { $regex: name, $options: "i" } };
 
-  const qry = [{ email }];
-  if (username) {
-    qry.push({ username });
-  }
-
-  if (phone_number) {
-    qry.push({ phone_number });
-  }
-
-  const existUser = await reportFormRepo.findItem({
-    qry: { $or: qry },
+  // Check on db it exist or not in Db
+  const existReportForm = await reportFormRepo.findItem({
+    qry,
   });
 
-  if (existUser) {
+  if (existReportForm) {
     throw customError({
-      message: "Failure to create user!",
-      errors: [{ name: `User already exist!` }],
+      message: "Failure to create report form!",
+      errors: [{ name: `Form name already exist!` }],
+    });
+  }
+  const isValidField = keyValueValidation({
+    keys: ["label", "name"],
+    values: fields,
+  });
+  if (!isValidField) {
+    throw customError({
+      message: "Failure to create report form!",
+      errors: [{ fields: `Invalid params` }],
+    });
+  }
+  const filtering = fieldsFilter({
+    keys: ["label", "name", "type", "validation"],
+    values: fields,
+  });
+
+  if (!filtering?.length) {
+    throw customError({
+      message: "Failure to create report form!",
+      errors: [{ fields: `Minimum one field is mandatory!` }],
     });
   }
 
-  const hash = await bcrypt.hash(password, await bcrypt.genSalt(10));
-
   const newObj = {
     name,
-    email,
-    password: hash,
+    fields,
   };
-  if (phone_number) {
-    newObj.phone_number = phone_number;
+  if (status) {
+    newObj.status = status;
   }
-  if (username) {
-    newObj.username = username;
-  }
-  if (roles) {
-    newObj.roles = roles;
-  }
-
-  if (passwordAllow) {
-    newObj.passwordAllow = passwordAllow;
-  }
-  if (password) {
-  }
-
-  const user = await reportFormRepo.createNewItem(newObj);
-  delete user.password;
-  return user;
+  const reportForm = await reportFormRepo.create(newObj);
+  return reportForm;
 };
 
 module.exports = createItem;

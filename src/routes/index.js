@@ -1,8 +1,9 @@
 const router = require("express").Router();
+const authorize = require("../middleware/authorize");
+const authenticate = require("../middleware/authenticate");
 const { controllers: authControllers } = require("../api/v1/auth");
 const { controllers: userControllers } = require("../api/v1/user");
-const authenticate = require("../middleware/authenticate");
-const authorize = require("../middleware/authorize");
+const { controllers: reportFormControllers } = require("../api/v1/reportForm");
 
 const v1 = `/api/v1`;
 
@@ -172,9 +173,44 @@ router
   .post(authenticate, userControllers.updatePassword);
 /*=====  End of Uer  ======*/
 /*=============================================
-=                        =
+=              ReportForm          =
 =============================================*/
+router
+  .route(`${v1}/report-forms`)
+  /**
+   * Private Route
+   * @route baseurl/api/v1/report-forms
+   * @method POST
+   */
+  .post(authenticate, reportFormControllers.create)
+  /**
+   * Private Route
+   * @route baseurl/api/v1/report-forms
+   * @method GET
+   */
+  .get(authenticate, reportFormControllers.findAllItems);
 
-/*=====  End of   ======*/
+router
+  .route(`${v1}/report-forms/:id`)
+  /**
+   * Private Route
+   * @route baseurl/api/v1/report-forms/:id
+   * @method POST
+   */
+  .get(authenticate, reportFormControllers.findSingleItem)
+  /**
+   * Private Route
+   * @route baseurl/api/v1/report-forms/:id
+   * @method PUT
+   */
+  .put(authenticate, reportFormControllers.updateItem)
+  /**
+   * Private Route
+   * @route baseurl/api/v1/report-forms/:id
+   * @method DELETE
+   */
+  .delete(authenticate, reportFormControllers.removeItem);
+
+/*=====  End of ReportForm  ======*/
 
 module.exports = router;

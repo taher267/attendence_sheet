@@ -1238,7 +1238,7 @@ paths:
         "500":
           "$ref": "#/components/responses/500"
 
-  "/report-form":
+  "/report-forms":
     post:
       operationId: createReportForm
       security:
@@ -1252,6 +1252,7 @@ paths:
             schema:
               type: object
               $ref: "#/components/schemas/ReportForm"
+              required: [name, fields]
       responses:
         "201":
           description: Response to create a new Report Form
@@ -1282,6 +1283,8 @@ paths:
       description: "Retrive all Report Forms"
       tags:
         - "ReportForm"
+      security:
+        - bearerAuth: []
       parameters:
         - $ref: "#/components/parameters/pageParam"
         - $ref: "#/components/parameters/limitParam"
@@ -1314,7 +1317,7 @@ paths:
         "500":
           "$ref": "#/components/responses/500"
 
-  "/report-form/{id}":
+  "/report-forms/{id}":
     get:
       security:
         - bearerAuth: []
@@ -1355,7 +1358,7 @@ paths:
           "$ref": "#/components/responses/404"
         "500":
           "$ref": "#/components/responses/500"
-    patch:
+    put:
       operationId: updateReportForm
       security:
         - bearerAuth: []
@@ -1773,12 +1776,12 @@ paths:
         "500":
           "$ref": "#/components/responses/500"
 
-  "/work-report":
+  "/work-reports":
     post:
-      operationId: createHoliday
+      operationId: createWorkReport
       security:
         - bearerAuth: []
-      description: "Create a new Holiday"
+      description: "Create a new Work Report"
       tags:
         - "WorkReport"
       requestBody:
@@ -1786,10 +1789,10 @@ paths:
           "application/json":
             schema:
               type: object
-              $ref: "#/components/schemas/Holiday"
+              $ref: "#/components/schemas/WorkReport"
       responses:
         "201":
-          description: Response to create a new Holiday
+          description: Response to create a new Work Report
           content:
             "application/json":
               schema:
@@ -1802,16 +1805,18 @@ paths:
                     type: string
                     example: Added Holiday, Successfully
                   data:
-                    $ref: "#/components/schemas/HolidayResponse"
+                    $ref: "#/components/schemas/WorkReportResponse"
         "400":
           $ref: "#/components/responses/400"
         "500":
           "$ref": "#/components/responses/500"
     get:
       operationId: AllReportForms
-      description: "Retrive all Holiday"
+      description: "Retrive all WorkReport"
       tags:
         - "WorkReport"
+      security:
+        - bearerAuth: []
       parameters:
         - $ref: "#/components/parameters/pageParam"
         - $ref: "#/components/parameters/limitParam"
@@ -1837,17 +1842,17 @@ paths:
                     type: array
                     items:
                       type: object
-                      $ref: "#/components/schemas/HolidayResponse"
+                      $ref: "#/components/schemas/WorkReportResponse"
         "500":
           "$ref": "#/components/responses/500"
 
-  "/work-report/{id}":
+  "/work-reports/{id}":
     get:
       security:
         - bearerAuth: []
 
-      operationId: getHoliday
-      description: "Retrive single Holiday"
+      operationId: getWorkReport
+      description: "Retrive single WorkReport"
       tags:
         - "WorkReport"
       parameters:
@@ -1855,7 +1860,7 @@ paths:
 
       responses:
         "200":
-          description: Fetching a Holiday
+          description: Fetching a WorkReport
           content:
             "application/json":
               schema:
@@ -1867,9 +1872,9 @@ paths:
                     example: 200
                   message:
                     type: string
-                    example: Added Holiday, Successfully
+                    example: Added WorkReport, Successfully
                   data:
-                    $ref: "#/components/schemas/HolidayResponse"
+                    $ref: "#/components/schemas/WorkReportResponse"
         "401":
           "$ref": "#/components/responses/401"
         "403":
@@ -1879,10 +1884,10 @@ paths:
         "500":
           "$ref": "#/components/responses/500"
     patch:
-      operationId: updateHoliday
+      operationId: updateWorkReport
       security:
         - bearerAuth: []
-      description: "Update Holiday"
+      description: "Update WorkReport"
       tags:
         - "WorkReport"
       parameters:
@@ -1892,11 +1897,11 @@ paths:
           "application/json":
             schema:
               type: object
-              $ref: "#/components/schemas/Holiday"
+              $ref: "#/components/schemas/WorkReport"
 
       responses:
         "200":
-          description: Update Holiday
+          description: Update WorkReport
           content:
             "application/json":
               schema:
@@ -1908,17 +1913,17 @@ paths:
                     example: 200
                   message:
                     type: string
-                    example: Update Holiday, Successfully
+                    example: Update WorkReport, Successfully
                   data:
                     type: array
                     items:
                       type: object
-                      $ref: "#/components/schemas/HolidayResponse"
+                      $ref: "#/components/schemas/WorkReportResponse"
     delete:
-      operationId: DeleteHoliday
+      operationId: DeleteWorkReport
       security:
         - bearerAuth: []
-      description: "Delete Holiday"
+      description: "Delete WorkReport"
       tags:
         - "WorkReport"
       parameters:
@@ -1926,7 +1931,7 @@ paths:
 
       responses:
         "202":
-          description: Holiday Deleting
+          description: WorkReport Deleting
           content:
             "application/json":
               schema:
@@ -2066,6 +2071,11 @@ components:
         name:
           type: string
           example: Sales
+        status:
+          type: string
+          enum: [active, inactive]
+          example: active
+          default: active
         fields:
           type: array
           items:
@@ -2105,9 +2115,7 @@ components:
                     "url",
                     "week",
                   ]
-              submission_date:
-                type: string
-                format: data-time
+
                 description: For which date do you submit the book?
               validation:
                 type: array
@@ -2115,11 +2123,14 @@ components:
                   type: string
                   example: "required→The filed is mandatory&pattern→^[a-z][a-z_]+$"
           required: [label, name, type]
-      required: [name, fields]
+      # required: [name, fields]
+
     WorkReport:
       properties:
         report_permission_id:
-          $ref: "#/components/schemas/ID_TYPE_EXAMPLE"
+          # $ref: "#/components/schemas/ID_TYPE_EXAMPLE"
+          type: string
+          example: "64d268cdeef8c84bb18912db"
         for_submission_date:
           type: string
           format: data-time
@@ -2134,7 +2145,7 @@ components:
               report:
                 type: string
                 example: 09:30 AM
-
+          required: [name, report]
       required: [report_permission_id, fields, for_submission_date]
     WorkReportResponse:
       allOf:
@@ -2144,21 +2155,33 @@ components:
     ReportPermission:
       properties:
         user_id:
-          $ref: "#components/schemas/ID_TYPE_EXAMPLE"
+          type: string
+          example: "64d268cdeef8c84bb18912db"
+          # $ref: "#components/schemas/ID_TYPE_EXAMPLE"
         report_form_id:
-          $ref: "#components/schemas/ID_TYPE_EXAMPLE"
+          type: string
+          example: "64d268cdeef8c84bb18912db"
+          # $ref: "#components/schemas/ID_TYPE_EXAMPLE"
         status:
           type: string
           enum: [open, "close"]
         establishment_id:
-          $ref: "#components/schemas/ID_TYPE_EXAMPLE"
+          type: string
+          example: "64d268cdeef8c84bb18912db"
+          # $ref: "#components/schemas/ID_TYPE_EXAMPLE"
         department_id:
-          $ref: "#components/schemas/ID_TYPE_EXAMPLE"
+          type: string
+          example: "64d268cdeef8c84bb18912db"
+          # $ref: "#components/schemas/ID_TYPE_EXAMPLE"
         holiday_id:
-          $ref: "#components/schemas/ID_TYPE_EXAMPLE"
+          type: string
+          example: "64d268cdeef8c84bb18912db"
+          # $ref: "#components/schemas/ID_TYPE_EXAMPLE"
         observer:
           description: observer should be a active user and it role would be observer
-          $ref: "#components/schemas/ID_TYPE_EXAMPLE"
+          type: string
+          example: "64d268cdeef8c84bb18912db"
+          # $ref: "#components/schemas/ID_TYPE_EXAMPLE"
       required: [user_id, form_id, status]
     Holiday:
       properties:

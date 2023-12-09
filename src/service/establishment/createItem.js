@@ -2,36 +2,16 @@ const { badRequest, customError } = require("../../utils/error");
 const establishmentRepo = require("../../repo/establishment");
 const bcrypt = require("bcrypt");
 
-const createItem = async ({
-  name,
-  email,
-  // status,
-  phone_number,
-  username,
-  passwordAllow,
-  // lastLogin,
-  roles,
-  // refreshToken,
-  password,
-}) => {
-  if (!name || !email || !password) {
+const createItem = async ({ name, fields }) => {
+  if (!name || !fields?.length) {
     throw badRequest(`Invalid parameters!`);
   }
 
-  const qry = [{ email }];
-  if (username) {
-    qry.push({ username });
-  }
-
-  if (phone_number) {
-    qry.push({ phone_number });
-  }
-
-  const existUser = await establishmentRepo.findItem({
-    qry: { $or: qry },
+  const existEstablishment = await establishmentRepo.findItem({
+    qry: { name: { $regex: name, $options: "i" } },
   });
 
-  if (existUser) {
+  if (existEstablishment) {
     throw customError({
       message: "Failure to create user!",
       errors: [{ name: `User already exist!` }],
