@@ -22,5 +22,6 @@ const filedTypes = [
   "url",
   "week",
 ];
+const statuses = ["active", "inactive"];
 
-module.exports = { filedTypes };
+module.exports = { filedTypes, statuses };

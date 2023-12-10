@@ -27,7 +27,7 @@ const ReportFormSchema = new Schema(
         validation: Array,
       },
     ],
-    status: { type: String, eum: ["active", "inactive"], default: "active" },
+    status: { type: String, eum: reportFormFiledConfig.statuses, default: "active" },
   },
   { timestamps: true, versionKey: false  }
 );

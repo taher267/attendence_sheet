@@ -1,15 +1,13 @@
 const holidayService = require("../../../../service/holiday");
 
 const updateItem = async (req, res, next) => {
-  const { name, fields, status } = req.body;
+  const {  weekly , monthly , occasional   } = req.body;
   const { id } = req.params;
 
   try {
     const data = await holidayService.updateItem({
-      name,
-      fields,
-      status,
       id,
+      weekly , monthly , occasional 
     });
 
     const response = {

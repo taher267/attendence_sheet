@@ -1,4 +1,4 @@
-const { badRequest, customError } = require("../../utils/error");
+const { badRequest } = require("../../utils/error");
 const holidayRepo = require("../../repo/holiday");
 const createItem = async ({ weekly = [], monthly = [], occasional = [] }) => {
   if (!weekly?.length && !monthly?.length && !occasional?.length) {
@@ -16,8 +16,8 @@ const createItem = async ({ weekly = [], monthly = [], occasional = [] }) => {
     newObj.occasional = occasional;
   }
 
-  const createItem = await holidayRepo.createNewItem(newObj);
-  return createItem;
+  const createdItem = await holidayRepo.createNewItem(newObj);
+  return createdItem;
 };
 
 module.exports = createItem;

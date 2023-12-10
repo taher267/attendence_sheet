@@ -2,7 +2,7 @@ const reportPermissionRepo = require("../../repo/reportPermission");
 const defaults = require("../../config/defaults");
 const { query } = require("../../utils");
 /**
- * Find all users
+ * Find all items
  * Pagination
  * Searching
  * Sorting
@@ -33,19 +33,15 @@ const findAllItems = async ({
   const skip = page * limit - limit;
   const selection = [
     "id",
-    "name",
-    "email",
-    "phone_number",
-    "username",
-    "lastLogin",
-    "roles",
-    "username",
-    "status",
-    "createdAt",
-    "updatedAt",
+    "user_id",
+    "report_form_id",
+    "establishment_id",
+    "department_id",
+    "holiday_id",
+    "observer",
   ];
 
-  const users = await reportPermissionRepo.findAllItems({
+  const items = await reportPermissionRepo.findAllItems({
     qry: filter,
     sortStr,
     limit,
@@ -53,11 +49,11 @@ const findAllItems = async ({
     select: selection,
   });
   // .populate({ path: "author", select: "name" })
-  console.log(users?.length);
+  console.log(items?.length);
   const data = query.getTransformedItems({
-    items: users,
+    items: items,
     selection,
-    path: "/users",
+    path: "/report-permissions",
   });
 
   // pagination
@@ -76,7 +72,7 @@ const findAllItems = async ({
   });
 
   return {
-    users: data,
+    items: data,
     totalItems,
     pagination,
     links,

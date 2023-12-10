@@ -4,11 +4,11 @@ const { isValidObjectId } = require("mongoose");
 
 const removeItem = async ({ id }) => {
   if (!id || !isValidObjectId(id)) throw badRequest(`Invalid user id!`);
-  const user = await holidayRepo.deleteItemById({ id });
+  const item = await holidayRepo.deleteItemById({ id });
 
-  if (!user) {
+  if (!item) {
     throw notFound();
   }
-  return user;
+  return item;
 };
 module.exports = removeItem;

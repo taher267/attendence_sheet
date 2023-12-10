@@ -1,66 +1,37 @@
-const { badRequest, customError, notFound } = require("../../utils/error");
+const { badRequest } = require("../../utils/error");
 const holidayRepo = require("../../repo/holiday");
-const keyValueValidation = require("../../utils/keyValueValidation");
-const fieldsFilter = require("../../utils/fieldsFilter");
 const { isValidObjectId } = require("mongoose");
 
-const updateItem = async ({ id, name, fields, status }) => {
-  if ((!name && !fields?.length && !status) || !id || !isValidObjectId(id)) {
+const updateItem = async ({ id, weekly, monthly, occasional }) => {
+  if (!id || !isValidObjectId(id)) {
     throw badRequest(`Invalid parameters!`);
   }
-  const existReportForm = await holidayRepo.findItemById({
-    id,
-  });
+  // const doesExistItem = await holidayRepo.findItemById({
+  //   id,
+  // });
 
-  if (!existReportForm) {
-    throw notFound();
-  }
-  if (name && name !== existReportForm.name) {
-    const qry = { name: { $regex: name, $options: "i" } };
-    const existReportFormByName = await holidayRepo.findItemById({
-      qry,
-    });
-    if (existReportFormByName) {
-      throw customError({
-        message: "Failure to create report form!",
-        errors: [{ name: `Form name already exist!` }],
-      });
-    }
-  }
+  // if (!doesExistItem) {
+  //   throw notFound();
+  // }
+  const updateDate = {};
 
-  const isValidField = keyValueValidation({
-    keys: ["label", "name"],
-    values: fields,
-  });
-  if (!isValidField) {
-    throw customError({
-      message: "Failure to create report form!",
-      errors: [{ fields: `Invalid params` }],
-    });
+  if (weekly) {
+    updateDate.weekly = weekly;
   }
-  const filtering = fieldsFilter({
-    keys: ["label", "name", "type", "validation"],
-    values: fields,
-  });
-
-  if (!filtering?.length) {
-    throw customError({
-      message: "Failure to create report form!",
-      errors: [{ fields: `Minimum one field is mandatory!` }],
-    });
+  if (monthly) {
+    updateDate.monthly = monthly;
+  }
+  if (occasional) {
+    updateDate.occasional = occasional;
   }
 
-  const updateObj = {
-    name,
-    fields,
-  };
-  if (status) {
-    updateObj.status = status;
+  if (!Object.keys(updateDate).length) {
+    throw badRequest(`Nothing to be changed!`);
   }
   const reportForm = await holidayRepo.updateItemById({
     id,
     updateDate: updateObj,
-    options: { new: true },
+    options: { new: true, runValidators: true },
   });
   return reportForm;
 };

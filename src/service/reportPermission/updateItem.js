@@ -1,25 +1,25 @@
 const { badRequest } = require("../../utils/error");
 const reportPermissionRepo = require("../../repo/reportPermission");
-const userRepo = require("../../repo/user");
+const { isValidObjectId } = require("mongoose");
 const reportFormRepo = require("../../repo/reportForm");
+const userRepo = require("../../repo/user");
 const establishmentRepo = require("../../repo/establishment");
 const departmentRepo = require("../../repo/department");
 const holidayRepo = require("../../repo/holiday");
 
-const { isValidObjectId } = require("mongoose");
-
-const createItem = async ({
-  user_id,
+const updateItem = async ({
+  id,
+  // user_id,
   report_form_id,
-  status,
   establishment_id,
   department_id,
   holiday_id,
   observer,
+  status,
 }) => {
   if (
-    !user_id ||
-    !isValidObjectId(user_id) ||
+    !id ||
+    !isValidObjectId(id) ||
     !report_form_id ||
     !isValidObjectId(report_form_id) ||
     (establishment_id && !isValidObjectId(establishment_id)) ||
@@ -31,50 +31,59 @@ const createItem = async ({
     throw badRequest(`Invalid parameters!`);
   }
 
-  const newObj = {};
-  if (user_id) {
-    const doesExist = await userRepo.findItemById({ id: user_id });
-    if (!doesExist) {
-      throw badRequest(`User doesn't exist the id: ${user_id}`);
-    } else if (doesExist?.status !== "active") {
-      throw badRequest(`User should be Active of the id: ${user_id}`);
-    }
-    newObj.user_id = user_id;
+  const doesExist = await reportPermissionRepo.findItemById({ id });
+  if (!doesExist) {
+    throw badRequest(`Report permission doesn't exist!`);
   }
-  if (report_form_id) {
-    const doesExist = await reportFormRepo.findItemById({ id: report_form_id });
-    if (!doesExist) {
-      throw badRequest(`Report Form doesn't exist the id: ${report_form_id}`);
-    } else if (doesExist?.status !== "active") {
-      throw badRequest(
-        `Report Form should be Active of the id: ${report_form_id}`
-      );
+  const updateDate = {};
+
+  if (
+    report_form_id &&
+    report_form_id !== doesExist?.report_form_id?.toString?.()
+  ) {
+    if (report_form_id) {
+      const doesExist = await reportFormRepo.findItemById({
+        id: report_form_id,
+      });
+      if (!doesExist) {
+        throw badRequest(`Report Form doesn't exist the id: ${report_form_id}`);
+      } else if (doesExist?.status !== "active") {
+        throw badRequest(
+          `Report Form should be Active of the id: ${report_form_id}`
+        );
+      }
+      updateDate.report_form_id = report_form_id;
     }
-    newObj.report_form_id = report_form_id;
   }
 
-  if (establishment_id) {
+  if (
+    establishment_id &&
+    establishment_id !== doesExist?.establishment_id?.toString?.()
+  ) {
     if (!(await establishmentRepo.findItemById({ id: establishment_id }))) {
       throw badRequest(
         `Establishment doesn't exist the id: ${establishment_id}`
       );
     }
-
-    newObj.establishment_id = establishment_id;
+    updateDate.establishment_id = establishment_id;
   }
-  if (department_id) {
+  if (
+    department_id &&
+    department_id !== doesExist?.department_id?.toString?.()
+  ) {
     if (!(await departmentRepo.findItemById({ id: department_id }))) {
       throw badRequest(`Department doesn't exist the id: ${department_id}`);
     }
-    newObj.department_id = department_id;
+    updateDate.department_id = department_id;
   }
-  if (holiday_id) {
+
+  if (holiday_id && holiday_id !== doesExist?.holiday_id?.toString?.()) {
     if (!(await holidayRepo.findItemById({ id: holiday_id }))) {
       throw badRequest(`Holiday doesn't exist the id: ${holiday_id}`);
     }
-    newObj.holiday_id = holiday_id;
+    updateDate.holiday_id = holiday_id;
   }
-  if (observer) {
+  if (observer && observer !== doesExist?.observer?.toString?.()) {
     const doesExist = await userRepo.findItemById({ id: observer });
     if (!doesExist) {
       throw badRequest(`Observer doesn't exist the id: ${observer}`);
@@ -85,12 +94,17 @@ const createItem = async ({
     }
     newObj.observer = observer;
   }
-  if (status) {
-    newObj.status = status;
+
+  if (status && doesExist?.status !== status) {
+    updateDate.status = status;
   }
 
-  const created = await reportPermissionRepo.createNewItem(newObj);
-  return created;
+  const reportForm = await reportPermissionRepo.updateItemById({
+    id,
+    updateDate: updateObj,
+    options: { new: true, runValidators: true },
+  });
+  return reportForm;
 };
 
-module.exports = createItem;
+module.exports = updateItem;

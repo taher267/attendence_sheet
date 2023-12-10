@@ -38,6 +38,7 @@ const userSchema = new Schema(
     lastLogin: { type: Date },
     roles: {
       type: [String],
+      enum: userConfig.roles,
     },
     status: {
       type: String,

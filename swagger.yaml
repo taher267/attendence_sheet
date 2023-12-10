@@ -1428,7 +1428,7 @@ paths:
         "500":
           "$ref": "#/components/responses/500"
 
-  "/holiday":
+  "/holidays":
     post:
       operationId: createHoliday
       security:
@@ -1464,6 +1464,8 @@ paths:
           "$ref": "#/components/responses/500"
     get:
       operationId: AllReportForms
+      security:
+        - bearerAuth: []
       description: "Retrive all Holiday"
       tags:
         - "Holiday"
@@ -1496,7 +1498,7 @@ paths:
         "500":
           "$ref": "#/components/responses/500"
 
-  "/holiday/{id}":
+  "/holidays/{id}":
     get:
       security:
         - bearerAuth: []
@@ -1600,7 +1602,7 @@ paths:
         "500":
           "$ref": "#/components/responses/500"
 
-  "/report-permission":
+  "/report-permissions":
     post:
       operationId: createReportPermission
       security:
@@ -1672,7 +1674,7 @@ paths:
         "500":
           "$ref": "#/components/responses/500"
 
-  "/report-permission/{id}":
+  "/report-permissions/{id}":
     get:
       security:
         - bearerAuth: []
@@ -2183,6 +2185,7 @@ components:
           example: "64d268cdeef8c84bb18912db"
           # $ref: "#components/schemas/ID_TYPE_EXAMPLE"
       required: [user_id, form_id, status]
+    
     Holiday:
       properties:
         weekly:

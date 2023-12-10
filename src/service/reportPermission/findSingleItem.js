@@ -2,17 +2,15 @@ const { isValidObjectId } = require("mongoose");
 const reportPermissionRepo = require("../../repo/reportPermission");
 const { notFound, badRequest } = require("../../utils/error");
 
-const findSingleItem = async ({
-  id,
-}) => {
-  if (!id || !isValidObjectId(id)) throw badRequest(`Invalid user id!`);
-  const user = await reportPermissionRepo.findItemById({ id });
-  if (!user) throw notFound();
+const findSingleItem = async ({ id }) => {
+  if (!id || !isValidObjectId(id)) throw badRequest(`Invalid id!`);
+  const data = await reportPermissionRepo.findItemById({ id });
+  if (!data) throw notFound();
 
   return {
-    user,
+    data,
     links: {
-      self: `/users/${user.id}`,
+      self: `/report-permissions/${data.id}`,
     },
   };
 };

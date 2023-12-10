@@ -1,4 +1,5 @@
 const { Schema, model } = require("mongoose");
+const reportPermissionStatus = require("../config/reportPermission");
 
 const ReportPermissionSchema = new Schema(
   {
@@ -34,7 +35,7 @@ const ReportPermissionSchema = new Schema(
 
     status: {
       type: String,
-      enum: ["open", "close"],
+      enum: reportPermissionStatus.statuses,
       required: [true, `Status is mandatory!`],
     },
   },

@@ -5,11 +5,13 @@ const { authenticationError, serverError } = require("../utils/error");
 const cache = require("../cache");
 
 const authenticate = async (req, _res, next) => {
+  console.log("authenticate check============");
   if (!USER_CACHE_DATA_EXPIRY) {
     throw serverError();
   }
   try {
     const token = req.headers?.authorization?.split?.(" ")?.[1];
+    console.log("authenticate check222222222222222222222");
     if (!token) {
       return next(authenticationError());
     }

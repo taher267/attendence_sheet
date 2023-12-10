@@ -1,10 +1,10 @@
-const holidayService = require("../../../../service/holiday");
+const reportPermissionService = require("../../../../service/reportPermission");
 
 const findSingleItem = async (req, res, next) => {
   const { id } = req.params;
 
   try {
-    const { data, ...rest } = await holidayService.findSingleItem({
+    const { data, ...rest } = await reportPermissionService.findSingleItem({
       id,
     });
     const response = {
