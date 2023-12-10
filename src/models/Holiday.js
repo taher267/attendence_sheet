@@ -1,7 +1,6 @@
 const { Schema, model } = require("mongoose");
 const holidayConfig = require("../config/holiday");
 
-
 const HolidaySchema = new Schema(
   {
     weekly: {
@@ -14,6 +13,7 @@ const HolidaySchema = new Schema(
       max: [holidayConfig.maxOfMonth, `End the day of Month`],
     },
     occasional: [Date],
+    individual: [Date],
   },
   { versionKey: false }
 );

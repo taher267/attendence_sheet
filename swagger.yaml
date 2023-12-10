@@ -681,6 +681,7 @@ paths:
                   type: array
                   items:
                     type: string
+                    enum: [super_admin, admin, user, observer]
                 status:
                   type: string
                   enum: ["active", "inactive", "pending", "close"]
@@ -1981,6 +1982,7 @@ components:
           type: array
           items:
             type: string
+            enum: [super_admin, admin, user, observer]
         # password:
         #   type: string
         #   format: password
@@ -2185,7 +2187,7 @@ components:
           example: "64d268cdeef8c84bb18912db"
           # $ref: "#components/schemas/ID_TYPE_EXAMPLE"
       required: [user_id, form_id, status]
-    
+
     Holiday:
       properties:
         weekly:

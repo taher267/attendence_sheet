@@ -6,7 +6,7 @@ const { controllers } = require("../api/v1/reportPermission");
 const v1 = `/api/v1`;
 
 /*=============================================
-=              holiday          =
+=              report permission          =
 =============================================*/
 router
   .route(`${v1}/report-permissions`)
@@ -44,6 +44,6 @@ router
    */
   .delete(authenticate, authorize(), controllers.removeItem);
 
-/*=====  End of holiday  ======*/
+/*=====  End of report permission  ======*/
 
 module.exports = router;

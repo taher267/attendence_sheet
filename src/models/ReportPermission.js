@@ -38,6 +38,11 @@ const ReportPermissionSchema = new Schema(
       enum: reportPermissionStatus.statuses,
       required: [true, `Status is mandatory!`],
     },
+    totalSubmit: Number,
+    totalReview: Number,
+    totalApproved: Number,
+    totalRejected: Number,
+    currentRejected: Number,
   },
   { timestamps: true, versionKey: false }
 );

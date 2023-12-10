@@ -1,4 +1,5 @@
 const { Schema, model } = require("mongoose");
+const workReportConfig = require("../config/workReport");
 
 const WorkReportSchema = new Schema(
   {
@@ -17,6 +18,11 @@ const WorkReportSchema = new Schema(
     for_submission_date: {
       type: Date,
       required: [true, `For submission date is mandatory`],
+    },
+    status: {
+      type: String,
+      enum: workReportConfig.statuses,
+      required: [true, `Work Report Status is mandatory`],
     },
   },
   { timestamps: true, versionKey: false }
