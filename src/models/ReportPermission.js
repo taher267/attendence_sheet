@@ -38,11 +38,15 @@ const ReportPermissionSchema = new Schema(
       enum: reportPermissionStatus.statuses,
       required: [true, `Status is mandatory!`],
     },
-    totalSubmit: Number,
-    totalReview: Number,
-    totalApproved: Number,
-    totalRejected: Number,
-    currentRejected: Number,
+    open_submission_date: {
+      type: Date,
+      required: [true, `Open submission Date is mandatory!`],
+    },
+    totalSubmit: { type: Number, default: 0 },
+    totalReview: { type: Number, default: 0 },
+    totalApproved: { type: Number, default: 0 },
+    totalRejected: { type: Number, default: 0 },
+    currentRejected: { type: Number, default: 0 },
   },
   { timestamps: true, versionKey: false }
 );

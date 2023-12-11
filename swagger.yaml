@@ -1990,7 +1990,7 @@ components:
           type: boolean
         lastLogin:
           type: string
-          format: data-time
+          format: date-time
         status:
           type: string
           # example: active
@@ -2064,7 +2064,7 @@ components:
           type: boolean
         lastLogin:
           type: string
-          format: data-time
+          format: date-time
         status:
           type: string
           # example: active
@@ -2137,7 +2137,7 @@ components:
           example: "64d268cdeef8c84bb18912db"
         for_submission_date:
           type: string
-          format: data-time
+          format: date-time
         fields:
           type: array
           items:
@@ -2156,6 +2156,7 @@ components:
         - $ref: "#/components/schemas/ID"
         - $ref: "#/components/schemas/WorkReport"
         - $ref: "#/components/schemas/Timestamp"
+        # open_submission_date
     ReportPermission:
       properties:
         user_id:
@@ -2208,7 +2209,7 @@ components:
           type: array
           items:
             type: string
-            format: data-time
+            format: date-time
     HolidayResponse:
       allOf:
         - $ref: "#/components/schemas/ID"
@@ -2235,11 +2236,11 @@ components:
       properties:
         createdAt:
           type: string
-          format: data-time
+          format: date-time
           example: "2023-09-20T00:25:31.597Z"
         updatedAt:
           type: string
-          format: data-time
+          format: date-time
           example: "2023-09-20T00:25:31.597Z"
     Pagination:
       type: object
