@@ -7,6 +7,7 @@ const reportPermissionRepo = require("../../repo/reportPermission");
 const { isValidObjectId } = require("mongoose");
 const moment = require("moment");
 const workReportConfig = require("../../config/workReport");
+const helpers = require("./helpers");
 // const dbDate = "2023-12-09T14:11:53.599+00:00";
 // const submitDate = "2023-12-08T14:11:53.599+00:00";
 // userRepo
@@ -19,10 +20,13 @@ const createItem = async ({
   fields = [],
   for_submission_date,
   status = "submited",
+  user_id,
 }) => {
   if (
     !report_permission_id ||
     !isValidObjectId(report_permission_id) ||
+    !user_id ||
+    !isValidObjectId(user_id) ||
     !fields?.length ||
     !for_submission_date ||
     !moment(for_submission_date).isValid() ||
@@ -37,6 +41,8 @@ const createItem = async ({
   });
   if (!doesExistReportPermission) {
     throw badRequest(`Report Permission table doesn't exist!`);
+  } else if (user_id !== doesExistReportPermission.user_id?.toString?.()) {
+    throw badRequest(`Invalid user id!`);
   }
 
   const reportForm = await reportFormRepo.findItemById({
@@ -102,7 +108,7 @@ const createItem = async ({
     a[key] = value;
     return a;
   }, {});
-  const { errors, valid } = submitedFormValidation({
+  const { errors, valid } = helpers.submitedFormValidation({
     workReportForm,
     submittedNameValues: reports,
   });
@@ -114,7 +120,7 @@ const createItem = async ({
   }
   const inc = {};
 
-  const newObj = { report_permission_id, fields, status };
+  const newObj = { report_permission_id, fields, status, user_id };
   if (workReportConfig.approvalType === "by_form_fill_up") {
     newObj.status = "approved";
     inc.totalApproved = 1;
@@ -136,85 +142,24 @@ const createItem = async ({
       id: doesExistReportPermission.holiday_id,
     });
     if (weekly?.length) {
-      next_submission_date = holiday_in_week({ holiday: weekly });
+      next_submission_date = helpers.holiday_in_week({ holiday: weekly });
     }
     if (occasional?.length) {
-      next_submission_date = holiday_in_occasional({ holiday: occasional });
+      next_submission_date = helpers.holiday_in_occasional({
+        holiday: occasional,
+      });
     }
   }
   const update_permission = {
     $inc: { ...inc, totalSubmit: 1 },
     open_submission_date: next_submission_date,
   };
+  await reportPermissionRepo.updateItemById({
+    id: doesExistReportPermission.id,
+    updateDate: update_permission,
+    options: { new: true, runValidators: true },
+  });
   return created;
 };
 
 module.exports = createItem;
-
-function submitedFormValidation({
-  submittedNameValues = {},
-  workReportForm = [],
-}) {
-  const copy = JSON.parse(JSON.stringify(workReportForm));
-  let misRequired = false;
-  const errors = [];
-
-  for (const W_R_field of workReportForm) {
-    const { required, name } = W_R_field;
-    if (required) {
-      if (!submittedNameValues[name]?.trim?.()) {
-        misRequired = true;
-        errors.push({ [name]: `${[name]} is mandatory!` });
-      } else {
-        delete copy[name];
-      }
-    } else {
-      delete copy[name];
-    }
-  }
-  if (Object.keys(copy).length) {
-    misRequired = true;
-    errors.push({ custom: `Please remove invalid field(s)!` });
-  }
-  if (misRequired) {
-    return { valid: false, errors };
-  }
-  return { valid: true };
-}
-//[Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, and Sunday]
-function holiday_in_week({
-  holiday = [
-    // "Saturday", "Sunday", "Tuesday", 'Wednesday'
-  ],
-}) {
-  let next_permission_date = moment().utc().endOf("D").add(12, "hours");
-  let findNext = false;
-  while (!findNext) {
-    const day = next_permission_date.format("dddd");
-    if (holiday.includes(day)) {
-      next_permission_date = moment(next_permission_date).utc().add(1, "day");
-    } else {
-      findNext = true;
-    }
-  }
-  return next_permission_date.toISOString();
-}
-// console.log(holiday_in_week({}), "=========");
-function holiday_in_occasional({ holiday = [] }) {
-  let next_permission_date = moment()
-    .utc()
-    .endOf("D")
-    .add(12, "hours")
-    .toISOString()
-    .slice(0, 10);
-  holiday = holiday.map((item) => item.toISOString().slice(0, 10));
-  let findNext = false;
-  while (!findNext) {
-    if (holiday.join(",").includes(next_permission_date)) {
-      next_permission_date = moment(next_permission_date).utc().add(1, "day");
-    } else {
-      findNext = true;
-    }
-  }
-  return `${next_permission_date}T12:00:00.000Z`;
-}

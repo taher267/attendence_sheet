@@ -1,4 +1,7 @@
 const statuses = ["submited", "on-review", "approved", "rejected"];
+const updatableSelfStatuses = [statuses[0]];
+const updatableObserverStatuses = [statuses[0], statuses[1]];
+const deleteRolesAllow = ["admin"];
 
 const nextSubmitionWithApproval = false; //if `true` at first previous all submited from should be approved by observer
 const nextSubmitionWithReject = false; // if `false` Any previous submission cannot be rejected
@@ -11,4 +14,7 @@ module.exports = {
   nextSubmitionWithReject,
   currentSubmitionWithPreviousAllSubmissions,
   approvalType,
+  updatableSelfStatuses,
+  updatableObserverStatuses,
+  deleteRolesAllow,
 };

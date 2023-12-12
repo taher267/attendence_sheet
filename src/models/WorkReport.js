@@ -3,10 +3,15 @@ const workReportConfig = require("../config/workReport");
 
 const WorkReportSchema = new Schema(
   {
+    user_id: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: [true, `User id is mandatory!`],
+    },
     report_permission_id: {
       type: Schema.Types.ObjectId,
       ref: "ReportPermission",
-      required: [true, `User id is mandatory!`],
+      required: [true, `Report Permission id is mandatory!`],
     },
 
     fields: [

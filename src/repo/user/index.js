@@ -1,4 +1,5 @@
 const { User } = require("../../models");
+const quryReplacer = require("../../utils/quryReplacer");
 
 const findAllItems = async ({
   qry = {},
@@ -8,6 +9,7 @@ const findAllItems = async ({
   limit = 10,
   select = "",
 }) => {
+  qry = quryReplacer(qry);
   let items = [];
   if (populate) {
     items = await User.find(qry)
@@ -30,6 +32,7 @@ const findAllItems = async ({
 };
 
 const findItem = async ({ qry = {}, select = "" }) => {
+  qry = quryReplacer(qry);
   const item = await User.findOne(qry).select(select).exec();
   if (!item) return false;
   const copy = { id: item.id, ...item._doc };
@@ -47,6 +50,7 @@ const findItemById = async ({ id, select = "" }) => {
 };
 
 const updateItem = async ({ qry = {}, updateDate = {}, options = {} }) => {
+  qry = quryReplacer(qry);
   const updated = await User.updateOne(qry, updateDate, options);
   if (!updated.matchedCount) return false;
   return updated;
@@ -61,6 +65,7 @@ const updateItemById = async ({ id, updateDate = {}, options = {} }) => {
 };
 
 const deleteItem = ({ qry = {} }) => {
+  qry = quryReplacer(qry);
   return User.deleteOne(qry);
 };
 
@@ -69,6 +74,7 @@ const deleteItemById = ({ id }) => {
 };
 
 const deleteManyItem = ({ qry = {} }) => {
+  qry = quryReplacer(qry);
   return User.deleteMany(qry);
 };
 
@@ -89,7 +95,8 @@ const create = async ({ ...data }) => {
   return copy;
 };
 
-const count = ({ filter }) => {
+const count = ({ filter = {} }) => {
+  filter = quryReplacer(filter);
   return User.countDocuments(filter);
 };
 

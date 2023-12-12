@@ -2,17 +2,17 @@ const workReportService = require("../../../../service/workReport");
 
 const updateItem = async (req, res, next) => {
   const {
-    body: { fields, report_permission_id },
+    body: { status, report_permission_id },
     user: { id: user_id },
   } = req;
   const { id } = req.params;
 
   try {
-    const updated = await workReportService.updateItem({
-      fields,
+    const updated = await workReportService.updateItemProperties({
       report_permission_id,
       id,
       user_id,
+      status,
     });
 
     const response = {

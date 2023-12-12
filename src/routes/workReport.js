@@ -41,12 +41,24 @@ router
    * @method PUT
    */
   .put(authenticate, controllers.updateItem)
+  
+  /**
+   * Private Route
+   * @route baseurl/api/v1/work-reports/:id
+   * @method PATCH
+   */
+
+  .patch(
+    authenticate,
+    authorize(["observer"]),
+    controllers.updateItemProperties
+  )
   /**
    * Private Route by Admin
    * @route baseurl/api/v1/work-reports/:id
    * @method DELETE
    */
-  .delete(authenticate, authorize(['admin']), controllers.removeItem);
+  .delete(authenticate, authorize(["admin"]), controllers.removeItem);
 
 /*=====  End of Work Report  ======*/
 

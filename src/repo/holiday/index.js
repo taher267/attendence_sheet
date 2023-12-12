@@ -1,4 +1,5 @@
 const { Holiday } = require("../../models");
+const quryReplacer = require("../../utils/quryReplacer");
 
 const findAllItems = async ({
   qry = {},
@@ -8,6 +9,7 @@ const findAllItems = async ({
   limit = 10,
   select = "",
 }) => {
+  qry = quryReplacer(qry);
   let items = [];
   if (populate) {
     items = await Holiday.find(qry)
@@ -30,6 +32,7 @@ const findAllItems = async ({
 };
 
 const findItem = async ({ qry = {}, select = "" }) => {
+  qry = quryReplacer(qry);
   const item = await Holiday.findOne(qry).select(select).exec();
   if (!item) return false;
   const copy = { id: item.id, ...item._doc };
@@ -48,13 +51,14 @@ const findItemById = async ({ id, select = "" }) => {
 };
 
 const updateItem = async ({ qry = {}, updateDate = {}, options = {} }) => {
+  qry = quryReplacer(qry);
   const updated = await Holiday.updateOne(qry, updateDate, options);
   if (!updated.matchedCount) return false;
   return updated;
 };
 
 const updateItemById = async ({ id, updateDate = {}, options = {} }) => {
-  const updated = await Holiday.findByIdAndUpdate(id, updateDate,options);
+  const updated = await Holiday.findByIdAndUpdate(id, updateDate, options);
   if (!updated) return false;
   const copy = { id: updated.id, ...updated._doc };
   delete copy._id;
@@ -62,6 +66,7 @@ const updateItemById = async ({ id, updateDate = {}, options = {} }) => {
 };
 
 const deleteItem = ({ qry = {} }) => {
+  qry = quryReplacer(qry);
   return Holiday.deleteOne(qry);
 };
 
@@ -70,6 +75,7 @@ const deleteItemById = ({ id }) => {
 };
 
 const deleteManyItem = ({ qry = {} }) => {
+  qry = quryReplacer(qry);
   return Holiday.deleteMany(qry);
 };
 
@@ -90,7 +96,8 @@ const create = async ({ ...data }) => {
   return copy;
 };
 
-const count = ({ filter }) => {
+const count = ({ filter = {} }) => {
+  filter = quryReplacer(filter);
   return Holiday.countDocuments(filter);
 };
 

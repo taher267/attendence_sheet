@@ -1,11 +1,15 @@
-const establishmentService = require("../../../../service/establishment");
+const workReportService = require("../../../../service/workReport");
 
 const findSingleItem = async (req, res, next) => {
   const id = req.params.id;
+  const { searchfor } = req.query;
 
   try {
-    const { user, ...rest } = await establishmentService.findSingleItem({
+    const { user, ...rest } = await workReportService.findSingleItem({
       id,
+      user_id,
+      user: req.user,
+      searchfor,
     });
     const response = {
       user,
