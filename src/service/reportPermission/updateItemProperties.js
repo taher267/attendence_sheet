@@ -7,25 +7,25 @@ const establishmentRepo = require("../../repo/establishment");
 const departmentRepo = require("../../repo/department");
 const holidayRepo = require("../../repo/holiday");
 
-const updateItem = async ({
+const updateItemProperties = async ({
   id,
-  user: { id: user_id },
-  report_form_id,
-  establishment_id,
-  department_id,
-  holiday_id,
-  observer,
+  // report_form_id,
+  // establishment_id,
+  // department_id,
+  // holiday_id,
+  // observer,
   status,
+  user: { id: user_id },
 }) => {
   if (
     !id ||
-    !isValidObjectId(id) ||
-    !report_form_id ||
-    !isValidObjectId(report_form_id) ||
-    (establishment_id && !isValidObjectId(establishment_id)) ||
-    (department_id && !isValidObjectId(department_id)) ||
-    (holiday_id && !isValidObjectId(holiday_id)) ||
-    (!observer && !isValidObjectId(observer))
+    !isValidObjectId(id)
+    //|| !report_form_id ||
+    // !isValidObjectId(report_form_id) ||
+    // (establishment_id && !isValidObjectId(establishment_id)) ||
+    // (department_id && !isValidObjectId(department_id)) ||
+    // (holiday_id && !isValidObjectId(holiday_id)) ||
+    // (!observer && !isValidObjectId(observer))
   ) {
     throw badRequest(`Invalid parameters!`);
   }
@@ -106,4 +106,4 @@ const updateItem = async ({
   return reportForm;
 };
 
-module.exports = updateItem;
+module.exports = updateItemProperties;

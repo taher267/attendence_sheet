@@ -36,7 +36,7 @@ router
    * @route baseurl/api/v1/report-permissions/:id
    * @method PUT
    */
-  .put(authenticate, authorize(), controllers.updateItem)
+  .put(authenticate, authorize(["admin", "observer"]), controllers.updateItem)
   /**
    * Private Route by Admin
    * @route baseurl/api/v1/report-permissions/:id

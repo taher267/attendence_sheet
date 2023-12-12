@@ -11,10 +11,10 @@ const updateItem = async ({
   id,
   user: { id: user_id },
   report_form_id,
-  establishment_id,
-  department_id,
+  // establishment_id,
+  // department_id,
   holiday_id,
-  observer,
+  // observer,
   status,
 }) => {
   if (
@@ -22,10 +22,10 @@ const updateItem = async ({
     !isValidObjectId(id) ||
     !report_form_id ||
     !isValidObjectId(report_form_id) ||
-    (establishment_id && !isValidObjectId(establishment_id)) ||
-    (department_id && !isValidObjectId(department_id)) ||
-    (holiday_id && !isValidObjectId(holiday_id)) ||
-    (!observer && !isValidObjectId(observer))
+    // (establishment_id && !isValidObjectId(establishment_id)) ||
+    // (department_id && !isValidObjectId(department_id)) ||
+    (holiday_id && !isValidObjectId(holiday_id))
+    // ||(!observer && !isValidObjectId(observer))
   ) {
     throw badRequest(`Invalid parameters!`);
   }
@@ -55,26 +55,26 @@ const updateItem = async ({
     }
   }
 
-  if (
-    establishment_id &&
-    establishment_id !== doesExist?.establishment_id?.toString?.()
-  ) {
-    if (!(await establishmentRepo.findItemById({ id: establishment_id }))) {
-      throw badRequest(
-        `Establishment doesn't exist the id: ${establishment_id}`
-      );
-    }
-    updateDate.establishment_id = establishment_id;
-  }
-  if (
-    department_id &&
-    department_id !== doesExist?.department_id?.toString?.()
-  ) {
-    if (!(await departmentRepo.findItemById({ id: department_id }))) {
-      throw badRequest(`Department doesn't exist the id: ${department_id}`);
-    }
-    updateDate.department_id = department_id;
-  }
+  // if (
+  //   establishment_id &&
+  //   establishment_id !== doesExist?.establishment_id?.toString?.()
+  // ) {
+  //   if (!(await establishmentRepo.findItemById({ id: establishment_id }))) {
+  //     throw badRequest(
+  //       `Establishment doesn't exist the id: ${establishment_id}`
+  //     );
+  //   }
+  //   updateDate.establishment_id = establishment_id;
+  // }
+  // if (
+  //   department_id &&
+  //   department_id !== doesExist?.department_id?.toString?.()
+  // ) {
+  //   if (!(await departmentRepo.findItemById({ id: department_id }))) {
+  //     throw badRequest(`Department doesn't exist the id: ${department_id}`);
+  //   }
+  //   updateDate.department_id = department_id;
+  // }
 
   if (holiday_id && holiday_id !== doesExist?.holiday_id?.toString?.()) {
     if (!(await holidayRepo.findItemById({ id: holiday_id }))) {
@@ -82,17 +82,17 @@ const updateItem = async ({
     }
     updateDate.holiday_id = holiday_id;
   }
-  if (observer && observer !== doesExist?.observer?.toString?.()) {
-    const doesExist = await userRepo.findItemById({ id: observer });
-    if (!doesExist) {
-      throw badRequest(`Observer doesn't exist the id: ${observer}`);
-    } else if (doesExist?.status !== "active") {
-      throw badRequest(`Observer should be Active User of the id: ${observer}`);
-    } else if (!doesExist?.roles?.includes("observer")) {
-      throw badRequest(`Observer should be Active User of the id: ${observer}`);
-    }
-    newObj.observer = observer;
-  }
+  // if (observer && observer !== doesExist?.observer?.toString?.()) {
+  //   const doesExist = await userRepo.findItemById({ id: observer });
+  //   if (!doesExist) {
+  //     throw badRequest(`Observer doesn't exist the id: ${observer}`);
+  //   } else if (doesExist?.status !== "active") {
+  //     throw badRequest(`Observer should be Active User of the id: ${observer}`);
+  //   } else if (!doesExist?.roles?.includes("observer")) {
+  //     throw badRequest(`Observer should be Active User of the id: ${observer}`);
+  //   }
+  //   newObj.observer = observer;
+  // }
 
   if (status && doesExist?.status !== status) {
     updateDate.status = status;

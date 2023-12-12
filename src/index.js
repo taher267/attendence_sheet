@@ -20,4 +20,4 @@ const main = async () => {
 
 main();
 // for vercel
-module.exports = {};
+module.exports = {}
