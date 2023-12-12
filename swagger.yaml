@@ -1860,6 +1860,7 @@ paths:
         - "WorkReport"
       parameters:
         - $ref: "#/components/parameters/idPathParam"
+        - $ref: "#/components/parameters/searchforQueryParam"
 
       responses:
         "200":
@@ -2354,6 +2355,14 @@ components:
       schema:
         type: string
         example: "64d268cdeef8c84bb18912db"
+    searchforQueryParam:
+      in: query
+      name: searchfor
+      # required: true
+      # description: Data ID of single item Retrieve
+      schema:
+        type: string
+        enum: [observe, self]
   responses:
     "500":
       description: "Internal Server Error"

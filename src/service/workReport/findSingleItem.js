@@ -1,6 +1,6 @@
 const { isValidObjectId } = require("mongoose");
 const workReportRepo = require("../../repo/workReport");
-const userRepo = require("../../repo/user");
+// const userRepo = require("../../repo/user");
 const reportPermissionRepo = require("../../repo/reportPermission");
 const {
   notFound,
@@ -28,6 +28,8 @@ const findSingleItem = async ({
       throw authorizationError();
     }
     qry.report_permission_id = existInPermissionTable.id;
+  } else if (!roles.includes("admin")) {
+    throw authorizationError();
   }
   // if (roles.includes("admin")) {
   // } else if (roles.includes("boserver")) {
