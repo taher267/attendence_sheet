@@ -11,7 +11,11 @@ const applyMiddleware = (app) => {
   app.use(express.json());
   app.use(
     cors({
-      origin: ["http://localhost:5173", "http://localhost:3000"],
+      origin: [
+        "http://localhost:5173",
+        "http://localhost:3000",
+        "https://pz-attendance.netlify.app",
+      ],
       credentials: true,
     })
   );
