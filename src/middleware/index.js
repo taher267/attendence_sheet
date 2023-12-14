@@ -9,7 +9,12 @@ const swaggerDoc = YAML.load("./swagger.yaml");
 
 const applyMiddleware = (app) => {
   app.use(express.json());
-  app.use(cors());
+  app.use(
+    cors({
+      origin: ["http://localhost:5173", "http://localhost:3000"],
+      credentials: true,
+    })
+  );
   app.use(morgan("dev"));
   app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerDoc));
   app.use(

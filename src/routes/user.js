@@ -5,7 +5,6 @@ const { controllers: userControllers } = require("../api/v1/user");
 
 const v1 = `/api/v1`;
 
-
 /*=============================================
 =            User            =
 =============================================*/
@@ -25,6 +24,14 @@ router
    */
   .get(authenticate, authorize(), userControllers.findAllItems);
 
+router
+  .route(`${v1}/users/mine`)
+  /**
+   * Private Route
+   * @method GET
+   * @route base_url/api/v1/users/mine
+   */
+  .get(authenticate, userControllers.mine);
 router
   .route(`${v1}/users/:id`)
   /**
@@ -91,7 +98,5 @@ router
   .route(`${v1}/users/update-password`)
   .post(authenticate, userControllers.updatePassword);
 /*=====  End of Uer  ======*/
-
-
 
 module.exports = router;

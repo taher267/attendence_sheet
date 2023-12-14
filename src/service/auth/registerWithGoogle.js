@@ -1,11 +1,8 @@
 const jwt = require("jsonwebtoken");
 const userRepo = require("../../repo/user");
-//   axios = require("axios"),
-//   config = require("../config");
 const { badRequest } = require("../../utils/error");
 const token = require("../token");
-
-// qs = require("qs");
+const { REFRESH_TOKEN_SECRET, REFRESH_TOKEN_EXPIRY } = process.env;
 
 const IdToenVerify = async ({ id_token }) => {
   //, access_token
@@ -18,6 +15,7 @@ const IdToenVerify = async ({ id_token }) => {
     throw badRequest(`Google account is not verified`);
   }
   const { email, name, picture: profilePic } = decoded;
+  console.log(decoded);
   const existUser = await userRepo.findItem({
     qry: { email },
     select: "+refreshToken",

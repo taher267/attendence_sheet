@@ -3,7 +3,7 @@ const authService = require("../../../../service/auth");
 const registerWithGoogle = async (req, res, next) => {
   try {
     // const { query } = req;
-    const { id_token, access_token } = body;
+    const { id_token, access_token } = req.body;
     const { user, accessToken, refreshToken } =
       await authService.registerWithGoogle.IdToenVerify({
         id_token,

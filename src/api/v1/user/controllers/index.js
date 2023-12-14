@@ -8,6 +8,7 @@ const profileChange = require("./profileChange");
 const updatePassword = require("./updatePassword");
 const setPassword = require("./setPassword");
 const changeProfilePic = require("./changeProfilePic.js");
+const mine=require('./mine')
 
 module.exports = {
   findAllItems,
@@ -19,5 +20,6 @@ module.exports = {
   profileChange,
   setPassword,
   updatePassword,
-  changeProfilePic
+  changeProfilePic,
+  mine
 };
