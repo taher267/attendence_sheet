@@ -59,7 +59,7 @@ const IdToenVerify = async ({ id_token }) => {
   return {
     accessToken,
     refreshToken,
-    user,
+    user: existUser,
   };
 };
 
@@ -87,7 +87,6 @@ function tokenObj({ code }) {
   const qs = new URLSearchParams(body).toString();
   return qs;
 }
-
 
 const codeByIdToken = async (req, res, next) => {
   try {

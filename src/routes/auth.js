@@ -29,10 +29,10 @@ router
   .post(controllers.registerWithGoogle);
 
 /**
- * @route baseurl/api/v1/auth/register-with-google
+ * @route baseurl/api/v1/auth/login-with-google
  * @method POST
  */
-router.route(`${v1}/auth/loging-with-google`).post(controllers.loginWithGoogle);
+router.route(`${v1}/auth/login-with-google`).post(controllers.loginWithGoogle);
 
 /**
  * @route baseurl/api/v1/auth/login
