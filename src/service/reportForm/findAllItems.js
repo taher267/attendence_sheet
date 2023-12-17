@@ -64,7 +64,7 @@ const findAllItems = async ({
   });
 
   return {
-    reportForm: data,
+    reportForms: data,
     totalItems,
     pagination,
     links,

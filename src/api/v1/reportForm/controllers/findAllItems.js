@@ -15,7 +15,7 @@ const findAllItems = async (req, res, next) => {
 
   try {
     // data
-    const { users, ...rest } = await reportFormService.findAllItems({
+    const { reportForms, ...rest } = await reportFormService.findAllItems({
       page,
       limit,
       sortType,
@@ -28,7 +28,7 @@ const findAllItems = async (req, res, next) => {
 
     res.status(200).json({
       code: 200,
-      data: users,
+      data: reportForms,
       ...rest,
     });
   } catch (e) {

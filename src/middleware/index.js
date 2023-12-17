@@ -5,8 +5,14 @@ const YAML = require("yamljs");
 const OpenApiValidator = require("express-openapi-validator");
 const cors = require("cors");
 const swaggerDoc = YAML.load("./swagger.yaml");
+// const cookieParser = require("cookie-parser");
 // const authenticate = require('./authenticate');
-
+const cookieObj = (cookie = "") =>
+  cookie?.split?.(/; /g)?.reduce?.((a, c) => {
+    const [k, v] = c.split("=");
+    if (k && v) a[k.trim()] = v.trim();
+    return a;
+  }, {});
 const applyMiddleware = (app) => {
   app.use(express.json());
   app.use(
@@ -20,6 +26,16 @@ const applyMiddleware = (app) => {
     })
   );
   app.use(morgan("dev"));
+  // app.use(cookieParser())
+  app.use((req, res, next) => {
+    const { cookie } = req.headers;
+    if (cookie) {
+      const cookies = cookieObj(decodeURIComponent(cookie));
+
+      req.cookies = cookies;
+    }
+    return next();
+  });
   app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerDoc));
   app.use(
     OpenApiValidator.middleware({

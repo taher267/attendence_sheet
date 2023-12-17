@@ -15,13 +15,13 @@ router
    * @route baseurl/api/v1/report-forms
    * @method POST
    */
-  .post(authenticate, authorize(), controllers.create)
+  .post(authenticate, authorize(["admin", "observer"]), controllers.create)
   /**
    * Private Route by Admin
    * @route baseurl/api/v1/report-forms
    * @method GET
    */
-  .get(authenticate, authorize(), controllers.findAllItems);
+  .get(authenticate, authorize(["admin"]), controllers.findAllItems);
 
 router
   .route(`${v1}/report-forms/:id`)

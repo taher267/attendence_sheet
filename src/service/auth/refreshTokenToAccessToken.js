@@ -5,9 +5,10 @@ const {
   authenticationError,
 } = require("../../utils/error");
 const { generateToken } = require("../token");
+const { REFRESH_TOKEN_SECRET, REFRESH_TOKEN_EXPIRY } = process.env;
 
 const getAccessTokenByRefreshToken = async ({ refreshToken }) => {
-  if (refreshToken) {
+  if (!refreshToken) {
     throw authenticationError();
   }
   const user = await userRepo.findItem({
@@ -17,7 +18,12 @@ const getAccessTokenByRefreshToken = async ({ refreshToken }) => {
   if (!user) {
     throw authorizationError();
   }
-  const { success, decoded, message } = verityJWT(refreshToken);
+  const { success, decoded, message } = verityJWT({
+    token: refreshToken,
+    secret: REFRESH_TOKEN_SECRET,
+  });
+  // console.log({ success, decoded, message });
+
   if (!success) {
     throw authorizationError(message);
   }

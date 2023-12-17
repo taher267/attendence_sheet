@@ -2123,10 +2123,8 @@ components:
 
                 description: For which date do you submit the book?
               validation:
-                type: array
-                items:
-                  type: string
-                  example: "required→The filed is mandatory&pattern→^[a-z][a-z_]+$"
+                type: string
+                example: "required→The filed is mandatory&pattern→^[a-z][a-z_]+$"
           required: [label, name, type]
       # required: [name, fields]
 

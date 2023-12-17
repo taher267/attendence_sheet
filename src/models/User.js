@@ -44,12 +44,17 @@ const userSchema = new Schema(
       type: String,
       enum: userConfig.statuses,
     },
-    refreshToken: [
-      {
-        type: String,
-        select: false,
-      },
-    ],
+    refreshToken: {
+      type: String,
+      select: false,
+    },
+
+    // refreshToken: [
+    //   {
+    //     type: String,
+    //     select: false,
+    //   },
+    // ],
   },
   { timestamps: true, versionKey: false }
 );
