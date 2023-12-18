@@ -1,34 +1,19 @@
 const establishmentService = require("../../../../service/establishment");
 
 const create = async (req, res, next) => {
-  const {
-    name,
-    email,
-    password,
-    phone_number,
-    username,
-    // passwordAllow,
-    roles,
-  } = req.body;
+  const { name } = req.body;
 
   try {
-    const user = await establishmentService.createItem({
+    const establishment = await establishmentService.createItem({
       name,
-      email,
-      password,
-      phone_number,
-      username,
-      // passwordAllow,
-      roles,
-      // status
     });
 
     const response = {
       code: 201,
-      message: "Users Created Successfully",
-      data: { ...user },
+      message: "establishments Created Successfully",
+      data: { ...establishment },
       links: {
-        self: `/users/${user.id}`,
+        self: `/establishments/${establishment.id}`,
       },
     };
 

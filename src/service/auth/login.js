@@ -28,6 +28,8 @@ const login = async ({ username, password }) => {
 
   if (!user) {
     throw notFound("User doesn't exist!");
+  } else if (!user?.password) {
+    throw badRequest(`Invalid Credentials!`);
   }
   if (user.status === "pending") {
     throw badRequest(`Please verify your account!`);
