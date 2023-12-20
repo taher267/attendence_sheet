@@ -2,9 +2,10 @@ const jwt = require("jsonwebtoken");
 const userRepo = require("../../repo/user");
 const { badRequest } = require("../../utils/error");
 const token = require("../token");
+const userConfig = require("../../config/user");
 const { REFRESH_TOKEN_SECRET, REFRESH_TOKEN_EXPIRY } = process.env;
 
-const IdToenVerify = async ({ id_token }) => {
+const IdToenVerify = async ({ id_token, status = userConfig.statuses[2] }) => {
   //, access_token
 
   if (!id_token) {
@@ -24,7 +25,7 @@ const IdToenVerify = async ({ id_token }) => {
     throw badRequest(`User Already exist!`);
   }
 
-  const newObj = { name, email, profilePic, thirdPartyAuth: "google" };
+  const newObj = { name, email, profilePic, thirdPartyAuth: "google", status };
 
   const user = await userRepo.create(newObj);
   const { id } = user;

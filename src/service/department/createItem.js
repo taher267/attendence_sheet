@@ -1,69 +1,29 @@
 const { badRequest, customError } = require("../../utils/error");
 const departmentRepo = require("../../repo/department");
-const bcrypt = require("bcrypt");
+const establishmentRepo = require("../../repo/establishment");
+const { isValidObjectId } = require("mongoose");
 
-const createItem = async ({
-  name,
-  email,
-  // status,
-  phone_number,
-  username,
-  passwordAllow,
-  // lastLogin,
-  roles,
-  // refreshToken,
-  password,
-}) => {
-  if (!name || !email || !password) {
+const createItem = async ({ name, establishment_id }) => {
+  if (!name || !establishment_id || !isValidObjectId(establishment_id)) {
     throw badRequest(`Invalid parameters!`);
   }
-
-  const qry = [{ email }];
-  if (username) {
-    qry.push({ username });
-  }
-
-  if (phone_number) {
-    qry.push({ phone_number });
-  }
-
-  const existUser = await departmentRepo.findItem({
-    qry: { $or: qry },
+  const doesExitEstablishment = await establishmentRepo.findItemById({
+    id: establishment_id,
   });
 
-  if (existUser) {
+  if (!doesExitEstablishment) {
     throw customError({
-      message: "Failure to create user!",
-      errors: [{ name: `User already exist!` }],
+      message: "Failure to create department!",
+      errors: [{ name: `Establishment doesn't exist! 🥵` }],
     });
   }
 
-  const hash = await bcrypt.hash(password, await bcrypt.genSalt(10));
-
   const newObj = {
     name,
-    email,
-    password: hash,
+    establishment_id,
   };
-  if (phone_number) {
-    newObj.phone_number = phone_number;
-  }
-  if (username) {
-    newObj.username = username;
-  }
-  if (roles) {
-    newObj.roles = roles;
-  }
-
-  if (passwordAllow) {
-    newObj.passwordAllow = passwordAllow;
-  }
-  if (password) {
-  }
-
-  const user = await departmentRepo.createNewItem(newObj);
-  delete user.password;
-  return user;
+  const item = await departmentRepo.createNewItem({ data: newObj });
+  return item;
 };
 
 module.exports = createItem;

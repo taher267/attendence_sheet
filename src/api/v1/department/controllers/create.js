@@ -1,34 +1,25 @@
 const departmentService = require("../../../../service/department");
 
+// departmentService
+//   .createItem({ name: "TAher", establishment_id: "65808706e750347c2485ff24" })
+//   .then(console.log)
+//   .catch(console.error);
+
 const create = async (req, res, next) => {
-  const {
-    name,
-    email,
-    password,
-    phone_number,
-    username,
-    // passwordAllow,
-    roles,
-  } = req.body;
+  const { name, establishment_id } = req.body;
 
   try {
-    const user = await departmentService.createItem({
+    const item = await departmentService.createItem({
       name,
-      email,
-      password,
-      phone_number,
-      username,
-      // passwordAllow,
-      roles,
-      // status
+      establishment_id,
     });
 
     const response = {
       code: 201,
-      message: "Users Created Successfully",
-      data: { ...user },
+      message: "Department Created Successfully",
+      data: { ...item },
       links: {
-        self: `/users/${user.id}`,
+        self: `/departments/${item.id}`,
       },
     };
 
