@@ -11,7 +11,7 @@ const ReportPermissionSchema = new Schema(
     observer: {
       type: Schema.Types.ObjectId,
       ref: "User",
-      required: [true, `User id is mandatory!`],
+      required: [false, `User id is mandatory!`],
     },
     establishment_id: {
       type: Schema.Types.ObjectId,

@@ -7,7 +7,7 @@ const create = async (req, res, next) => {
   } = req;
 
   try {
-    const data = await workReportService.createItem({
+    const item = await workReportService.createItem({
       report_permission_id,
       fields,
       for_submission_date,
@@ -17,9 +17,9 @@ const create = async (req, res, next) => {
     const response = {
       code: 201,
       message: "Work Report Created Successfully",
-      data,
+      data: item,
       links: {
-        self: `/work-reports/${data.id}`,
+        self: `/work-reports/${item.id}`,
       },
     };
 

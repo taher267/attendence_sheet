@@ -41,7 +41,7 @@ const findSingleItem = async ({
   if (!item) throw notFound();
 
   return {
-    user,
+    item,
     links: {
       self: `/work-reports/${item.id}`,
     },

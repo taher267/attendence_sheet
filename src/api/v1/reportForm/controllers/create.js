@@ -4,7 +4,7 @@ const create = async (req, res, next) => {
   const { name, fields, status } = req.body;
 
   try {
-    const reportForm = await reportFormService.createItem({
+    const item = await reportFormService.createItem({
       name,
       fields,
       status,
@@ -13,7 +13,7 @@ const create = async (req, res, next) => {
     const response = {
       code: 201,
       message: "Report form Created Successfully",
-      data: { ...reportForm },
+      data: item,
       links: {
         self: `/report-forms/${reportForm.id}`,
       },

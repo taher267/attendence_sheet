@@ -5,7 +5,7 @@ const updateItem = async (req, res, next) => {
   const { id } = req.params;
 
   try {
-    const data = await reportPermissionService.updateItem({
+    const item = await reportPermissionService.updateItem({
       id,
       weekly,
       monthly,
@@ -15,9 +15,9 @@ const updateItem = async (req, res, next) => {
     const response = {
       code: 200,
       message: "Report permission has been updated, Successfully",
-      data: { ...data },
+      data: { ...item },
       links: {
-        self: `/report-permissions/${data.id}`,
+        self: `/report-permissions/${item.id}`,
       },
     };
 

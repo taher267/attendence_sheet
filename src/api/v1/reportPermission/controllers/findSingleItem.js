@@ -4,11 +4,11 @@ const findSingleItem = async (req, res, next) => {
   const { id } = req.params;
 
   try {
-    const { data, ...rest } = await reportPermissionService.findSingleItem({
+    const { item, ...rest } = await reportPermissionService.findSingleItem({
       id,
     });
     const response = {
-      data,
+      data: item,
       ...rest,
     };
 

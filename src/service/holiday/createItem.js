@@ -1,11 +1,23 @@
 const { badRequest } = require("../../utils/error");
 const holidayRepo = require("../../repo/holiday");
-const createItem = async ({ weekly = [], monthly = [], occasional = [] }) => {
-  if (!weekly?.length && !monthly?.length && !occasional?.length) {
+const createItem = async ({
+  name,
+  weekly = [],
+  monthly = [],
+  occasional = [],
+  individual = [],
+}) => {
+  if (
+    !name ||
+    (!weekly?.length &&
+      !monthly?.length &&
+      !occasional?.length &&
+      !individual?.length)
+  ) {
     throw badRequest(`Invalid parameters!`);
   }
 
-  const newObj = {};
+  const newObj = { name };
   if (weekly?.length) {
     newObj.weekly = weekly;
   }
@@ -15,8 +27,7 @@ const createItem = async ({ weekly = [], monthly = [], occasional = [] }) => {
   if (occasional?.length) {
     newObj.occasional = occasional;
   }
-
-  const createdItem = await holidayRepo.createNewItem(newObj);
+  const createdItem = await holidayRepo.createNewItem({ data: newObj });
   return createdItem;
 };
 

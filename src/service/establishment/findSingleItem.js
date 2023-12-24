@@ -2,17 +2,15 @@ const { isValidObjectId } = require("mongoose");
 const establishmentRepo = require("../../repo/establishment");
 const { notFound, badRequest } = require("../../utils/error");
 
-const findSingleItem = async ({
-  id,
-}) => {
+const findSingleItem = async ({ id }) => {
   if (!id || !isValidObjectId(id)) throw badRequest(`Invalid user id!`);
-  const user = await establishmentRepo.findItemById({ id });
-  if (!user) throw notFound();
+  const item = await establishmentRepo.findItemById({ id });
+  if (!item) throw notFound();
 
   return {
-    user,
+    item,
     links: {
-      self: `/users/${user.id}`,
+      self: `/users/${item.id}`,
     },
   };
 };

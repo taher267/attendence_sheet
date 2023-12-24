@@ -15,7 +15,7 @@ const findAllItems = async (req, res, next) => {
 
   try {
     // data
-    const items = await departmentService.findAllItems({
+    const { items, ...rest } = await departmentService.findAllItems({
       page,
       limit,
       sortType,
@@ -28,7 +28,8 @@ const findAllItems = async (req, res, next) => {
 
     res.status(200).json({
       code: 200,
-      ...items,
+      data: items,
+      ...rest,
     });
   } catch (e) {
     next(e);

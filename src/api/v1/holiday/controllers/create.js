@@ -1,13 +1,21 @@
 const holidayService = require("../../../../service/holiday");
-
+// holidayService
+//   .createItem({
+//     weekly: [4],
+//     name:"Rasel Amin"
+//   })
+//   .then(console.log)
+//   .catch(console.error);
 const create = async (req, res, next) => {
-  const { weekly, monthly, occasional } = req.body;
+  const { name, weekly, monthly, occasional, individual } = req.body;
 
   try {
     const data = await holidayService.createItem({
+      name,
       weekly,
       monthly,
       occasional,
+      individual,
     });
 
     const response = {

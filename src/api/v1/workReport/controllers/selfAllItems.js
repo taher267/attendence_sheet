@@ -5,7 +5,7 @@ const defaults = require("../../../../config/defaults");
  * observer only access by his/her assigned
  * admin can see all
  */
-const findAllItems = async (req, res, next) => {
+const selfAllItems = async (req, res, next) => {
   const page = req.query.page || defaults.page;
   const limit = req.query.limit || defaults.limit;
   const sortType = req.query.sort_type || defaults.sortType;
@@ -18,7 +18,7 @@ const findAllItems = async (req, res, next) => {
 
   try {
     // data
-    const { items, ...rest } = await reportFormService.findAllItems({
+    const { items, ...rest } = await reportFormService.selfAllItems({
       page,
       limit,
       sortType,
@@ -39,4 +39,4 @@ const findAllItems = async (req, res, next) => {
   }
 };
 
-module.exports = findAllItems;
+module.exports = selfAllItems;

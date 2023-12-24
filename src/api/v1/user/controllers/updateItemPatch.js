@@ -5,14 +5,14 @@ const updateItemPatch = async (req, res, next) => {
   const { roles, status } = req.body;
 
   try {
-    const user = await userService.updateProperties({ id, roles, status });
+    const data = await userService.updateProperties({ id, roles, status });
 
     const response = {
       code: 200,
       message: "user updated successfully",
-      data: user,
+      data,
       links: {
-        self: `/users/${user.id}`,
+        self: `/users/${data.id}`,
       },
     };
 

@@ -4,13 +4,13 @@ const { notFound, badRequest } = require("../../utils/error");
 
 const findSingleItem = async ({ id }) => {
   if (!id || !isValidObjectId(id)) throw badRequest(`Invalid parameters!`);
-  const data = await holidayRepo.findItemById({ id });
-  if (!data) throw notFound();
+  const item = await holidayRepo.findItemById({ id });
+  if (!item) throw notFound();
 
   return {
-    data,
+    item,
     links: {
-      self: `/holidays/${data.id}`,
+      self: `/holidays/${item.id}`,
     },
   };
 };

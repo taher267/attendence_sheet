@@ -3,9 +3,7 @@ const userService = require("../../../../service/auth");
 const updatePassword = async (req, res, next) => {
   try {
     const {
-      body: { oldPassword,
-        newPassword,
-        confirmPassword,},
+      body: { oldPassword, newPassword, confirmPassword },
       user: { id },
     } = req;
     const { refreshToken } = await userService.updatePassword({
@@ -17,7 +15,7 @@ const updatePassword = async (req, res, next) => {
 
     res.json({
       message: "Alhamdu lillah, password has been updated!",
-      refreshToken,
+      data: { refreshToken },
     });
   } catch (e) {
     next(e);

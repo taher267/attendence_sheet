@@ -5,14 +5,14 @@ const findSingleItem = async (req, res, next) => {
   const { searchfor } = req.query;
 
   try {
-    const { user, ...rest } = await workReportService.findSingleItem({
+    const { item, ...rest } = await workReportService.findSingleItem({
       id,
       user_id,
       user: req.user,
       searchfor,
     });
     const response = {
-      user,
+      data: item,
       ...rest,
     };
 

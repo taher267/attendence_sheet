@@ -5,7 +5,7 @@ const { connectDB } = require("./db/");
 
 const server = http.createServer(app);
 
-const port = process.env.PORT || 4001;
+const port = process.env.PORT || 4003;
 const main = async () => {
   try {
     await connectDB();

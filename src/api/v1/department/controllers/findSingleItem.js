@@ -8,7 +8,7 @@ const findSingleItem = async (req, res, next) => {
       id,
     });
     const response = {
-      user,
+      data: user,
       ...rest,
     };
 

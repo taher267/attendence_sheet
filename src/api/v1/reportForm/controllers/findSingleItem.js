@@ -4,11 +4,11 @@ const findSingleItem = async (req, res, next) => {
   const id = req.params.id;
 
   try {
-    const { user, ...rest } = await establishmentService.findSingleItem({
+    const { item, ...rest } = await establishmentService.findSingleItem({
       id,
     });
     const response = {
-      user,
+      data: item,
       ...rest,
     };
 

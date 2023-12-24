@@ -15,6 +15,7 @@ const helpers = require("./helpers");
 //   .then((d) => {
 //     console.log(d.createdAt.toISOString().slice(0,10));
 //   });
+// console.log(moment('2023-12-28').day())
 const createItem = async ({
   report_permission_id,
   fields = [],

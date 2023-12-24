@@ -7,7 +7,9 @@ const departmentRepo = require("../../repo/department");
 const holidayRepo = require("../../repo/holiday");
 
 const { isValidObjectId } = require("mongoose");
-
+/**
+TODO: open_submission_date check can not before today
+ */
 const createItem = async ({
   user_id,
   report_form_id,
@@ -16,6 +18,7 @@ const createItem = async ({
   department_id,
   holiday_id,
   observer,
+  open_submission_date,
 }) => {
   if (
     !user_id ||
@@ -25,13 +28,14 @@ const createItem = async ({
     (establishment_id && !isValidObjectId(establishment_id)) ||
     (department_id && !isValidObjectId(department_id)) ||
     (holiday_id && !isValidObjectId(holiday_id)) ||
-    !observer ||
-    !isValidObjectId(observer)
+    !open_submission_date
+    //|| !observer ||
+    // !isValidObjectId(observer)
   ) {
     throw badRequest(`Invalid parameters!`);
   }
 
-  const newObj = {};
+  const newObj = { open_submission_date };
   if (user_id) {
     const doesExist = await userRepo.findItemById({ id: user_id });
     if (!doesExist) {
@@ -88,8 +92,7 @@ const createItem = async ({
   if (status) {
     newObj.status = status;
   }
-
-  const created = await reportPermissionRepo.createNewItem(newObj);
+  const created = await reportPermissionRepo.createNewItem({ data: newObj });
   return created;
 };
 

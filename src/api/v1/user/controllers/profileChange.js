@@ -4,14 +4,14 @@ const profileChange = async (req, res, next) => {
   const { id } = req.params;
 
   try {
-    const user = await userService.profileChange(id, req.body);
+    const data = await userService.profileChange(id, req.body);
 
     const response = {
       code: 200,
-      message: "user updated successfully",
-      data: user,
+      message: "User updated successfully",
+      data,
       links: {
-        self: `/users/${user.id}`,
+        self: `/users/${data.id}`,
       },
     };
 

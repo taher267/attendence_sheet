@@ -12,7 +12,7 @@ const create = async (req, res, next) => {
   } = req.body;
 
   try {
-    const user = await userService.createItem({
+    const data = await userService.createItem({
       name,
       email,
       password,
@@ -26,9 +26,9 @@ const create = async (req, res, next) => {
     const response = {
       code: 201,
       message: "Users Created Successfully",
-      data: { ...user },
+      data,
       links: {
-        self: `/users/${user.id}`,
+        self: `/users/${data.id}`,
       },
     };
 

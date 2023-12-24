@@ -7,7 +7,7 @@ const { accountVarificationTemplate } = require("../template");
 const { badRequest } = require("../../utils/error");
 const cache = require("../../cache");
 
-const registerWithLinkLocalCache = async ({ name, email, url }) => {
+const registerWithLink = async ({ name, email, url }) => {
   if (!name || !email || !url) {
     throw badRequest(`Invalid parameters!`);
   }
@@ -38,4 +38,4 @@ const registerWithLinkLocalCache = async ({ name, email, url }) => {
   return { code: 200 };
 };
 
-module.exports = registerWithLinkLocalCache;
+module.exports = registerWithLink;

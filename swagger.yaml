@@ -9,7 +9,7 @@ info:
     email: abutaher267@gmail.com
 servers:
   - description: Dev
-    url: "http://localhost:4001/api/v1"
+    url: "http://localhost:4003/api/v1"
   - description: Live
     url: "https://ecom-server-rw2s.onrender.com/api/v1"
   - description: Ngrok Dynamic
@@ -2185,8 +2185,12 @@ components:
           description: observer should be a active user and it role would be observer
           type: string
           example: "64d268cdeef8c84bb18912db"
-          # $ref: "#components/schemas/ID_TYPE_EXAMPLE"
-      required: [user_id, form_id, status]
+        open_submission_date:
+          description: From which date employee will submit his/her form
+          type: string
+          format: date-time
+
+      required: [user_id, report_form_id, open_submission_date, status]
 
     Holiday:
       properties:

@@ -3,8 +3,9 @@ const holidayConfig = require("../config/holiday");
 
 const HolidaySchema = new Schema(
   {
+    name: { type: String, required: [true, `Name is mandatory!`] },
     weekly: {
-      type: [String],
+      type: [Number],
       enum: holidayConfig.daysOfWeek,
     },
     monthly: {

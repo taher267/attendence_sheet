@@ -12,7 +12,7 @@ const register = async (req, res, next) => {
       phone_number,
     });
     // setAccessAndRefreshToken(res, { setRefresh: true, refreshToken });
-    return res.status(201).json({ user, accessToken, refreshToken });
+    return res.status(201).json({ data: { user, accessToken, refreshToken } });
   } catch (e) {
     next(e);
   }

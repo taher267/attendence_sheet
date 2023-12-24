@@ -5,7 +5,7 @@ const updateItem = async (req, res, next) => {
   const { id } = req.params;
 
   try {
-    const reportForm = await reportFormService.updateItem({
+    const item = await reportFormService.updateItem({
       name,
       fields,
       status,
@@ -15,9 +15,9 @@ const updateItem = async (req, res, next) => {
     const response = {
       code: 200,
       message: "Report form has been updated, Successfully",
-      data: { ...reportForm },
+      data: { ...item },
       links: {
-        self: `/report-forms/${reportForm.id}`,
+        self: `/report-forms/${item.id}`,
       },
     };
 

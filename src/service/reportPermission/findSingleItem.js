@@ -4,13 +4,13 @@ const { notFound, badRequest } = require("../../utils/error");
 
 const findSingleItem = async ({ id }) => {
   if (!id || !isValidObjectId(id)) throw badRequest(`Invalid id!`);
-  const data = await reportPermissionRepo.findItemById({ id });
-  if (!data) throw notFound();
+  const item = await reportPermissionRepo.findItemById({ id });
+  if (!item) throw notFound();
 
   return {
-    data,
+    item,
     links: {
-      self: `/report-permissions/${data.id}`,
+      self: `/report-permissions/${item.id}`,
     },
   };
 };

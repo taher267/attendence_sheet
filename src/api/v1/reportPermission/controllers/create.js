@@ -9,10 +9,11 @@ const create = async (req, res, next) => {
     department_id,
     holiday_id,
     observer,
+    open_submission_date,
   } = req.body;
 
   try {
-    const data = await reportPermissionService.createItem({
+    const item = await reportPermissionService.createItem({
       user_id,
       report_form_id,
       status,
@@ -20,14 +21,15 @@ const create = async (req, res, next) => {
       department_id,
       holiday_id,
       observer,
+      open_submission_date,
     });
 
     const response = {
       code: 201,
       message: "Report Permission Created Successfully",
-      data,
+      data: item,
       links: {
-        self: `/report-permissions/${data.id}`,
+        self: `/report-permissions/${item.id}`,
       },
     };
 

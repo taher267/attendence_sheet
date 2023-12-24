@@ -31,7 +31,7 @@ const findAllItems = async ({
   }
 
   const skip = page * limit - limit;
-  const selection = ["id", "weekly", "monthly", "occasional"];
+  const selection = ["id", "name", "weekly", "monthly", "occasional"];
 
   const items = await holidayRepo.findAllItems({
     qry: filter,

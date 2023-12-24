@@ -4,11 +4,11 @@ const findSingleItem = async (req, res, next) => {
   const { id } = req.params;
 
   try {
-    const { data, ...rest } = await holidayService.findSingleItem({
+    const { item, ...rest } = await holidayService.findSingleItem({
       id,
     });
     const response = {
-      data,
+      data: item,
       ...rest,
     };
 
