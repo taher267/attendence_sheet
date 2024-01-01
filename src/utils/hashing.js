@@ -17,3 +17,5 @@ module.exports = {
   generateHash,
   hashMatched,
 };
+
+// generateHash("J").then(console.log).then(console.error);

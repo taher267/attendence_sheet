@@ -19,6 +19,7 @@ const applyMiddleware = (app) => {
     cors({
       origin: [
         "http://localhost:4001",
+        "http://localhost:4003",
         "http://localhost:3000",
         "https://pz-attendance.netlify.app",
       ],
