@@ -1317,6 +1317,45 @@ paths:
                         - $ref: "#/components/schemas/Timestamp"
         "500":
           "$ref": "#/components/responses/500"
+  "/report-forms/self":
+    get:
+      operationId: SelfAllReportForms
+      description: "Retrive all Report Forms"
+      tags:
+        - "ReportForm"
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/pageParam"
+        - $ref: "#/components/parameters/limitParam"
+        - $ref: "#/components/parameters/sortTypeParam"
+        - $ref: "#/components/parameters/sortByParam"
+        - $ref: "#/components/parameters/searchParam"
+
+      responses:
+        "200":
+          description: Fetching all Report Forms
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 202
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      allOf:
+                        - $ref: "#components/schemas/ID"
+                        - $ref: "#/components/schemas/ReportForm"
+                        - $ref: "#/components/schemas/Timestamp"
+        "500":
+          "$ref": "#/components/responses/500"
 
   "/report-forms/{id}":
     get:
@@ -1848,6 +1887,42 @@ paths:
                       $ref: "#/components/schemas/WorkReportResponse"
         "500":
           "$ref": "#/components/responses/500"
+  "/work-reports/self":
+    get:
+      operationId: SelfAllReportForms
+      description: "Retrive all WorkReport"
+      tags:
+        - "WorkReport"
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/pageParam"
+        - $ref: "#/components/parameters/limitParam"
+        - $ref: "#/components/parameters/sortTypeParam"
+        - $ref: "#/components/parameters/sortByParam"
+        - $ref: "#/components/parameters/searchParam"
+
+      responses:
+        "200":
+          description: Fetching all Holidays
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 202
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      $ref: "#/components/schemas/WorkReportResponse"
+        "500":
+          "$ref": "#/components/responses/500"
 
   "/work-reports/{id}":
     get:
@@ -2097,6 +2172,7 @@ components:
                 enum:
                   [
                     "text",
+                    "textarea",
                     "select",
                     "button",
                     "checkbox",

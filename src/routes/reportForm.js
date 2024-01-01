@@ -22,6 +22,14 @@ router
    * @method GET
    */
   .get(authenticate, authorize(["admin"]), controllers.findAllItems);
+router
+  .route(`${v1}/report-forms/self`)
+  /**
+   * Private Route
+   * @route baseurl/api/v1/report-forms/self
+   * @method GET
+   */
+  .get(authenticate, controllers.selfAllItems);
 
 router
   .route(`${v1}/report-forms/:id`)

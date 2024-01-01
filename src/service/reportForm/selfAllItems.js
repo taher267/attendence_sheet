@@ -1,15 +1,17 @@
-const workReportRepo = require("../../repo/workReport");
+const Repo = require("../../repo/reportPermission");
 const defaults = require("../../config/defaults");
 const { query } = require("../../utils");
+const { badRequest } = require("../../utils/error");
+const objectKeyValueSelect = require("../../utils/objectKeyValueSelect");
 /**
- * Find all users
+ * Find all reportForm
  * Pagination
  * Searching
  * Sorting
  * @param{*} param0
  * @returns
  */
-const findAllItems = async ({
+const selfAllItems = async ({
   page = defaults.page,
   limit = defaults.limit,
   sortType = defaults.sortType,
@@ -18,9 +20,13 @@ const findAllItems = async ({
   searchBy = "",
   searchType = "",
   request = {},
+  user_id,
 }) => {
+  if (!user_id) {
+    throw badRequest();
+  }
   const sortStr = `${sortType === "dsc" ? "-" : ""}${sortBy}`;
-  const filter = {};
+  const filter = { user_id };
 
   if (searchBy && search) {
     if (searchType === "pattern") {
@@ -31,37 +37,37 @@ const findAllItems = async ({
   }
 
   const skip = page * limit - limit;
-  const selection = [
-    "id",
-    "name",
-    "email",
-    "phone_number",
-    "username",
-    "lastLogin",
-    "roles",
-    "username",
-    "status",
-    "createdAt",
-    "updatedAt",
-  ];
+  const selection = ["id", "report_form_id"];
+  // const selection = ["id", "name", "fields"];
 
-  const users = await workReportRepo.findAllItems({
+  const items = await Repo.findAllItems({
     qry: filter,
     sortStr,
     limit,
     skip,
-    select: selection,
+    // select: ["report_form_id"],
+    populate: [["report_form_id"]],
   });
-  // .populate({ path: "author", select: "name" })
-  console.log(users?.length);
+  const filteredItems = [],
+    filter_keys = ["fields", "name", "status", "createdAt", "upatedAt"];
+  for (const single_item of items) {
+    filteredItems.push(
+      objectKeyValueSelect({
+        data: single_item?.report_form_id,
+        select: ["_id", ...filter_keys],
+        key_replace: { _id: "id" },
+      })
+    );
+  }
+  // console.log(filteredItems);
   const data = query.getTransformedItems({
-    items: users,
-    selection,
-    path: "/users",
+    items: filteredItems,
+    selection: ["id", ...filter_keys],
+    path: "/report-forms",
   });
 
   // pagination
-  const totalItems = await workReportRepo.count({ filter });
+  const totalItems = await Repo.count({ filter });
 
   const pagination = query.getPagination({ totalItems, limit, page });
 
@@ -76,11 +82,11 @@ const findAllItems = async ({
   });
 
   return {
-    data,
+    items: data,
     totalItems,
     pagination,
     links,
   };
 };
 
-module.exports = findAllItems;
+module.exports = selfAllItems;

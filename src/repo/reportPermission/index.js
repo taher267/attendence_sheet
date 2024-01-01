@@ -1,4 +1,5 @@
 const { ReportPermission } = require("../../models");
+const { ObjectId } = require("mongodb");
 const quryReplacer = require("../../utils/quryReplacer");
 
 const findAllItems = async ({
@@ -13,7 +14,12 @@ const findAllItems = async ({
   let items = [];
   if (populate) {
     items = await ReportPermission.find(qry)
-      .populate({ ...populate })
+      .populate(...(populate?.[0] || []))
+      .populate(...(populate?.[1] || []))
+      .populate(...(populate?.[2] || []))
+      .populate(...(populate?.[3] || []))
+      .populate(...(populate?.[4] || []))
+      .populate(...(populate?.[5] || []))
       .select(select)
       .sort(sortStr)
       .skip(skip)
@@ -31,6 +37,100 @@ const findAllItems = async ({
   }));
 };
 
+const permissionFollowingForms = async ({
+  qry = {},
+  populate,
+  sortStr = "-createdAt",
+  skip = 0,
+  limit = 10,
+  select = "",
+}) => {
+  // qry = quryReplacer(qry);
+  // let items = [];
+  // if (populate) {
+  //   items = await ReportPermission.find(qry)
+  //     .populate({ ...populate })
+  //     .select(select)
+  //     .sort(sortStr)
+  //     .skip(skip)
+  //     .limit(limit);
+  // } else {
+  //   items = await ReportPermission.find(qry)
+  //     .select(select)
+  //     .sort(sortStr)
+  //     .skip(skip)
+  //     .limit(limit);
+  // }
+  // return items.map((item) => ({
+  //   ...item._doc,
+  //   id: item.id,
+  // }));
+  const data = await ReportPermission.aggregate([
+    {
+      $match: {
+        // user_id: new ObjectId("657b6d1c12e9c9d91211d4b0"),
+      },
+    },
+
+    {
+      $lookup: {
+        from: "reportforms",
+        localField: "report_form_id",
+        foreignField: "_id",
+        as: "reportForms",
+      },
+    },
+    { $unwind: "$reportForms" },
+    {
+      $lookup: {
+        from: "users",
+        localField: "user_id",
+        foreignField: "_id",
+        as: "Users",
+      },
+    },
+    { $unwind: "$Users" },
+
+    {
+      $lookup: {
+        from: "users",
+        localField: "observer_id",
+        foreignField: "_id",
+        as: "Observer",
+      },
+    },
+    {
+      $lookup: {
+        from: "establishments",
+        localField: "establishment_id",
+        foreignField: "_id",
+        as: "Establishment",
+      },
+    },
+    {
+      $lookup: {
+        from: "departments",
+        localField: "department_id",
+        foreignField: "_id",
+        as: "department",
+      },
+    },
+    {
+      $lookup: {
+        from: "holidays",
+        localField: "holiday_id",
+        foreignField: "_id",
+        as: "holiday",
+      },
+    },
+  ]);
+  console.log(data?.[0]);
+};
+// permissionFollowingForms({ qry: {} })
+//   .then((d) => {
+//     console.log(d?.[0]);
+//   })
+//   .catch(console.error);
 const findItem = async ({ qry = {}, select = "" }) => {
   qry = quryReplacer(qry);
   const item = await ReportPermission.findOne(qry).select(select).exec();
@@ -139,4 +239,5 @@ module.exports = {
   deleteItem,
   deleteItemById,
   deleteManyItem,
+  // permissionFollowingForms,
 };

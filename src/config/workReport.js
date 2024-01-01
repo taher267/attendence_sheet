@@ -7,6 +7,14 @@ const nextSubmitionWithApproval = false; //if `true` at first previous all submi
 const nextSubmitionWithReject = false; // if `false` Any previous submission cannot be rejected
 const currentSubmitionWithPreviousAllSubmissions = true; // if `true` you have submit previous all days form first! To fill up Till current day.
 const approvalType = "by_form_fill_up"; //menually
+const defaults = {
+  totalItems: 0,
+  limit: 10,
+  page: 1,
+  sortType: "dsc",
+  sortBy: "updatedAt",
+  search: "",
+};
 
 module.exports = {
   statuses,
@@ -17,4 +25,5 @@ module.exports = {
   updatableSelfStatuses,
   updatableObserverStatuses,
   deleteRolesAllow,
+  defaults,
 };

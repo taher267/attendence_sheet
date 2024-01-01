@@ -1,6 +1,6 @@
 const reportFormService = require("../../../../service/reportForm");
 // const { query } = require("../../../../utils");
-const defaults = require("../../../../config/defaults");
+const { defaults } = require("../../../../config/workReport");
 /**
  * observer only access by his/her assigned
  * admin can see all
@@ -13,6 +13,7 @@ const findAllItems = async (req, res, next) => {
   const search = req.query.search || defaults.search;
   const searchBy = req.query.searchBy || "";
   const searchType = req.query.searchType || "";
+  // const viewType = req.query.viewType || defaults.viewType;
 
   const { path, url, query } = req;
 

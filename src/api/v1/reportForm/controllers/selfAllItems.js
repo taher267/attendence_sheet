@@ -1,10 +1,7 @@
-const Services = require("../../../../service/workReport");
+const reportFormService = require("../../../../service/reportForm");
 // const { query } = require("../../../../utils");
-const defaults = require("../../../../config/defaults");
-/**
- * observer only access by his/her assigned
- * admin can see all
- */
+const { defaults } = require("../../../../config/reportForm");
+
 const selfAllItems = async (req, res, next) => {
   const page = req.query.page || defaults.page;
   const limit = req.query.limit || defaults.limit;
@@ -23,7 +20,7 @@ const selfAllItems = async (req, res, next) => {
 
   try {
     // data
-    const { items, ...rest } = await Services.selfAllItems({
+    const { items, ...rest } = await reportFormService.selfAllItems({
       page,
       limit,
       sortType,

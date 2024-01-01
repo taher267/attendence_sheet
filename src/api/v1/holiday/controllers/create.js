@@ -2,7 +2,7 @@ const holidayService = require("../../../../service/holiday");
 // holidayService
 //   .createItem({
 //     weekly: [4],
-//     name:"Rasel Amin"
+//     name:"Taher Tweetsy"
 //   })
 //   .then(console.log)
 //   .catch(console.error);

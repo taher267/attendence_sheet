@@ -1,6 +1,7 @@
 const workReportRepo = require("../../repo/workReport");
-const defaults = require("../../config/defaults");
+const { defaults } = require("../../config/workReport");
 const { query } = require("../../utils");
+const { badRequest } = require("../../utils/error");
 /**
  * Find all users
  * Pagination
@@ -9,7 +10,7 @@ const { query } = require("../../utils");
  * @param{*} param0
  * @returns
  */
-const findAllItems = async ({
+const selfAllItems = async ({
   page = defaults.page,
   limit = defaults.limit,
   sortType = defaults.sortType,
@@ -18,9 +19,13 @@ const findAllItems = async ({
   searchBy = "",
   searchType = "",
   request = {},
+  user_id,
 }) => {
+  if (!user_id) {
+    throw badRequest(`Invalid prameters`);
+  }
   const sortStr = `${sortType === "dsc" ? "-" : ""}${sortBy}`;
-  const filter = {};
+  const filter = { user_id };
 
   if (searchBy && search) {
     if (searchType === "pattern") {
@@ -83,4 +88,4 @@ const findAllItems = async ({
   };
 };
 
-module.exports = findAllItems;
+module.exports = selfAllItems;

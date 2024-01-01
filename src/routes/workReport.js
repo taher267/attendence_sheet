@@ -21,12 +21,15 @@ router
    * @route baseurl/api/v1/work-reports
    * @method GET
    */
-  .get(
-    authenticate,
-    authorize(["admin", "observer"]),
-    controllers.findAllItems
-  );
-
+  .get(authenticate, controllers.findAllItems);
+router
+  .route(`${v1}/work-reports/self`)
+  /**
+   * Private Route by Admin
+   * @route baseurl/api/v1/work-reports/self
+   * @method GET
+   */
+  .get(authenticate, controllers.selfAllItems);
 router
   .route(`${v1}/work-reports/:id`)
   /**
@@ -41,7 +44,7 @@ router
    * @method PUT
    */
   .put(authenticate, controllers.updateItem)
-  
+
   /**
    * Private Route
    * @route baseurl/api/v1/work-reports/:id
