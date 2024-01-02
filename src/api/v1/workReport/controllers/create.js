@@ -1,17 +1,17 @@
-const workReportService = require("../../../../service/workReport");
+const Services = require("../../../../service/workReport");
 
 const create = async (req, res, next) => {
   const {
     body: { report_permission_id, fields, for_submission_date },
-    user: { id },
+    user: { id: user_id },
   } = req;
 
   try {
-    const item = await workReportService.createItem({
+    const item = await Services.createItem({
       report_permission_id,
       fields,
       for_submission_date,
-      user_id: id,
+      user_id,
     });
 
     const response = {

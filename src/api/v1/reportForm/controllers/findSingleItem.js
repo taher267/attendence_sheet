@@ -1,10 +1,10 @@
-const establishmentService = require("../../../../service/establishment");
+const Services = require("../../../../service/reportForm");
 
 const findSingleItem = async (req, res, next) => {
   const id = req.params.id;
 
   try {
-    const { item, ...rest } = await establishmentService.findSingleItem({
+    const { item, ...rest } = await Services.findSingleItem({
       id,
     });
     const response = {

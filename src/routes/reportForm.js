@@ -34,11 +34,11 @@ router
 router
   .route(`${v1}/report-forms/:id`)
   /**
-   * Private Route by Admin
+   * Private Route
    * @route baseurl/api/v1/report-forms/:id
    * @method POST
    */
-  .get(authenticate, authorize(), controllers.findSingleItem)
+  .get(authenticate, controllers.findSingleItem)
   /**
    * Private Route by Admin
    * @route baseurl/api/v1/report-forms/:id

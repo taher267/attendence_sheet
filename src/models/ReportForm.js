@@ -24,12 +24,16 @@ const ReportFormSchema = new Schema(
           enum: reportFormFiledConfig.filedTypes,
           default: "text",
         },
-        validation: Array,
+        validation: String,
       },
     ],
-    status: { type: String, eum: reportFormFiledConfig.statuses, default: "active" },
+    status: {
+      type: String,
+      eum: reportFormFiledConfig.statuses,
+      default: "active",
+    },
   },
-  { timestamps: true, versionKey: false  }
+  { timestamps: true, versionKey: false }
 );
 const ReportForm = model("ReportForm", ReportFormSchema);
 

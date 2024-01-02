@@ -1,4 +1,4 @@
-const quryReplacer = (data) => {
+const queryReplacer = (data) => {
   if (!data) return;
   let qry = data;
   const qryStr = JSON.stringify(data);
@@ -7,4 +7,4 @@ const quryReplacer = (data) => {
   }
   return qry;
 };
-module.exports = quryReplacer;
+module.exports = queryReplacer;

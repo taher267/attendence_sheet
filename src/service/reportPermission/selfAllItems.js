@@ -3,6 +3,7 @@ const { defaults } = require("../../config/reportPermission");
 const { query } = require("../../utils");
 const { badRequest } = require("../../utils/error");
 const objectKeyValueSelect = require("../../utils/objectKeyValueSelect");
+
 /**
  * Find all reportForm
  * Pagination
@@ -48,22 +49,25 @@ const selfAllItems = async ({
     // select: ["report_form_id"],
     populate: [["report_form_id"]],
   });
+
   const filteredItems = [],
-    filter_keys = ["fields", "name", "status", "createdAt", "upatedAt"];
+    filter_keys = [
+      "id",
+      "report_form",
+      "open_submission_date",
+      "status",
+      "createdAt",
+      "upatedAt",
+    ];
   for (const single_item of items) {
-    filteredItems.push(
-      objectKeyValueSelect({
-        data: single_item?.report_form_id,
-        select: ["_id", ...filter_keys],
-        key_replace: { _id: "id" },
-      })
-    );
+    single_item.report_form = single_item.report_form_id;
+    delete single_item.report_form_id;
+    filteredItems.push(single_item);
   }
-  // console.log(filteredItems);
   const data = query.getTransformedItems({
     items: filteredItems,
-    selection: ["id", ...filter_keys],
-    path: "/report-forms",
+    selection: filter_keys,
+    path: "/report-permissions",
   });
 
   // pagination

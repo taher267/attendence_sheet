@@ -24,13 +24,22 @@ router
   .get(authenticate, authorize(), controllers.findAllItems);
 
 router
+  .route(`${v1}/report-permissions/self`)
+  /**
+   * Private Route by Admin
+   * @route baseurl/api/v1/report-permissions/self
+   * @method GET
+   */
+  .get(authenticate, controllers.selfAllItems);
+
+router
   .route(`${v1}/report-permissions/:id`)
   /**
    * Private Route by Admin
    * @route baseurl/api/v1/report-permissions/:id
    * @method POST
    */
-  .get(authenticate, authorize(), controllers.findSingleItem)
+  .get(authenticate, controllers.findSingleItem)
   /**
    * Private Route by Admin
    * @route baseurl/api/v1/report-permissions/:id

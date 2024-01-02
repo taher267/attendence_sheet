@@ -1,6 +1,8 @@
 const { ReportPermission } = require("../../models");
 const { ObjectId } = require("mongodb");
 const quryReplacer = require("../../utils/quryReplacer");
+const copy = require("../../utils/copy");
+const keyReplacer = require("../../utils/keyReplacer");
 
 const findAllItems = async ({
   qry = {},
@@ -31,10 +33,14 @@ const findAllItems = async ({
       .skip(skip)
       .limit(limit);
   }
-  return items.map((item) => ({
-    ...item._doc,
-    id: item.id,
-  }));
+  return items.map((item) => {
+    const replacedItem = keyReplacer(item?._doc);
+
+    return {
+      ...replacedItem,
+      id: item.id,
+    };
+  });
 };
 
 const permissionFollowingForms = async ({
@@ -141,8 +147,15 @@ const findItem = async ({ qry = {}, select = "" }) => {
   return copy;
 };
 
-const findItemById = async ({ id, select = "" }) => {
-  const item = await ReportPermission.findById(id).select(select).exec();
+const findItemById = async ({ id, select = "", populate }) => {
+  const item = await ReportPermission.findById(id)
+    .populate(...(populate?.[0] || []))
+    .populate(...(populate?.[1] || []))
+    .populate(...(populate?.[2] || []))
+    .populate(...(populate?.[3] || []))
+    .populate(...(populate?.[4] || []))
+    .populate(...(populate?.[5] || []))
+    .select(select);
   if (!item) return false;
   const copy = { id: item.id, ...item._doc };
   delete copy._id;

@@ -16,9 +16,10 @@ const helpers = require("./helpers");
 //     console.log(d.createdAt.toISOString().slice(0,10));
 //   });
 // console.log(moment('2023-12-28').day())
+
 const createItem = async ({
   report_permission_id,
-  fields = [],
+  fields = {},
   for_submission_date,
   status = "submited",
   user_id,
@@ -28,7 +29,7 @@ const createItem = async ({
     !isValidObjectId(report_permission_id) ||
     !user_id ||
     !isValidObjectId(user_id) ||
-    !fields?.length ||
+    !Object.keys(fields)?.length ||
     !for_submission_date ||
     !moment(for_submission_date).isValid() ||
     moment(for_submission_date)
@@ -39,6 +40,7 @@ const createItem = async ({
   }
   const doesExistReportPermission = await reportPermissionRepo.findItemById({
     id,
+    populate: [["report_form_id"]],
   });
   if (!doesExistReportPermission) {
     throw badRequest(`Report Permission table doesn't exist!`);
@@ -46,13 +48,15 @@ const createItem = async ({
     throw badRequest(`Invalid user id!`);
   }
 
-  const reportForm = await reportFormRepo.findItemById({
-    id: doesExistReportPermission.report_form_id,
-    select: "fields status",
-  });
+  const reportForm = doesExistReportPermission?.report_form_id;
+
+  // await reportFormRepo.findItemById({
+  //   id: doesExistReportPermission.report_form_id,
+  //   select: "fields status",
+  // });
   if (!reportForm) {
     throw badRequest(`Submission form doesn't exist!`);
-  } else if (reportForm.status !== "active") {
+  } else if (reportForm?.status !== "active") {
     throw badRequest(`Submission form Inactive!`);
   }
   if (doesExistReportPermission.status !== "open") {
@@ -104,14 +108,14 @@ const createItem = async ({
     );
   }
 
-  const workReportForm = fields.reduce((a, c) => {
+  const workReportForm = reportForm.fields.reduce((a, c) => {
     const [key, value] = Object.entries(c)?.[0];
     a[key] = value;
     return a;
   }, {});
   const { errors, valid } = helpers.submitedFormValidation({
     workReportForm,
-    submittedNameValues: reports,
+    submittedNameValues: fields,
   });
   if (!valid) {
     throw customError({
