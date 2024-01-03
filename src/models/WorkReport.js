@@ -13,13 +13,21 @@ const WorkReportSchema = new Schema(
       ref: "ReportPermission",
       required: [true, `Report Permission id is mandatory!`],
     },
-
-    fields: [
-      {
-        name: { type: String, required: [true, `Field name is mandatory!`] },
-        report: { type: String, required: [true, `Field name is mandatory!`] },
-      },
-    ],
+    report_form_id: {
+      type: Schema.Types.ObjectId,
+      required: [true, `Report form id is mandatory!`],
+      ref: "ReportForm",
+    },
+    fields: {
+      type: Object,
+      required: [true, `Work Report fields is mandatory!`],
+    },
+    // fields: [
+    //   {
+    //     name: { type: String, required: [true, `Field name is mandatory!`] },
+    //     report: { type: String, required: [true, `Field name is mandatory!`] },
+    //   },
+    // ],
     for_submission_date: {
       type: Date,
       required: [true, `For submission date is mandatory`],

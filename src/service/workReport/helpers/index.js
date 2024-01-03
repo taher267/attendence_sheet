@@ -1,34 +1,46 @@
 const moment = require("moment");
+const copy = require("../../../utils/copy");
+const stringToRHFRules = require("../../../utils/stringToRHFRules");
 
-const submitedFormValidation = ({
-  submittedNameValues = {},
-  workReportForm = [],
-}) => {
-  const copy = JSON.parse(JSON.stringify(workReportForm));
-  let misRequired = false;
+const submitedFormValidation = ({ data = {}, compare_with = [] }) => {
   const errors = [];
+  let valid = true;
 
-  for (const W_R_field of workReportForm) {
-    const { required, name } = W_R_field;
-    if (required) {
-      if (!submittedNameValues[name]?.trim?.()) {
-        misRequired = true;
-        errors.push({ [name]: `${[name]} is mandatory!` });
-      } else {
-        delete copy[name];
+  const copied = copy(data);
+  for (const field of compare_with) {
+    const { name } = field;
+    if (field?.validation) {
+      const { required, pattern } =
+        stringToRHFRules({ data: field?.validation }) || {};
+      if (required?.value === true) {
+        const val = data[name];
+        if (
+          val === "" ||
+          val === undefined ||
+          val === null ||
+          !val?.toString?.()?.trim?.()
+        ) {
+          valid = false;
+          errors.push({ [name]: required.message || `${name} is mandatory!` });
+        }
+        if (pattern?.value && !new RegExp(pattern.value).test(val)) {
+          valid = false;
+          errors.push({ [name]: pattern.message || `${name} is invalid!` });
+        }
+        // after checking delete this field
+        delete copied[name];
       }
     } else {
-      delete copy[name];
+      delete copied[name];
     }
   }
-  if (Object.keys(copy).length) {
-    misRequired = true;
-    errors.push({ custom: `Please remove invalid field(s)!` });
+  if (Object.keys(copied || {}).length) {
+    valid = false;
+    for (const single of Object.keys(copied || {})) {
+      errors.push({ [single]: `${single} are not allow` });
+    }
   }
-  if (misRequired) {
-    return { valid: false, errors };
-  }
-  return { valid: true };
+  return { valid, errors };
 };
 //[Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, and Sunday]
 const holiday_in_week = ({

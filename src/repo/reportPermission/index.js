@@ -157,7 +157,8 @@ const findItemById = async ({ id, select = "", populate }) => {
     .populate(...(populate?.[5] || []))
     .select(select);
   if (!item) return false;
-  const copy = { id: item.id, ...item._doc };
+  const replaced = keyReplacer(item._doc);
+  const copy = { id: item.id, ...replaced };
   delete copy._id;
   delete copy.__v;
   return copy;

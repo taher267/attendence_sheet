@@ -1,13 +1,12 @@
 const { badRequest, customError } = require("../../utils/error");
 const workReportRepo = require("../../repo/workReport");
-const reportFormRepo = require("../../repo/reportForm");
-const holidayRepo = require("../../repo/holiday");
 // const userRepo = require("../../repo/user");
 const reportPermissionRepo = require("../../repo/reportPermission");
 const { isValidObjectId } = require("mongoose");
 const moment = require("moment");
 const workReportConfig = require("../../config/workReport");
 const helpers = require("./helpers");
+
 // const dbDate = "2023-12-09T14:11:53.599+00:00";
 // const submitDate = "2023-12-08T14:11:53.599+00:00";
 // userRepo
@@ -39,8 +38,8 @@ const createItem = async ({
     throw badRequest(`Invalid parameters!`);
   }
   const doesExistReportPermission = await reportPermissionRepo.findItemById({
-    id,
-    populate: [["report_form_id"]],
+    id: report_permission_id,
+    populate: [["report_form_id"], ["holiday_id"]],
   });
   if (!doesExistReportPermission) {
     throw badRequest(`Report Permission table doesn't exist!`);
@@ -84,7 +83,9 @@ const createItem = async ({
     }
   } else if (
     workReportConfig.currentSubmitionWithPreviousAllSubmissions &&
-    !moment().utc().isSame(moment(for_submission_date).utc(), "day")
+    !moment(doesExistReportPermission.open_submission_date)
+      .utc()
+      .isSame(moment(for_submission_date).utc(), "day")
   ) {
     // const startDate = moment(doesExistReportPermission.open_submission_date)
     //   .utc()
@@ -92,6 +93,7 @@ const createItem = async ({
     // const endDate = moment(for_submission_date).utc().startOf("day");
 
     // const absent_in_day = endDate.diff(startDate, "days");
+    // console.log(for_submission_date);
     throw badRequest(`Fillup your previus absences!`);
   } else if (
     moment(for_submission_date)
@@ -100,7 +102,7 @@ const createItem = async ({
       .isBefore(
         moment(doesExistReportPermission.open_submission_date)
           .utc()
-          .endOf("day")
+          .startOf("day")
       )
   ) {
     throw badRequest(
@@ -108,14 +110,9 @@ const createItem = async ({
     );
   }
 
-  const workReportForm = reportForm.fields.reduce((a, c) => {
-    const [key, value] = Object.entries(c)?.[0];
-    a[key] = value;
-    return a;
-  }, {});
   const { errors, valid } = helpers.submitedFormValidation({
-    workReportForm,
-    submittedNameValues: fields,
+    data: fields,
+    compare_with: reportForm?.fields,
   });
   if (!valid) {
     throw customError({
@@ -125,7 +122,14 @@ const createItem = async ({
   }
   const inc = {};
 
-  const newObj = { report_permission_id, fields, status, user_id };
+  const newObj = {
+    report_form_id: doesExistReportPermission?.report_form_id.id,
+    report_permission_id,
+    fields,
+    status,
+    user_id,
+    for_submission_date,
+  };
   if (workReportConfig.approvalType === "by_form_fill_up") {
     newObj.status = "approved";
     inc.totalApproved = 1;
@@ -135,17 +139,16 @@ const createItem = async ({
   // totalApproved
   // totalRejected
   // currentRejected
-
-  const created = await workReportRepo.createNewItem(newObj);
+  // console.log(newObj);
+  // throw badRequest();
+  const created = await workReportRepo.createNewItem({ data: newObj });
   let next_submission_date = moment()
     .utc()
     .startOf("date")
     .add(12, "hours")
     .toISOString();
-  if (doesExistReportPermission.holiday_id) {
-    const { weekly, occasional } = await holidayRepo.findItemById({
-      id: doesExistReportPermission.holiday_id,
-    });
+  if (doesExistReportPermission?.holiday_id) {
+    const { weekly, occasional } = doesExistReportPermission?.holiday_id;
     if (weekly?.length) {
       next_submission_date = helpers.holiday_in_week({ holiday: weekly });
     }
@@ -168,3 +171,26 @@ const createItem = async ({
 };
 
 module.exports = createItem;
+
+// const form_fields = [
+//   {
+//     name: "first_name",
+//     validation: "required→true←Field is mandatroy",
+//   },
+//   {
+//     name: "last_name",
+//     validation: "required→true←Field is mandatroy",
+//   },
+// ];
+// // required→true←Field is mandatroy
+// const submited_form = {
+//   first_name: "Abu",
+//   last_name: "Taher",
+//   // bio: "",
+// };
+// console.log(
+//   helpers.submitedFormValidation({
+//     data: submited_form,
+//     compare_with: form_fields,
+//   })
+// );
