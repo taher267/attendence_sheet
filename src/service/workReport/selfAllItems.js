@@ -38,13 +38,11 @@ const selfAllItems = async ({
   const skip = page * limit - limit;
   const selection = [
     "id",
-    "name",
-    "email",
-    "phone_number",
-    "username",
-    "lastLogin",
-    "roles",
-    "username",
+    "user_id",
+    "report_permission_id",
+    "report_form_id",
+    "fields",
+    "for_submission_date",
     "status",
     "createdAt",
     "updatedAt",

@@ -31,6 +31,7 @@ router
    * @method GET
    */
   .get(authenticate, controllers.selfAllItems);
+
 router
   .route(`${v1}/work-reports/:id`)
   /**

@@ -1,7 +1,7 @@
 const { isValidObjectId } = require("mongoose");
 const workReportRepo = require("../../repo/workReport");
 // const userRepo = require("../../repo/user");
-const reportPermissionRepo = require("../../repo/reportPermission");
+const Repo = require("../../repo/workReport");
 const {
   notFound,
   badRequest,
@@ -19,9 +19,9 @@ const findSingleItem = async ({
   const qry = { id };
   if (searchfor === "self") {
     qry.user_id = user_id;
-  } else if (searchfor === "observe") {
+  } else if (searchfor === "observer") {
     // qry.user_id = user_id;
-    const existInPermissionTable = await reportPermissionRepo.findItem({
+    const existInPermissionTable = await Repo.findItem({
       qry: { observer: user_id },
     });
     if (!existInPermissionTable) {
@@ -33,7 +33,7 @@ const findSingleItem = async ({
   }
   // if (roles.includes("admin")) {
   // } else if (roles.includes("boserver")) {
-  //   const isPermited = await reportPermissionRepo.findItem({
+  //   const isPermited = await Repo.findItem({
   //     qry: { observer: user_id, id },
   //   });
   // }

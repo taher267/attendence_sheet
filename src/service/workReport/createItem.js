@@ -134,13 +134,6 @@ const createItem = async ({
     newObj.status = "approved";
     inc.totalApproved = 1;
   }
-  //   totalSubmit
-  // totalReview
-  // totalApproved
-  // totalRejected
-  // currentRejected
-  // console.log(newObj);
-  // throw badRequest();
   const created = await workReportRepo.createNewItem({ data: newObj });
   let next_submission_date = moment()
     .utc()
