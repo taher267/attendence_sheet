@@ -135,22 +135,31 @@ const createItem = async ({
     inc.totalApproved = 1;
   }
   const created = await workReportRepo.createNewItem({ data: newObj });
-  let next_submission_date = moment()
+  let next_submission_date = moment(
+    doesExistReportPermission.open_submission_date
+  )
     .utc()
     .startOf("date")
     .add(12, "hours")
+    .add(1, "d")
     .toISOString();
+
   if (doesExistReportPermission?.holiday_id) {
     const { weekly, occasional } = doesExistReportPermission?.holiday_id;
     if (weekly?.length) {
-      next_submission_date = helpers.holiday_in_week({ holiday: weekly });
+      next_submission_date = helpers.holiday_in_week({
+        holiday: weekly,
+        next: next_submission_date,
+      });
     }
     if (occasional?.length) {
       next_submission_date = helpers.holiday_in_occasional({
         holiday: occasional,
+        next: next_submission_date,
       });
     }
   }
+
   const update_permission = {
     $inc: { ...inc, totalSubmit: 1 },
     open_submission_date: next_submission_date,
@@ -164,26 +173,3 @@ const createItem = async ({
 };
 
 module.exports = createItem;
-
-// const form_fields = [
-//   {
-//     name: "first_name",
-//     validation: "required→true←Field is mandatroy",
-//   },
-//   {
-//     name: "last_name",
-//     validation: "required→true←Field is mandatroy",
-//   },
-// ];
-// // required→true←Field is mandatroy
-// const submited_form = {
-//   first_name: "Abu",
-//   last_name: "Taher",
-//   // bio: "",
-// };
-// console.log(
-//   helpers.submitedFormValidation({
-//     data: submited_form,
-//     compare_with: form_fields,
-//   })
-// );
