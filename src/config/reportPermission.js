@@ -7,4 +7,12 @@ const defaults = {
   sortBy: "updatedAt",
   search: "",
 };
-module.exports = Object.freeze({ statuses, defaults });
+const ref_id_keys = {
+  user: "user_id",
+  observer: "observer",
+  establishment: "establishment_id",
+  department: "department_id",
+  holiday: "holiday_id",
+  report_form: "report_form_id",
+};
+module.exports = Object.freeze({ statuses, defaults, ref_id_keys });

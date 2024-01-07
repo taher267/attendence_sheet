@@ -9,6 +9,8 @@ const findAllItems = async (req, res, next) => {
   const search = req.query.search || defaults.search;
   const searchBy = req.query.searchBy || "";
   const searchType = req.query.searchType || "";
+  const expands = req.query.expands || defaults?.search || "";
+  // const expand = `user_id,observer,establishment_id,department_id,holiday_id,report_form_id`;
 
   const { path, url, query } = req;
 
@@ -22,6 +24,7 @@ const findAllItems = async (req, res, next) => {
       search,
       searchBy,
       searchType,
+      expands,
       request: { path, url, query },
     });
 

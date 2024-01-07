@@ -10,6 +10,9 @@ const selfAllItems = async (req, res, next) => {
   const search = req.query.search || defaults.search;
   const searchBy = req.query.searchBy || "";
   const searchType = req.query.searchType || "";
+  const expands = req.query.expands || defaults.expands || "report_form";
+
+  //
 
   const {
     path,
@@ -29,6 +32,7 @@ const selfAllItems = async (req, res, next) => {
       searchBy,
       searchType,
       user_id,
+      expands,
       request: { path, url, query },
     });
 

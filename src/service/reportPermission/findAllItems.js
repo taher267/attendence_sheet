@@ -1,6 +1,8 @@
 const reportPermissionRepo = require("../../repo/reportPermission");
-const defaults = require("../../config/defaults");
+const { defaults, ref_id_keys } = require("../../config/reportPermission");
 const { query } = require("../../utils");
+const itemChanger = require("../../utils/itemChanger");
+
 /**
  * Find all items
  * Pagination
@@ -17,11 +19,14 @@ const findAllItems = async ({
   search = defaults.search,
   searchBy = "",
   searchType = "",
+  expands = "",
   request = {},
 }) => {
   const sortStr = `${sortType === "dsc" ? "-" : ""}${sortBy}`;
   const filter = {};
 
+  const spil = (expands || "").split(",").filter((item) => item);
+  const expanding = itemChanger({ items: spil, keyVals: ref_id_keys });
   if (searchBy && search) {
     if (searchType === "pattern") {
       filter[searchBy] = { $regex: search, $options: "i" };
@@ -47,8 +52,8 @@ const findAllItems = async ({
     limit,
     skip,
     select: selection,
+    populate: expanding,
   });
-  // .populate({ path: "author", select: "name" })
   console.log(items?.length);
   const data = query.getTransformedItems({
     items: items,

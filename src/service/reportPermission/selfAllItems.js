@@ -1,8 +1,9 @@
 const Repo = require("../../repo/reportPermission");
-const { defaults } = require("../../config/reportPermission");
+const { defaults, ref_id_keys } = require("../../config/reportPermission");
 const { query } = require("../../utils");
 const { badRequest } = require("../../utils/error");
 const objectKeyValueSelect = require("../../utils/objectKeyValueSelect");
+const itemChanger = require("../../utils/itemChanger");
 
 /**
  * Find all reportForm
@@ -20,12 +21,15 @@ const selfAllItems = async ({
   search = defaults.search,
   searchBy = "",
   searchType = "",
+  expands = "",
   request = {},
   user_id,
 }) => {
   if (!user_id) {
     throw badRequest();
   }
+  const spil = (expands || "").split(",").filter((item) => item);
+  const expanding = itemChanger({ items: spil, keyVals: ref_id_keys });
   const sortStr = `${sortType === "dsc" ? "-" : ""}${sortBy}`;
   const filter = { user_id };
 
@@ -47,8 +51,9 @@ const selfAllItems = async ({
     limit,
     skip,
     // select: ["report_form_id"],
-    populate: [["report_form_id"]],
+    populate: expanding, //[["report_form_id"]],
   });
+
 
   const filteredItems = [],
     filter_keys = [

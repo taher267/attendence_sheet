@@ -1693,6 +1693,7 @@ paths:
         - $ref: "#/components/parameters/sortTypeParam"
         - $ref: "#/components/parameters/sortByParam"
         - $ref: "#/components/parameters/searchParam"
+        - $ref: "#/components/parameters/expands"
 
       responses:
         "200":
@@ -1730,6 +1731,7 @@ paths:
         - $ref: "#/components/parameters/sortTypeParam"
         - $ref: "#/components/parameters/sortByParam"
         - $ref: "#/components/parameters/searchParam"
+        - $ref: "#/components/parameters/expands"
 
       responses:
         "200":
@@ -2426,6 +2428,13 @@ components:
         type: integer
         format: int32
         example: 10
+    expands:
+      in: query
+      name: expands
+      description: expanding items
+      schema:
+        type: string
+        example: user,observer
     sortTypeParam:
       in: query
       name: sort_type
