@@ -1,10 +1,11 @@
 const express = require("express");
+const path = require("path");
 const morgan = require("morgan");
 const swaggerUI = require("swagger-ui-express");
 const YAML = require("yamljs");
 const OpenApiValidator = require("express-openapi-validator");
 const cors = require("cors");
-const swaggerDoc = YAML.load("./swagger.yaml");
+const swaggerDoc = YAML.load(path.resolve("./swagger.yaml"));
 // const cookieParser = require("cookie-parser");
 // const authenticate = require('./authenticate');
 const cookieObj = (cookie = "") =>
