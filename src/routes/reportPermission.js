@@ -38,7 +38,7 @@ router
    * @route baseurl/api/v1/report-permissions/observe-by
    * @method GET
    */
-  .get(authenticate, authorize(["observer"]), controllers.observerByAllItems);
+  .get(authenticate, authorize(["observer"]), controllers.observeByAllItems);
 router
   .route(`${v1}/report-permissions/:id`)
   /**
