@@ -44,10 +44,10 @@ const applyMiddleware = (app) => {
       apiSpec: "./swagger.yaml",
     })
   );
-  app.use((req, res, next) => {
-    req.user = { id: "6568c4210a26245b8cb27313" };
-    next();
-  });
+  // app.use((req, res, next) => {
+  //   req.user = { id: "6568c4210a26245b8cb27313" };
+  //   next();
+  // });
 };
 
 module.exports = applyMiddleware;

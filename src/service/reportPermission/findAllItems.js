@@ -20,10 +20,11 @@ const findAllItems = async ({
   searchBy = "",
   searchType = "",
   expands = "",
+  defaultFilter = {},
   request = {},
 }) => {
   const sortStr = `${sortType === "dsc" ? "-" : ""}${sortBy}`;
-  const filter = {};
+  const filter = { ...defaultFilter };
 
   const spil = (expands || "").split(",").filter((item) => item);
   const expanding = itemChanger({ items: spil, keyVals: ref_id_keys });

@@ -31,7 +31,14 @@ router
    * @method GET
    */
   .get(authenticate, controllers.selfAllItems);
-
+router
+  .route(`${v1}/report-permissions/observe-by`)
+  /**
+   * Private Route by Admin
+   * @route baseurl/api/v1/report-permissions/observe-by
+   * @method GET
+   */
+  .get(authenticate, authorize(["observer"]), controllers.observerByAllItems);
 router
   .route(`${v1}/report-permissions/:id`)
   /**

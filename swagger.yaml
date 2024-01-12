@@ -1721,9 +1721,47 @@ paths:
           "$ref": "#/components/responses/500"
   "/report-permissions/self":
     get:
-      operationId: AllSelfReportForms
+      operationId: AllSelfReportPermission
 
-      description: "Retrive all Self Report Forms"
+      description: "Retrive all Self Report permissions"
+      tags:
+        - "ReportPermission"
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/pageParam"
+        - $ref: "#/components/parameters/limitParam"
+        - $ref: "#/components/parameters/sortTypeParam"
+        - $ref: "#/components/parameters/sortByParam"
+        - $ref: "#/components/parameters/searchParam"
+        - $ref: "#/components/parameters/expands"
+
+      responses:
+        "200":
+          description: Fetching all Report Permission
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 202
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      $ref: "#/components/schemas/ReportPermissionResponse"
+        "500":
+          "$ref": "#/components/responses/500"
+  "/report-permissions/observer-by":
+    get:
+      operationId: ObserverByMeReportPermission
+
+      description: "Retrive all observe Report permissions with Forms"
       tags:
         - "ReportPermission"
       security:

@@ -2,7 +2,7 @@ const Services = require("../../../../service/reportPermission");
 // const { query } = require("../../../../utils");
 const { defaults } = require("../../../../config/reportPermission");
 
-const selfAllItems = async (req, res, next) => {
+const observeByAllItems = async (req, res, next) => {
   const page = req.query.page || defaults.page;
   const limit = req.query.limit || defaults.limit;
   const sortType = req.query.sort_type || defaults.sortType;
@@ -18,7 +18,7 @@ const selfAllItems = async (req, res, next) => {
     path,
     url,
     query,
-    user: { id: user_id },
+    user: { id: observer },
   } = req;
 
   try {
@@ -31,10 +31,9 @@ const selfAllItems = async (req, res, next) => {
       search,
       searchBy,
       searchType,
-      // user_id,
-      defaultFilter: { user_id },
       expands,
       request: { path, url, query },
+      defaultFilter: { observer },
     });
 
     res.status(200).json({
@@ -47,4 +46,4 @@ const selfAllItems = async (req, res, next) => {
   }
 };
 
-module.exports = selfAllItems;
+module.exports = observeByAllItems;
