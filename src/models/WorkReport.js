@@ -8,6 +8,11 @@ const WorkReportSchema = new Schema(
       ref: "User",
       required: [true, `User id is mandatory!`],
     },
+    observer: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      // required: [true, `User id is mandatory!`],
+    },
     report_permission_id: {
       type: Schema.Types.ObjectId,
       ref: "ReportPermission",

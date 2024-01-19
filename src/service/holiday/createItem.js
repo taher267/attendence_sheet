@@ -1,4 +1,4 @@
-const { badRequest } = require("../../utils/error");
+const { badRequest, customError } = require("../../utils/error");
 const holidayRepo = require("../../repo/holiday");
 const createItem = async ({
   name,
@@ -14,10 +14,21 @@ const createItem = async ({
       !occasional?.length &&
       !individual?.length)
   ) {
+    // console.log()
     throw badRequest(`Invalid parameters!`);
   }
 
   const newObj = { name };
+
+  const doesExist = await holidayRepo.findItem({
+    qry: { name: new RegExp(name, "i") },
+  });
+  if (doesExist) {
+    throw customError({
+      message: `Failure to create holiday`,
+      errors: [{ name: `Name already exist!` }],
+    });
+  }
   if (weekly?.length) {
     newObj.weekly = weekly;
   }

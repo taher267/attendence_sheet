@@ -1757,7 +1757,7 @@ paths:
                       $ref: "#/components/schemas/ReportPermissionResponse"
         "500":
           "$ref": "#/components/responses/500"
-  "/report-permissions/observer-by":
+  "/report-permissions/observe-by":
     get:
       operationId: ObserverByMeReportPermission
 
@@ -2352,9 +2352,13 @@ components:
 
     Holiday:
       properties:
+        name:
+          type: string
         weekly:
-          type: integer
-          enum: [0, 1, 2, 3, 4, 5, 6]
+          type: array
+          items:
+            type: integer
+            enum: [0, 1, 2, 3, 4, 5, 6]
         monthly:
           type: string
         occasional:
@@ -2362,6 +2366,8 @@ components:
           items:
             type: string
             format: date-time
+      required:
+        - "name"
     HolidayResponse:
       allOf:
         - $ref: "#/components/schemas/ID"

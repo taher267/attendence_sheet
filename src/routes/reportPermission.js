@@ -31,6 +31,7 @@ router
    * @method GET
    */
   .get(authenticate, controllers.selfAllItems);
+
 router
   .route(`${v1}/report-permissions/observe-by`)
   /**
@@ -39,6 +40,7 @@ router
    * @method GET
    */
   .get(authenticate, authorize(["observer"]), controllers.observeByAllItems);
+  
 router
   .route(`${v1}/report-permissions/:id`)
   /**
