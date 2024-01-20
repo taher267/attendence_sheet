@@ -1,15 +1,18 @@
-const Repo = require("../../repo/workReport");
-const defaults = require("../../config/defaults");
+const workReportRepo = require("../../repo/workReport");
+const { defaults } = require("../../config/workReport");
 const { query } = require("../../utils");
+const { badRequest } = require("../../utils/error");
+const { isValidObjectId } = require("mongoose");
 /**
- * Find all report-forms
+ * Find all users
  * Pagination
  * Searching
  * Sorting
  * @param{*} param0
  * @returns
  */
-const findAllItems = async ({
+
+const observerByAllItems = async ({
   page = defaults.page,
   limit = defaults.limit,
   sortType = defaults.sortType,
@@ -18,9 +21,22 @@ const findAllItems = async ({
   searchBy = "",
   searchType = "",
   request = {},
+  // user_id,
+  observer,
+  report_form_id,
+  report_prmission_id,
 }) => {
+  if (
+    !observer ||
+    !report_form_id ||
+    !report_prmission_id ||
+    !isValidObjectId(observer) ||
+    !isValidObjectId(report_prmission_id)
+  ) {
+    throw badRequest(`Invalid prameters`);
+  }
   const sortStr = `${sortType === "dsc" ? "-" : ""}${sortBy}`;
-  const filter = {};
+  const filter = { observer, report_form_id, report_prmission_id };
 
   if (searchBy && search) {
     if (searchType === "pattern") {
@@ -34,7 +50,6 @@ const findAllItems = async ({
   const selection = [
     "id",
     "user_id",
-    "observer",
     "report_permission_id",
     "report_form_id",
     "fields",
@@ -44,23 +59,23 @@ const findAllItems = async ({
     "updatedAt",
   ];
 
-  const items = await Repo.findAllItems({
+  const users = await workReportRepo.findAllItems({
     qry: filter,
     sortStr,
     limit,
     skip,
     select: selection,
   });
-
-  console.log(items?.length);
+  // .populate({ path: "author", select: "name" })
+  console.log(users?.length);
   const data = query.getTransformedItems({
-    items,
+    items: users,
     selection,
-    path: "/work-reports",
+    path: "/users",
   });
 
   // pagination
-  const totalItems = await Repo.count({ filter });
+  const totalItems = await workReportRepo.count({ filter });
 
   const pagination = query.getPagination({ totalItems, limit, page });
 
@@ -82,4 +97,4 @@ const findAllItems = async ({
   };
 };
 
-module.exports = findAllItems;
+module.exports = observerByAllItems;

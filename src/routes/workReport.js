@@ -22,7 +22,7 @@ router
    * @route baseurl/api/v1/work-reports
    * @method GET
    */
-  .get(authenticate, controllers.findAllItems);
+  .get(authenticate, authorize(["admin"]), controllers.findAllItems);
 router
   .route(`${v1}/work-reports/self`)
   /**
@@ -31,6 +31,17 @@ router
    * @method GET
    */
   .get(authenticate, controllers.selfAllItems);
+
+router
+  .route(
+    `${v1}/work-reports/r-p/:report_prmission_id/report_form/:report_form_id`
+  )
+  /**
+   * Private Route by Observer
+   * @route baseurl/api/v1/work-reports/r-p/:report_prmission_id/report_form/:report_form_id
+   * @method GET
+   */
+  .get(authenticate, authorize(["observer"]), controllers.observerByAllItems);
 
 router
   .route(`${v1}/work-reports/:id`)

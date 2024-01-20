@@ -3,6 +3,7 @@ const reportPermissionRepo = require("../../repo/reportPermission");
 const { notFound, badRequest } = require("../../utils/error");
 
 const findSingleItem = async ({ id }) => {
+  console.log({ id });
   if (!id || !isValidObjectId(id)) throw badRequest(`Invalid id!`);
   const item = await reportPermissionRepo.findItemById({
     id,

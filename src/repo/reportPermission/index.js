@@ -43,103 +43,105 @@ const findAllItems = async ({
   });
 };
 
-const permissionFollowingForms = async ({
+const itemAggregation = async ({
   qry = {},
   populate,
   sortStr = "-createdAt",
   skip = 0,
   limit = 10,
   select = "",
+  filtering = {},
 }) => {
-  // qry = quryReplacer(qry);
-  // let items = [];
-  // if (populate) {
-  //   items = await ReportPermission.find(qry)
-  //     .populate({ ...populate })
-  //     .select(select)
-  //     .sort(sortStr)
-  //     .skip(skip)
-  //     .limit(limit);
-  // } else {
-  //   items = await ReportPermission.find(qry)
-  //     .select(select)
-  //     .sort(sortStr)
-  //     .skip(skip)
-  //     .limit(limit);
-  // }
-  // return items.map((item) => ({
-  //   ...item._doc,
-  //   id: item.id,
-  // }));
+  
   const data = await ReportPermission.aggregate([
     {
       $match: {
-        // user_id: new ObjectId("657b6d1c12e9c9d91211d4b0"),
+        ...filtering,
+        // observer: new ObjectId("657b6c4412e9c9d91211d4ab"),
+        // _id: new ObjectId("65888277a5b2f7bed1785bed"),
       },
     },
+    {
+      $lookup: {
+        from: "workreports",
+        localField: "_id",
+        foreignField: "report_permission_id",
+        as: "workreports",
+      },
+    },
+    // { $unwind: "$WorkReports" },
+    // {
+    //   $lookup: {
+    //     from: "reportforms",
+    //     localField: "report_form_id",
+    //     foreignField: "_id",
+    //     as: "reportForms",
+    //   },
+    // },
+    // { $unwind: "$reportForms" },
+    // {
+    //   $lookup: {
+    //     from: "users",
+    //     localField: "user_id",
+    //     foreignField: "_id",
+    //     as: "Users",
+    //   },
+    // },
+    // { $unwind: "$Users" },
 
-    {
-      $lookup: {
-        from: "reportforms",
-        localField: "report_form_id",
-        foreignField: "_id",
-        as: "reportForms",
-      },
-    },
-    { $unwind: "$reportForms" },
-    {
-      $lookup: {
-        from: "users",
-        localField: "user_id",
-        foreignField: "_id",
-        as: "Users",
-      },
-    },
-    { $unwind: "$Users" },
-
-    {
-      $lookup: {
-        from: "users",
-        localField: "observer_id",
-        foreignField: "_id",
-        as: "Observer",
-      },
-    },
-    {
-      $lookup: {
-        from: "establishments",
-        localField: "establishment_id",
-        foreignField: "_id",
-        as: "Establishment",
-      },
-    },
-    {
-      $lookup: {
-        from: "departments",
-        localField: "department_id",
-        foreignField: "_id",
-        as: "department",
-      },
-    },
-    {
-      $lookup: {
-        from: "holidays",
-        localField: "holiday_id",
-        foreignField: "_id",
-        as: "holiday",
-      },
-    },
+    // {
+    //   $lookup: {
+    //     from: "users",
+    //     localField: "observer_id",
+    //     foreignField: "_id",
+    //     as: "Observer",
+    //   },
+    // },
+    // {
+    //   $lookup: {
+    //     from: "establishments",
+    //     localField: "establishment_id",
+    //     foreignField: "_id",
+    //     as: "Establishment",
+    //   },
+    // },
+    // {
+    //   $lookup: {
+    //     from: "departments",
+    //     localField: "department_id",
+    //     foreignField: "_id",
+    //     as: "department",
+    //   },
+    // },
+    // {
+    //   $lookup: {
+    //     from: "holidays",
+    //     localField: "holiday_id",
+    //     foreignField: "_id",
+    //     as: "holiday",
+    //   },
+    // },
   ]);
   console.log(data?.[0]);
 };
-// permissionFollowingForms({ qry: {} })
+
+// itemAggregation({ qry: {} })
 //   .then((d) => {
 //     console.log(d?.[0]);
 //   })
 //   .catch(console.error);
-const findItem = async ({ qry = {}, select = "" }) => {
+
+const findItem = async ({ qry = {}, select = "", populate }) => {
   qry = quryReplacer(qry);
-  const item = await ReportPermission.findOne(qry).select(select).exec();
+  const item = await ReportPermission.findOne(qry)
+    .populate(...(populate?.[0] || []))
+    .populate(...(populate?.[1] || []))
+    .populate(...(populate?.[2] || []))
+    .populate(...(populate?.[3] || []))
+    .populate(...(populate?.[4] || []))
+    .populate(...(populate?.[5] || []))
+    .select(select)
+    .exec();
   if (!item) return false;
   const copy = { id: item.id, ...item._doc };
   delete copy._id;
@@ -253,5 +255,5 @@ module.exports = {
   deleteItem,
   deleteItemById,
   deleteManyItem,
-  // permissionFollowingForms,
+  itemAggregation,
 };

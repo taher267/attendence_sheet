@@ -1,8 +1,12 @@
-const Services = require("../../../../service/reportPermission");
+const Services = require("../../../../service/workReport");
 // const { query } = require("../../../../utils");
-const { defaults } = require("../../../../config/reportPermission");
+const defaults = require("../../../../config/defaults");
+/**
+ * observer only access by his/her assigned
+ * admin can see all
+ */
 
-const observeByAllItems = async (req, res, next) => {
+const observerByAllItems = async (req, res, next) => {
   const page = req.query.page || defaults.page;
   const limit = req.query.limit || defaults.limit;
   const sortType = req.query.sort_type || defaults.sortType;
@@ -10,13 +14,13 @@ const observeByAllItems = async (req, res, next) => {
   const search = req.query.search || defaults.search;
   const searchBy = req.query.searchBy || "";
   const searchType = req.query.searchType || "";
-  const expands = req.query.expands || defaults.expands || "report_form";
 
   const {
     path,
     url,
     query,
     user: { id: observer },
+    params: { report_prmission_id, report_form_id },
   } = req;
 
   try {
@@ -29,9 +33,8 @@ const observeByAllItems = async (req, res, next) => {
       search,
       searchBy,
       searchType,
-      expands,
       request: { path, url, query },
-      defaultFilter: { observer },
+      defaultFilter: { observer, report_form_id, report_prmission_id },
     });
 
     res.status(200).json({
@@ -44,4 +47,4 @@ const observeByAllItems = async (req, res, next) => {
   }
 };
 
-module.exports = observeByAllItems;
+module.exports = observerByAllItems;

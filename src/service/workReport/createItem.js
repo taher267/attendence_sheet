@@ -39,12 +39,19 @@ const createItem = async ({
   }
   const doesExistReportPermission = await reportPermissionRepo.findItemById({
     id: report_permission_id,
-    populate: [["report_form_id"], ["holiday_id"]],
+    populate: [["report_form_id"], ["holiday_id"], ["observer"]],
   });
   if (!doesExistReportPermission) {
     throw badRequest(`Report Permission table doesn't exist!`);
   } else if (user_id !== doesExistReportPermission.user_id?.toString?.()) {
     throw badRequest(`Invalid user id!`);
+  }
+  const observer = doesExistReportPermission?.observer;
+  if (
+    observer &&
+    (observer?.status !== "active" || !observer?.roles?.includes?.("observer"))
+  ) {
+    throw badRequest(`Observer is not permitted!`);
   }
 
   const reportForm = doesExistReportPermission?.report_form_id;

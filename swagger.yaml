@@ -1696,7 +1696,7 @@ paths:
         - $ref: "#/components/parameters/sortTypeParam"
         - $ref: "#/components/parameters/sortByParam"
         - $ref: "#/components/parameters/searchParam"
-        - $ref: "#/components/parameters/expands"
+        - $ref: "#/components/parameters/expandsParam"
 
       responses:
         "200":
@@ -1734,7 +1734,7 @@ paths:
         - $ref: "#/components/parameters/sortTypeParam"
         - $ref: "#/components/parameters/sortByParam"
         - $ref: "#/components/parameters/searchParam"
-        - $ref: "#/components/parameters/expands"
+        - $ref: "#/components/parameters/expandsParam"
 
       responses:
         "200":
@@ -1772,7 +1772,7 @@ paths:
         - $ref: "#/components/parameters/sortTypeParam"
         - $ref: "#/components/parameters/sortByParam"
         - $ref: "#/components/parameters/searchParam"
-        - $ref: "#/components/parameters/expands"
+        - $ref: "#/components/parameters/expandsParam"
 
       responses:
         "200":
@@ -2108,6 +2108,46 @@ paths:
 
         "400":
           $ref: "#/components/responses/400"
+        "500":
+          "$ref": "#/components/responses/500"
+
+  "/work-reports/r-p/{report_prmission_id}/observer/{observer_id}":
+    get:
+      security:
+        - bearerAuth: []
+
+      operationId: underObserverWorkReports
+      description: "Retrive all WorkReports under of a observer"
+      tags:
+        - "WorkReport"
+      parameters:
+        - $ref: "#/components/parameters/reportPermissionIdPathParam"
+        - $ref: "#/components/parameters/observerIdPathParam"
+        - $ref: "#/components/parameters/expandsParam"
+
+      responses:
+        "200":
+          description: Retrieve WorkReport under observer of a report permission
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 200
+                  message:
+                    type: string
+                    example: Added WorkReport, Successfully
+                  data:
+                    $ref: "#/components/schemas/WorkReportResponse"
+        "401":
+          "$ref": "#/components/responses/401"
+        "403":
+          "$ref": "#/components/responses/403"
+        "404":
+          "$ref": "#/components/responses/404"
         "500":
           "$ref": "#/components/responses/500"
 
@@ -2466,7 +2506,7 @@ components:
         type: integer
         format: int32
         example: 10
-    expands:
+    expandsParam:
       in: query
       name: expands
       description: expanding items
@@ -2516,6 +2556,22 @@ components:
       name: id
       required: true
       description: Data ID of single item Retrieve
+      schema:
+        type: string
+        example: "64d268cdeef8c84bb18912db"
+    reportPermissionIdPathParam:
+      in: path
+      name: report_permission_id
+      required: true
+      # description: Data ID of single item Retrieve
+      schema:
+        type: string
+        example: "64d268cdeef8c84bb18912db"
+    observerIdPathParam:
+      in: path
+      name: observer_id
+      required: true
+      # description: Data ID of single item Retrieve
       schema:
         type: string
         example: "64d268cdeef8c84bb18912db"
