@@ -31,18 +31,16 @@ router
    * @method GET
    */
   .get(authenticate, controllers.selfAllItems);
-
 router
   .route(
-    `${v1}/work-reports/r-p/:report_prmission_id/report_form/:report_form_id`
+    `${v1}/work-reports/report-permission/:report_permission_id/report-form/:report_form_id`
   )
   /**
    * Private Route by Observer
-   * @route baseurl/api/v1/work-reports/r-p/:report_prmission_id/report_form/:report_form_id
+   * @route baseurl/api/v1/work-reports/report-prmission/:report_prmission_id/report-form/:report_form_id
    * @method GET
    */
   .get(authenticate, authorize(["observer"]), controllers.observerByAllItems);
-
 router
   .route(`${v1}/work-reports/:id`)
   /**

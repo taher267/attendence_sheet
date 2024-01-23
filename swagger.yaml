@@ -2111,7 +2111,8 @@ paths:
         "500":
           "$ref": "#/components/responses/500"
 
-  "/work-reports/r-p/{report_prmission_id}/observer/{observer_id}":
+  "/work-reports/report-permission/{report_permission_id}/report-form/{report_form_id}":
+  #  http://localhost:4003/api/v1/work-reports/report-permission/65888277a5b2f7bed1785bed/report-form/657f157b8f57f1abcc44a504
     get:
       security:
         - bearerAuth: []
@@ -2122,7 +2123,7 @@ paths:
         - "WorkReport"
       parameters:
         - $ref: "#/components/parameters/reportPermissionIdPathParam"
-        - $ref: "#/components/parameters/observerIdPathParam"
+        - $ref: "#/components/parameters/reportFormPathParam"
         - $ref: "#/components/parameters/expandsParam"
 
       responses:
@@ -2572,6 +2573,13 @@ components:
       name: observer_id
       required: true
       # description: Data ID of single item Retrieve
+      schema:
+        type: string
+        example: "64d268cdeef8c84bb18912db"
+    reportFormPathParam:
+      in: path
+      name: report_form_id
+      required: true
       schema:
         type: string
         example: "64d268cdeef8c84bb18912db"

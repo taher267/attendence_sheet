@@ -18,9 +18,11 @@ const findAllItems = async ({
   searchBy = "",
   searchType = "",
   request = {},
+  defaultFilter = {},
 }) => {
   const sortStr = `${sortType === "dsc" ? "-" : ""}${sortBy}`;
-  const filter = {};
+  // delete defaultFilter.observer;
+  const filter = { ...defaultFilter };
 
   if (searchBy && search) {
     if (searchType === "pattern") {
@@ -52,7 +54,7 @@ const findAllItems = async ({
     select: selection,
   });
 
-  console.log(items?.length);
+  console.log(items?.length, { filter });
   const data = query.getTransformedItems({
     items,
     selection,

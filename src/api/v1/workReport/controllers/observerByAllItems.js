@@ -20,7 +20,7 @@ const observerByAllItems = async (req, res, next) => {
     url,
     query,
     user: { id: observer },
-    params: { report_prmission_id, report_form_id },
+    params: { report_permission_id, report_form_id },
   } = req;
 
   try {
@@ -34,7 +34,7 @@ const observerByAllItems = async (req, res, next) => {
       searchBy,
       searchType,
       request: { path, url, query },
-      defaultFilter: { observer, report_form_id, report_prmission_id },
+      defaultFilter: { observer, report_form_id, report_permission_id },
     });
 
     res.status(200).json({
