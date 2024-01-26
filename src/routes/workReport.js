@@ -23,6 +23,7 @@ router
    * @method GET
    */
   .get(authenticate, authorize(["admin"]), controllers.findAllItems);
+  
 router
   .route(`${v1}/work-reports/self`)
   /**

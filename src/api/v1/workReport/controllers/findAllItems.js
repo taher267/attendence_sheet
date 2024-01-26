@@ -1,4 +1,4 @@
-const reportFormService = require("../../../../service/reportForm");
+const Services = require("../../../../service/workReport");
 // const { query } = require("../../../../utils");
 const { defaults } = require("../../../../config/workReport");
 /**
@@ -19,7 +19,7 @@ const findAllItems = async (req, res, next) => {
 
   try {
     // data
-    const { items, ...rest } = await reportFormService.findAllItems({
+    const { items, ...rest } = await Services.findAllItems({
       page,
       limit,
       sortType,
