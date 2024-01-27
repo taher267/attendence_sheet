@@ -80,7 +80,6 @@ const findAllItems = async ({
 
   return {
     items: data,
-    totalItems,
     pagination,
     links,
   };

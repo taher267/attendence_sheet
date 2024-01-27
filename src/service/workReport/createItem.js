@@ -46,7 +46,10 @@ const createItem = async ({
   } else if (user_id !== doesExistReportPermission.user_id?.toString?.()) {
     throw badRequest(`Invalid user id!`);
   }
-  const observer = doesExistReportPermission?.observer;
+  const observer =
+    // doesExistReportPermission?.observer?.id ||
+    doesExistReportPermission?.observer;
+
   if (
     observer &&
     (observer?.status !== "active" || !observer?.roles?.includes?.("observer"))
@@ -137,10 +140,16 @@ const createItem = async ({
     user_id,
     for_submission_date,
   };
+  if (observer) {
+    newObj.observer = observer.id;
+  }
   if (workReportConfig.approvalType === "by_form_fill_up") {
     newObj.status = "approved";
     inc.totalApproved = 1;
   }
+
+  // console.log(newObj, doesExistReportPermission);
+  // throw badRequest();
   const created = await workReportRepo.createNewItem({ data: newObj });
   let next_submission_date = moment(
     doesExistReportPermission.open_submission_date

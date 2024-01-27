@@ -47,7 +47,7 @@ const findAllItems = async ({
   ];
 
   const items = await Repo.findAllItems({
-    qry: filter,
+    qry: filter,  
     sortStr,
     limit,
     skip,

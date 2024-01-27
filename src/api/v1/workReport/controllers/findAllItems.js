@@ -14,7 +14,6 @@ const findAllItems = async (req, res, next) => {
   const searchBy = req.query.searchBy || "";
   const searchType = req.query.searchType || "";
   // const viewType = req.query.viewType || defaults.viewType;
-
   const { path, url, query } = req;
 
   try {
