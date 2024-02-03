@@ -40,6 +40,7 @@ const findAllItems = async ({
     "username",
     "lastLogin",
     "roles",
+    "profilePic",
     "username",
     "status",
     "createdAt",

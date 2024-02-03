@@ -59,7 +59,7 @@ router
    */
   .patch(
     authenticate,
-    authorize(["super_admin"]),
+    authorize(["super_admin", "admin"]),
     userControllers.updateItemPatch
   );
 
