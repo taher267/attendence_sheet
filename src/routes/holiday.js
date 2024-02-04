@@ -22,7 +22,14 @@ router
    * @method GET
    */
   .get(authenticate, authorize(), controllers.findAllItems);
-
+router
+  .route(`${v1}/holidays/self`)
+  /**
+   * Private Route
+   * @route baseurl/api/v1/holidays/self
+   * @method POST
+   */
+  .get(authenticate, authorize(), controllers.selfAllItems);
 router
   .route(`${v1}/holidays/:id`)
   /**
