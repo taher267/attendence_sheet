@@ -23,6 +23,7 @@ const applyMiddleware = (app) => {
         "http://localhost:4003",
         "http://localhost:3000",
         "https://pz-attendance.netlify.app",
+        "https://at.abutaher.online",
       ],
       credentials: true,
     })
