@@ -1,36 +1,36 @@
 const { badRequest } = require("../../utils/error");
-const holidayRepo = require("../../repo/holiday");
+const repo = require("../../repo/holiday");
 const { isValidObjectId } = require("mongoose");
 
 const updateItem = async ({ id, weekly, monthly, occasional }) => {
   if (!id || !isValidObjectId(id)) {
     throw badRequest(`Invalid parameters!`);
   }
-  // const doesExistItem = await holidayRepo.findItemById({
+  // const doesExistItem = await repo.findItemById({
   //   id,
   // });
 
   // if (!doesExistItem) {
   //   throw notFound();
   // }
-  const updateDate = {};
+  const updateObj = {};
 
   if (weekly) {
-    updateDate.weekly = weekly;
+    updateObj.weekly = weekly;
   }
   if (monthly) {
-    updateDate.monthly = monthly;
+    updateObj.monthly = monthly;
   }
   if (occasional) {
-    updateDate.occasional = occasional;
+    updateObj.occasional = occasional;
   }
 
-  if (!Object.keys(updateDate).length) {
+  if (!Object.keys(updateObj).length) {
     throw badRequest(`Nothing to be changed!`);
   }
-  const reportForm = await holidayRepo.updateItemById({
+  const reportForm = await repo.updateItemById({
     id,
-    updateDate: updateObj,
+    updateData: updateObj,
     options: { new: true, runValidators: true },
   });
   return reportForm;

@@ -39,7 +39,7 @@ const updatePassword = async ({
     secret: REFRESH_TOKEN_SECRET,
     expiresIn: REFRESH_TOKEN_EXPIRY,
   });
-  await userRepo.updateItemById({ id, updateDate: { password, refreshToken } });
+  await userRepo.updateItemById({ id, updateData: { password, refreshToken } });
   return { code: 200, refreshToken };
 };
 

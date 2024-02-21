@@ -4,8 +4,8 @@ const updateItem = async (req, res, next) => {
   const {
     body: { status, report_permission_id },
     user: { id: user_id },
+    params: { id },
   } = req;
-  const { id } = req.params;
 
   try {
     const item = await workReportService.updateItemProperties({

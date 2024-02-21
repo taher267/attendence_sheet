@@ -34,7 +34,7 @@ const updateItem = async ({
   if (!doesExist) {
     throw badRequest(`Report permission doesn't exist!`);
   }
-  const updateDate = {};
+  const updateData = {};
 
   if (
     report_form_id &&
@@ -51,7 +51,7 @@ const updateItem = async ({
           `Report Form should be Active of the id: ${report_form_id}`
         );
       }
-      updateDate.report_form_id = report_form_id;
+      updateData.report_form_id = report_form_id;
     }
   }
 
@@ -64,7 +64,7 @@ const updateItem = async ({
         `Establishment doesn't exist the id: ${establishment_id}`
       );
     }
-    updateDate.establishment_id = establishment_id;
+    updateData.establishment_id = establishment_id;
   }
   if (
     department_id &&
@@ -73,14 +73,14 @@ const updateItem = async ({
     if (!(await departmentRepo.findItemById({ id: department_id }))) {
       throw badRequest(`Department doesn't exist the id: ${department_id}`);
     }
-    updateDate.department_id = department_id;
+    updateData.department_id = department_id;
   }
 
   if (holiday_id && holiday_id !== doesExist?.holiday_id?.toString?.()) {
     if (!(await holidayRepo.findItemById({ id: holiday_id }))) {
       throw badRequest(`Holiday doesn't exist the id: ${holiday_id}`);
     }
-    updateDate.holiday_id = holiday_id;
+    updateData.holiday_id = holiday_id;
   }
   if (observer && observer !== doesExist?.observer?.toString?.()) {
     const doesExist = await userRepo.findItemById({ id: observer });
@@ -95,12 +95,12 @@ const updateItem = async ({
   }
 
   if (status && doesExist?.status !== status) {
-    updateDate.status = status;
+    updateData.status = status;
   }
 
   const reportForm = await reportPermissionRepo.updateItemById({
     id,
-    updateDate: updateObj,
+    updateData: updateObj,
     options: { new: true, runValidators: true },
   });
   return reportForm;

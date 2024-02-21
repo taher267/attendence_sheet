@@ -46,7 +46,7 @@ const IdToenVerify = async ({ id_token }) => {
       });
       await userRepo.updateItemById({
         id: existUser.id,
-        updateDate: { refreshToken },
+        updateData: { refreshToken },
       });
     }
     delete existUser.password;
@@ -77,7 +77,7 @@ const IdToenVerify = async ({ id_token }) => {
     secret: REFRESH_TOKEN_SECRET,
     expiresIn: REFRESH_TOKEN_EXPIRY,
   });
-  await userRepo.updateItemById({ id, updateDate: { refreshToken } });
+  await userRepo.updateItemById({ id, updateData: { refreshToken } });
   return {
     user,
     accessToken,

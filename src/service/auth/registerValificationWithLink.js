@@ -108,7 +108,7 @@ const registerValificationWithLink = async ({
     secret: REFRESH_TOKEN_SECRET,
     expiresIn: REFRESH_TOKEN_EXPIRY,
   });
-  await userRepo.updateItemById({ id, updateDate: { refreshToken } });
+  await userRepo.updateItemById({ id, updateData: { refreshToken } });
   cache.del(email);
   // console.log(cache.get(email), cache.get(decoded.email));
   return {

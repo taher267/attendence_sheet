@@ -41,7 +41,7 @@ const IdToenVerify = async ({ id_token, status = userConfig.statuses[2] }) => {
     secret: REFRESH_TOKEN_SECRET,
     expiresIn: REFRESH_TOKEN_EXPIRY,
   });
-  await userRepo.updateItemById({ id, updateDate: { refreshToken } });
+  await userRepo.updateItemById({ id, updateData: { refreshToken } });
   return {
     user,
     accessToken,

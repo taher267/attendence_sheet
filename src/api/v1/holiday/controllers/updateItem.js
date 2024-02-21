@@ -11,7 +11,6 @@ const updateItem = async (req, res, next) => {
       monthly,
       occasional,
     });
-
     const response = {
       code: 200,
       message: "Report form has been updated, Successfully",

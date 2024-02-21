@@ -45,7 +45,7 @@ const getAccessTokenByRefreshToken = async ({ refreshToken }) => {
     });
     await userRepo.updateItemById({
       id: user.id,
-      updateDate: { refreshToken },
+      updateData: { refreshToken },
     });
   }
 

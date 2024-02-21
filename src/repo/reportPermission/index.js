@@ -166,28 +166,28 @@ const findItemById = async ({ id, select = "", populate }) => {
   return copy;
 };
 
-const updateItem = async ({ qry = {}, updateDate = {}, options = {} }) => {
+const updateItem = async ({ qry = {}, updateData = {}, options = {} }) => {
   if (
     !qry ||
     !Object.keys(qry)?.length ||
-    !updateDate ||
-    !Object.keys(updateDate)?.length
+    !updateData ||
+    !Object.keys(updateData)?.length
   ) {
     throw new Error(`Please provide data!`);
   }
   qry = quryReplacer(qry);
-  const updated = await ReportPermission.updateOne(qry, updateDate, options);
+  const updated = await ReportPermission.updateOne(qry, updateData, options);
   if (!updated.matchedCount) return false;
   return updated;
 };
 
-const updateItemById = async ({ id, updateDate = {}, options = {} }) => {
-  if (!updateDate || !Object.keys(updateDate)?.length) {
+const updateItemById = async ({ id, updateData = {}, options = {} }) => {
+  if (!updateData || !Object.keys(updateData)?.length) {
     throw new Error(`Please provide data!`);
   }
   const updated = await ReportPermission.findByIdAndUpdate(
     id,
-    updateDate,
+    updateData,
     options
   );
   if (!updated) return false;

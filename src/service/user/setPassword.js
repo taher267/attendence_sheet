@@ -18,7 +18,7 @@ const setPassword = async ({ newPassword, confirmPassword, id }) => {
   }
 
   const password = await generateHash(newPassword);
-  await userRepo.updateItemById({ id, updateDate: { password } });
+  await userRepo.updateItemById({ id, updateData: { password } });
   return { code: 200 };
 };
 

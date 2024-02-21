@@ -59,7 +59,7 @@ const login = async ({ username, password }) => {
     });
     await userRepo.updateItemById({
       id: user.id,
-      updateDate: { refreshToken },
+      updateData: { refreshToken },
     });
   }
   delete user.password;

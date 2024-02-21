@@ -41,7 +41,7 @@ const updateOrCreate = async ({
 
       const updated = await userRepo.updateItemById({
         id,
-        updateDate: payload,
+        updateData: payload,
         options: { new: true },
       });
       return { user: updateOrCreate, code: 200 };

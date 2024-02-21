@@ -35,7 +35,7 @@ const profileChange = async (id, { name, username, phone_number }) => {
 
   const updated = await userRepo.updateItemById({
     id,
-    updateDate: payload,
+    updateData: payload,
     options: { new: true },
   });
 

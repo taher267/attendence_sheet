@@ -25,7 +25,7 @@ const changeProfilePic = async ({ file = {}, user = {} }) => {
 
     // await userRepo.updateItemById({
     //   id: user.id,
-    //   updateDate: { profilePic },
+    //   updateData: { profilePic },
     // });
     return {
       code: 200,

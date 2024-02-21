@@ -182,7 +182,7 @@ const createItem = async ({
   };
   await reportPermissionRepo.updateItemById({
     id: doesExistReportPermission.id,
-    updateDate: update_permission,
+    updateData: update_permission,
     options: { new: true, runValidators: true },
   });
   return created;

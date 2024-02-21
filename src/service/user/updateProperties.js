@@ -3,12 +3,12 @@ const userRepo = require("../../repo/user");
 const { notFound, badRequest } = require("../../utils/error");
 
 const updateProperties = async ({ id, status, roles }) => {
-  const updateDate = {};
+  const updateData = {};
   if (status) {
     if (!userConfig.statuses.includes(status)) {
       throw badRequest(`${status} not allow on status`);
     }
-    updateDate.status = status;
+    updateData.status = status;
   }
   if (roles) {
     if (roles?.length) {
@@ -23,11 +23,11 @@ const updateProperties = async ({ id, status, roles }) => {
         throw badRequest(`Invalid roles`);
       }
     }
-    updateDate.roles = roles;
+    updateData.roles = roles;
   }
   const updated = await userRepo.updateItemById({
     id,
-    updateDate,
+    updateData,
     options: { new: true },
   });
   if (!updated) {

@@ -1578,8 +1578,44 @@ paths:
           "$ref": "#/components/responses/404"
         "500":
           "$ref": "#/components/responses/500"
-    patch:
+    put:
       operationId: updateHoliday
+      security:
+        - bearerAuth: []
+      description: "Update Holiday"
+      tags:
+        - "Holiday"
+      parameters:
+        - $ref: "#/components/parameters/idPathParam"
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              type: object
+              $ref: "#/components/schemas/Holiday"
+
+      responses:
+        "200":
+          description: Update Holiday
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 200
+                  message:
+                    type: string
+                    example: Update Holiday, Successfully
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      $ref: "#/components/schemas/HolidayResponse"
+    patch:
+      operationId: updateHolidayProperties
       security:
         - bearerAuth: []
       description: "Update Holiday"
@@ -2058,7 +2094,7 @@ paths:
           "application/json":
             schema:
               type: object
-              $ref: "#/components/schemas/WorkReport"
+              $ref: "#/components/schemas/WorkReportPatch"
 
       responses:
         "200":
@@ -2112,7 +2148,7 @@ paths:
           "$ref": "#/components/responses/500"
 
   "/work-reports/report-permission/{report_permission_id}/report-form/{report_form_id}":
-  #  http://localhost:4003/api/v1/work-reports/report-permission/65888277a5b2f7bed1785bed/report-form/657f157b8f57f1abcc44a504
+    #  http://localhost:4003/api/v1/work-reports/report-permission/65888277a5b2f7bed1785bed/report-form/657f157b8f57f1abcc44a504
     get:
       security:
         - bearerAuth: []
@@ -2333,9 +2369,9 @@ components:
           # $ref: "#/components/schemas/ID_TYPE_EXAMPLE"
           type: string
           example: "64d268cdeef8c84bb18912db"
-        for_submission_date:
-          type: string
-          format: date-time
+        # for_submission_date:
+        #   type: string
+        #   format: date-time
         fields:
           type: object
           # items:
@@ -2348,7 +2384,22 @@ components:
           #       type: string
           #       example: 09:30 AM
           # required: [name, report]
-      required: [report_permission_id, fields, for_submission_date]
+      required: [report_permission_id, fields] #for_submission_date
+
+    WorkReportPatch:
+      properties:
+        report_permission_id:
+          # $ref: "#/components/schemas/ID_TYPE_EXAMPLE"
+          type: string
+          example: "64d268cdeef8c84bb18912db"
+        status:
+          type: string
+        for_submission_date:
+          type: string
+          format: date-time
+      oneOf:
+        - required: ["status"]
+        - required: ["for_submission_date"]
     WorkReportResponse:
       allOf:
         - $ref: "#/components/schemas/ID"

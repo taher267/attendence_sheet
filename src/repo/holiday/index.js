@@ -51,28 +51,28 @@ const findItemById = async ({ id, select = "" }) => {
   return copy;
 };
 
-const updateItem = async ({ qry = {}, updateDate = {}, options = {} }) => {
+const updateItem = async ({ qry = {}, updateData = {}, options = {} }) => {
   if (
-    !updateDate ||
-    !Object.keys(updateDate).length ||
+    !updateData ||
+    !Object.keys(updateData).length ||
     !qry ||
     !Object.keys(qry).length
   ) {
     throw new Error(`Please provide data`);
   }
   qry = quryReplacer(qry);
-  const updated = await Holiday.updateOne(qry, updateDate, options);
+  const updated = await Holiday.updateOne(qry, updateData, options);
   if (!updated.matchedCount) return false;
   return updated;
 };
 
-const updateItemById = async ({ id, updateDate = {}, options = {} }) => {
-  if (!updateDate || !Object.keys(updateDate).length) {
+const updateItemById = async ({ id, updateData = {}, options = {} }) => {
+  if (!updateData || !Object.keys(updateData).length) {
     throw new Error(`Please provide data`);
   } else if (!id || !isValidObjectId(id)) {
     throw new Error(`Please provide valid ID!`);
   }
-  const updated = await Holiday.findByIdAndUpdate(id, updateDate, options);
+  const updated = await Holiday.findByIdAndUpdate(id, updateData, options);
   if (!updated) return false;
   const copy = { id: updated.id, ...updated._doc };
   delete copy._id;

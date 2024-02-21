@@ -50,7 +50,7 @@ const IdToenVerify = async ({ id_token }) => {
     });
     await userRepo.updateItemById({
       id: existUser.id,
-      updateDate: { refreshToken },
+      updateData: { refreshToken },
     });
   }
   delete existUser.password;

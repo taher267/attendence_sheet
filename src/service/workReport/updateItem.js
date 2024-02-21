@@ -79,7 +79,7 @@ const updateItem = async ({
 
   const updated = await workReportRepo.updateItemById({
     id,
-    updateDate: updateWorkReportObj,
+    updateData: updateWorkReportObj,
     options: { new: true, runValidators: true },
   });
 

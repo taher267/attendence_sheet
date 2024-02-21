@@ -59,7 +59,7 @@ const updateItem = async ({ id, name, fields, status }) => {
   }
   const reportForm = await reportFormRepo.updateItemById({
     id,
-    updateDate: updateObj,
+    updateData: updateObj,
     options: { new: true },
   });
   return reportForm;

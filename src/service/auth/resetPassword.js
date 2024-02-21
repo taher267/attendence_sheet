@@ -55,7 +55,7 @@ const resetPassword = async ({ hashToken, newPassword, confirmPassword }) => {
   });
   await userRepo.updateItemById({
     id: user.id,
-    updateDate: { refreshToken, password },
+    updateData: { refreshToken, password },
   });
 
   return {

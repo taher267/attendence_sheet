@@ -50,15 +50,15 @@ const findItemById = async ({ id, select = "" }) => {
   return copy;
 };
 
-const updateItem = async ({ qry = {}, updateDate = {}, options = {} }) => {
+const updateItem = async ({ qry = {}, updateData = {}, options = {} }) => {
   qry = quryReplacer(qry);
-  const updated = await WorkReport.updateOne(qry, updateDate, options);
+  const updated = await WorkReport.updateOne(qry, updateData, options);
   if (!updated.matchedCount) return false;
   return updated;
 };
 
-const updateItemById = async ({ id, updateDate = {}, options = {} }) => {
-  const updated = await WorkReport.findByIdAndUpdate(id, updateDate, options);
+const updateItemById = async ({ id, updateData = {}, options = {} }) => {
+  const updated = await WorkReport.findByIdAndUpdate(id, updateData, options);
   if (!updated) return false;
   const copy = { id: updated.id, ...updated._doc };
   delete copy._id;

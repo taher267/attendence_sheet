@@ -34,7 +34,7 @@ const registerWithLink = async ({
 
     await userRepo.updateItem({
       qry: { _id },
-      updateDate: { registerToken, password: hash, tokenExpiry: exp * 1000 },
+      updateData: { registerToken, password: hash, tokenExpiry: exp * 1000 },
     });
     const link = `${url}/${sign}`;
     const template = accountVarificationTemplate({ username: name, link });

@@ -54,7 +54,7 @@ const register = async ({ name, email, password, username, phone_number }) => {
     secret: REFRESH_TOKEN_SECRET,
     expiresIn: REFRESH_TOKEN_EXPIRY,
   });
-  await userRepo.updateItemById({ id, updateDate: { refreshToken } });
+  await userRepo.updateItemById({ id, updateData: { refreshToken } });
   return {
     user,
     accessToken,
