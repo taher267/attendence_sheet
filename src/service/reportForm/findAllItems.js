@@ -31,7 +31,7 @@ const findAllItems = async ({
   }
 
   const skip = page * limit - limit;
-  const selection = ["id", "name", "fields"];
+  const selection = ["id", "name", "fields", "createdAt"];
 
   const reportForm = await reportFormRepo.findAllItems({
     qry: filter,
