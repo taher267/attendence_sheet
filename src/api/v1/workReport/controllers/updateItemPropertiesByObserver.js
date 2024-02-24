@@ -1,24 +1,28 @@
 const workReportService = require("../../../../service/workReport");
 
-const updateItemProperties = async (req, res, next) => {
+const updateItemPropertiesByObserver = async (req, res, next) => {
   const {
-    body: { status }, // report_permission_id
-    // user: { id: user_id },
+    body: { status, report_permission_id },
+    user: { id: user_id },
     params: { id },
   } = req;
+  const defaultQuery = {
+    observer: user_id,
+    id,
+  };
 
   try {
     const item = await workReportService.updateItemProperties({
-      // report_permission_id,
-      // id,
-      // user_id,
+      report_permission_id,
+      id,
+      user_id,
       status,
-      defultQuery: { id },
+      defaultQuery,
     });
 
     const response = {
       code: 200,
-      message: "Report form has been updated, Successfully",
+      message: "Work report has been updated, Successfully",
       data: item,
       links: {
         self: `/report-forms/${item.id}`,
@@ -31,4 +35,4 @@ const updateItemProperties = async (req, res, next) => {
   }
 };
 
-module.exports = updateItemProperties;
+module.exports = updateItemPropertiesByObserver;

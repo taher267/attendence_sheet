@@ -2005,6 +2005,7 @@ paths:
                       $ref: "#/components/schemas/WorkReportResponse"
         "500":
           "$ref": "#/components/responses/500"
+
   "/work-reports/self":
     get:
       operationId: SelfAllReportForms
@@ -2147,6 +2148,44 @@ paths:
         "500":
           "$ref": "#/components/responses/500"
 
+  "/work-reports/{id}/observe-by":
+    patch:
+      operationId: updateWorkReportByObserver
+      security:
+        - bearerAuth: []
+      description: "Update WorkReport by under of observer"
+      tags:
+        - "WorkReport"
+      parameters:
+        - $ref: "#/components/parameters/idPathParam"
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              type: object
+              $ref: "#/components/schemas/WorkReportPatch"
+
+      responses:
+        "200":
+          description: Update WorkReport
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 200
+                  message:
+                    type: string
+                    example: Update WorkReport, Successfully
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      $ref: "#/components/schemas/WorkReportResponse"
+
   "/work-reports/report-permission/{report_permission_id}/report-form/{report_form_id}":
     #  http://localhost:4003/api/v1/work-reports/report-permission/65888277a5b2f7bed1785bed/report-form/657f157b8f57f1abcc44a504
     get:
@@ -2154,6 +2193,49 @@ paths:
         - bearerAuth: []
 
       operationId: underObserverWorkReports
+      description: "Retrive all WorkReports under of a observer"
+      tags:
+        - "WorkReport"
+      parameters:
+        - $ref: "#/components/parameters/reportPermissionIdPathParam"
+        - $ref: "#/components/parameters/reportFormPathParam"
+        - $ref: "#/components/parameters/expandsParam"
+      # requestBody:
+      #   content:
+      #     "application/json":
+      #       schema:
+      #         type: object
+      #         $ref: "#/components/schemas/WorkReportPatch"
+      responses:
+        "200":
+          description: Retrieve WorkReport under observer of a report permission
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 200
+                  message:
+                    type: string
+                    example: Added WorkReport, Successfully
+                  data:
+                    $ref: "#/components/schemas/WorkReportResponse"
+        "401":
+          "$ref": "#/components/responses/401"
+        "403":
+          "$ref": "#/components/responses/403"
+        "404":
+          "$ref": "#/components/responses/404"
+        "500":
+          "$ref": "#/components/responses/500"
+    put:
+      security:
+        - bearerAuth: []
+
+      operationId: underObserverWorkReportUpdate
       description: "Retrive all WorkReports under of a observer"
       tags:
         - "WorkReport"

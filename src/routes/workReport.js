@@ -32,6 +32,31 @@ router
    * @method GET
    */
   .get(authenticate, controllers.selfAllItems);
+
+// router
+// .route(
+//   `${v1}/work-reports/report-permission/:report_permission_id/report-form/:report_form_id`
+// )
+// /**
+//  * Private Route by Observer
+//  * @route baseurl/api/v1/work-reports/report-permission/:report_permission_id/report-form/:report_form_id
+//  * @method GET
+//  */
+// .get(authenticate, authorize(["observer"]), controllers.observerByAllItems)
+
+router
+  .route(`${v1}/work-reports/:id/observe-by`)
+  /**
+   * Private Route by Observer
+   * @route baseurl/api/v1/work-reports/:id/observe-by
+   * @method PATCH
+   */
+  .patch(
+    authenticate,
+    authorize(["observer"]),
+    controllers.updateItemPropertiesByObserver
+  );
+
 router
   .route(
     `${v1}/work-reports/report-permission/:report_permission_id/report-form/:report_form_id`
@@ -42,6 +67,18 @@ router
    * @method GET
    */
   .get(authenticate, authorize(["observer"]), controllers.observerByAllItems);
+
+/**
+ * Private Route by Observer
+ * @route baseurl/api/v1/work-reports/report-prmission/:report_prmission_id/report-form/:report_form_id
+ * @method PATCH
+ */
+// .patch(
+//   authenticate,
+//   authorize(["observer"]),
+//   controllers.updateItemPropertiesByObserver
+// );
+
 router
   .route(`${v1}/work-reports/:id`)
   /**
@@ -63,11 +100,7 @@ router
    * @method PATCH
    */
 
-  .patch(
-    authenticate,
-    authorize(["observer", "admin"]),
-    controllers.updateItemProperties
-  )
+  .patch(authenticate, authorize(["admin"]), controllers.updateItemProperties)
   /**
    * Private Route by Admin
    * @route baseurl/api/v1/work-reports/:id

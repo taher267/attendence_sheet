@@ -9,7 +9,7 @@ const reportPermissionRepo = require("../../repo/reportPermission");
 const { isValidObjectId } = require("mongoose");
 const workReportConfig = require("../../config/workReport");
 
-const updateItemProperties = async ({
+const updateItemPropertiesByObserver = async ({
   id,
   report_permission_id,
   user_id,
@@ -64,4 +64,4 @@ const updateItemProperties = async ({
   return updated;
 };
 
-module.exports = updateItemProperties;
+module.exports = updateItemPropertiesByObserver;

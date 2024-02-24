@@ -1,22 +1,23 @@
 const {
   badRequest,
-  customError,
-  authorizationError,
+  // customError,
+  // authorizationError,
 } = require("../../utils/error");
 const workReportRepo = require("../../repo/workReport");
 // const userRepo = require("../../repo/user");
-const reportPermissionRepo = require("../../repo/reportPermission");
-const { isValidObjectId } = require("mongoose");
-const workReportConfig = require("../../config/workReport");
+// const { isValidObjectId } = require("mongoose");
+const objectIdsChecker = require("../../utils/objectIdsChecker");
 
-const updateItemProperties = async ({ id, status }) => {
-  if (!id || !isValidObjectId(id)) {
+const updateItemProperties = async ({ defaultQuery = {}, status }) => {
+  console.log(defaultQuery);
+  if (!Object.keys(defaultQuery)?.length) {
     throw badRequest(`Invalid parameters!`);
+  } else {
+    objectIdsChecker({ data: defaultQuery });
   }
-
-  const existWorkReport = await workReportRepo.findItemById({
-    id,
-  });
+  const qry = { ...defaultQuery };
+  const existWorkReport = await workReportRepo.findItem(defaultQuery);
+  console.log(existWorkReport, { defaultQuery });
 
   if (!existWorkReport) {
     throw notFound();
@@ -29,9 +30,11 @@ const updateItemProperties = async ({ id, status }) => {
   // }
 
   const updateWorkReportObj = { status };
-
-  const updated = await workReportRepo.updateItemById({
-    id,
+  if (updateItemProperties.status === existWorkReport.status) {
+    throw badRequest(`Nothing to changed!`);
+  }
+  const updated = await workReportRepo.updateItem({
+    qry,
     updateData: updateWorkReportObj,
     options: { new: true, runValidators: true },
   });

@@ -6,6 +6,7 @@ const removeItem = require("./removeItem");
 const selfAllItems = require("./selfAllItems");
 const updateItem = require("./updateItem");
 const updateItemProperties = require("./updateItemProperties");
+const updateItemPropertiesByObserver = require("./updateItemPropertiesByObserver");
 
 module.exports = {
   findAllItems,
@@ -15,5 +16,6 @@ module.exports = {
   updateItem,
   updateItemProperties,
   selfAllItems,
-  observerByAllItems
+  observerByAllItems,
+  updateItemPropertiesByObserver,
 };
