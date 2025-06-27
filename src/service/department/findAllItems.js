@@ -39,6 +39,7 @@ const findAllItems = async ({
     limit,
     skip,
     select: selection,
+    populate: { path: "establishment_id", select: "name" },
   });
   // .populate({ path: "author", select: "name" })
   console.log(items?.length);

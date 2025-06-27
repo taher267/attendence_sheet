@@ -13,7 +13,7 @@ const findAllItems = async ({
   let items = [];
   if (populate) {
     items = await Department.find(qry)
-      .populate(...populate?.[0])
+      .populate({ ...populate })
       .select(select)
       .sort(sortStr)
       .skip(skip)
